@@ -2,6 +2,7 @@
 #include "GameState.h"
 #include "Engine.h"
 #include "StateManager.h"
+#include "TitleState.h"
 
 GameState::GameState() {}
 

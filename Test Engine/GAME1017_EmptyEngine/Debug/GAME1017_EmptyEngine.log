@@ -1,2 +1,28 @@
-﻿  States.cpp
-  GAME1017_EmptyEngine.vcxproj -> D:\_\__SDL Projects\GAME1017\GAME1017_W02_Lab\Debug\GAME1017_EmptyEngine.exe
+﻿Build started 2021-01-26 6:02:09 PM.
+Logging verbosity is set to: Normal.     1>Project "C:\Users\zhika\Documents\GitHub\GAME1014_One-Knight-Stand\Test Engine\GAME1017_EmptyEngine\GAME1017_EmptyEngine.vcxproj" on node 2 (Build target(s)).
+     1>InitializeBuildStatus:
+         Touching "Debug\GAME1017.5ae98247.tlog\unsuccessfulbuild".
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\bin\HostX86\x86\CL.exe /c /I"C:\Users\zhika\Documents\GitHub\GAME1014_One-Knight-Stand\Test Engine\\SDL\SDL2_ttf\include" /I"C:\Users\zhika\Documents\GitHub\GAME1014_One-Knight-Stand\Test Engine\\SDL\SDL2_mixer\include" /I"C:\Users\zhika\Documents\GitHub\GAME1014_One-Knight-Stand\Test Engine\\SDL\SDL2_image\include" /I"C:\Users\zhika\Documents\GitHub\GAME1014_One-Knight-Stand\Test Engine\\SDL\SDL2\include" /ZI /JMC /nologo /W3 /WX- /diagnostics:column /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /permissive- /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc142.pdb" /Gd /TP /analyze- /FC /errorReport:prompt Engine.cpp GameState.cpp TitleState.cpp
+         Engine.cpp
+         GameState.cpp
+         TitleState.cpp
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.24.28314\bin\HostX86\x86\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\zhika\Documents\GitHub\GAME1014_One-Knight-Stand\Test Engine\Debug\GAME1017_EmptyEngine.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\zhika\Documents\GitHub\GAME1014_One-Knight-Stand\Test Engine\\SDL\SDL2_ttf\lib\x86" /LIBPATH:"C:\Users\zhika\Documents\GitHub\GAME1014_One-Knight-Stand\Test Engine\\SDL\SDL2_mixer\lib\x86" /LIBPATH:"C:\Users\zhika\Documents\GitHub\GAME1014_One-Knight-Stand\Test Engine\\SDL\SDL2_image\lib\x86" /LIBPATH:"C:\Users\zhika\Documents\GitHub\GAME1014_One-Knight-Stand\Test Engine\\SDL\SDL2\lib\x86" SDL2.lib SDL2main.lib SDL2_image.lib SDL2_mixer.lib SDL2_ttf.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG:FASTLINK /PDB:"C:\Users\zhika\Documents\GitHub\GAME1014_One-Knight-Stand\Test Engine\Debug\GAME1017_EmptyEngine.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\zhika\Documents\GitHub\GAME1014_One-Knight-Stand\Test Engine\Debug\GAME1017_EmptyEngine.lib" /MACHINE:X86 Debug\Engine.obj
+         Debug\GameState.obj
+         Debug\Main.obj
+         Debug\StateManager.obj
+         Debug\States.obj
+         Debug\TitleState.obj
+         GAME1017_EmptyEngine.vcxproj -> C:\Users\zhika\Documents\GitHub\GAME1014_One-Knight-Stand\Test Engine\Debug\GAME1017_EmptyEngine.exe
+       FinalizeBuildStatus:
+         Deleting file "Debug\GAME1017.5ae98247.tlog\unsuccessfulbuild".
+         Touching "Debug\GAME1017.5ae98247.tlog\GAME1017_EmptyEngine.lastbuildstate".
+     1>Done Building Project "C:\Users\zhika\Documents\GitHub\GAME1014_One-Knight-Stand\Test Engine\GAME1017_EmptyEngine\GAME1017_EmptyEngine.vcxproj" (Build target(s)).
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.25

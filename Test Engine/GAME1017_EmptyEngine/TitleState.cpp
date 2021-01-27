@@ -1,6 +1,7 @@
 // Begin TitleState
 #include "TitleState.h"
 #include "Engine.h"
+#include "GameState.h"
 #include "StateManager.h"
 
 TitleState::TitleState() {}

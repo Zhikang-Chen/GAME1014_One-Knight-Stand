@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "StateManager.h"
 #include "States.h"
+#include "TitleState.h"
 
 int Engine::Init(const char* title, int xPos, int yPos, int width, int height, int flags)
 {
