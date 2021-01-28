@@ -4,6 +4,7 @@
 
 #include "SDL.h"
 #include <iostream>
+#include "PlatformPlayer.h"
 #define FPS 60
 #define WIDTH 1024
 #define HEIGHT 768
@@ -18,11 +19,24 @@ private: // private properties.
 	SDL_Window* m_pWindow;
 	SDL_Renderer* m_pRenderer;
 
+	//These are the dimensions of the platforms
+	SDL_Rect m_platforms[5] = { {462, 648, 100, 20}, //0
+							   {200, 468, 100, 20},  //1
+							   {724, 468, 100, 20},  //2
+							   {462, 368, 100, 40},  //3
+							   {-100, 668, 1000, 100} };  //4 This is the Ground.
+
+	PlatformPlayer m_player;
+		
+	
+
 private: // private method prototypes.
 	int Init(const char* title, int xPos, int yPos, int width, int height, int flags);
 	void Clean();
 	void Wake();
 	void HandleEvents();
+	bool KeyDown(const SDL_Scancode c);
+	void CheckCollision();
 	void Update();
 	void Render();
 	void Sleep();

@@ -1,5 +1,6 @@
 #include "Engine.h"
 
+
 int Engine::Init(const char* title, int xPos, int yPos, int width, int height, int flags)
 {
 	cout << "Initializing engine..." << endl;
@@ -25,6 +26,7 @@ int Engine::Init(const char* title, int xPos, int yPos, int width, int height, i
 	else return false; // initalization failed.
 	m_fps = (Uint32)round(1.0 / (double)FPS * 1000); // Converts FPS into milliseconds, e.g. 16.67
 	m_keystates = SDL_GetKeyboardState(nullptr);
+	m_player.Init(m_pRenderer);
 	cout << "Initialization successful!" << endl;
 	m_running = true;
 	return true;
@@ -45,13 +47,81 @@ void Engine::HandleEvents()
 		case SDL_QUIT:
 			m_running = false;
 			break;
+
+		case SDL_KEYDOWN:
+			//Player jump
+			if (event.key.keysym.sym == ' ' && m_player.IsGrounded()) //The player may only jump again if they are on the ground
+			{
+				m_player.SetAccelY(-60.0); //<- JUMPFORCE
+				m_player.SetGrounded(false);
+			}
+				break;
+			
+		}
+	}
+}
+
+bool Engine::KeyDown(const SDL_Scancode c)
+{
+	if (m_keystates[c] == 1)
+	{
+		return true;
+	}
+	else return false;
+}
+
+void Engine::CheckCollision()
+{
+	//Collision for Platforms
+	for (int i = 0; i < 5; i++)
+	{
+		if (SDL_HasIntersection(&m_player.GetRect(), &m_platforms[i]))
+		{
+			
+			if ((m_player.GetRect().y + m_player.GetRect().h) - (float)m_player.GetVelY() <= m_platforms[i].y)
+			{//Collliding with the top side of the platform
+				m_player.SetGrounded(true);
+				m_player.StopY();
+				m_player.SetY(m_platforms[i].y - m_player.GetRect().h);
+			}
+			else if (m_player.GetRect().y - (float)m_player.GetVelY() >= (m_platforms[i].y + m_platforms[i].h))
+
+			{//Collliding with the bottom side of the platform
+				m_player.StopY();
+				m_player.SetY(m_platforms[i].y + m_platforms[i].h);
+			}
+
+			else if ((m_player.GetRect().x + m_player.GetRect().w) - (float)m_player.GetVelX() <= m_platforms[i].x)
+			{//Collliding with the left side of the platform
+				m_player.StopX();
+				m_player.SetX(m_platforms[i].x - m_player.GetRect().w);
+			}
+
+			else if (m_player.GetRect().x - (float)m_player.GetVelX() >= (m_platforms[i].x + m_platforms[i].w))
+			{//Collliding with the right side of the platform
+				m_player.StopX();
+				m_player.SetX(m_platforms[i].x + m_platforms[i].w);
+			}
+			
+			
 		}
 	}
 }
 
 void Engine::Update()
 {
+	if (KeyDown(SDL_SCANCODE_A)) //Player Moving Left
+		m_player.SetAccelX(-1.0);
+	else if (KeyDown(SDL_SCANCODE_D)) //Player moving right
+		m_player.SetAccelX(1.0);
 
+	//Wrap the player
+	if (m_player.GetRect().x < -51.0) m_player.SetX(1024.0);
+	else if (m_player.GetRect().x > 1024.0) m_player.SetX(-50.0);
+
+	//Update the player
+	m_player.Update();
+	CheckCollision();
 }
 
 void Engine::Render()
@@ -59,7 +129,15 @@ void Engine::Render()
 	SDL_SetRenderDrawColor(m_pRenderer, 64, 128, 255, 255);
 	SDL_RenderClear(m_pRenderer);
 	// Any drawing here...
+	//Render platforms...
+	SDL_SetRenderDrawColor(m_pRenderer, 192, 64, 0, 255);
 
+	//DRAW the platforms
+	for (int i =0; i < 5; i++)
+	{
+		SDL_RenderFillRect(m_pRenderer, &m_platforms[i]);
+	}
+	m_player.Render();
 	SDL_RenderPresent(m_pRenderer); // Flip buffers - send data to window.
 }
 
