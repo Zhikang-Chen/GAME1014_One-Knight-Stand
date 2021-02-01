@@ -1,11 +1,6 @@
 ﻿  Engine.cpp
-C:\Users\RKeit\Documents\GitHub\GAME1014_One-Knight-Stand\GAME1007_PlatformerExample\GAME1007_SDLTemplate\Engine.cpp(85,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\RKeit\Documents\GitHub\GAME1014_One-Knight-Stand\GAME1007_PlatformerExample\GAME1007_SDLTemplate\Engine.cpp(91,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\RKeit\Documents\GitHub\GAME1014_One-Knight-Stand\GAME1007_PlatformerExample\GAME1007_SDLTemplate\Engine.cpp(97,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-C:\Users\RKeit\Documents\GitHub\GAME1014_One-Knight-Stand\GAME1007_PlatformerExample\GAME1007_SDLTemplate\Engine.cpp(103,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  Main.cpp
-  PlatformPlayer.cpp
-C:\Users\RKeit\Documents\GitHub\GAME1014_One-Knight-Stand\GAME1007_PlatformerExample\GAME1007_SDLTemplate\PlatformPlayer.cpp(69,49): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-C:\Users\RKeit\Documents\GitHub\GAME1014_One-Knight-Stand\GAME1007_PlatformerExample\GAME1007_SDLTemplate\PlatformPlayer.cpp(72,49): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-  Generating Code...
-  GAME1007_SDLTemplate.vcxproj -> C:\Users\RKeit\Documents\GitHub\GAME1014_One-Knight-Stand\GAME1007_PlatformerExample\Debug\GAME1007_SDLTemplate.exe
+C:\Users\gnief\Desktop\GitHub\GAME1014_One-Knight-Stand\GAME1007_PlatformerExample\GAME1007_SDLTemplate\Engine.cpp(85,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gnief\Desktop\GitHub\GAME1014_One-Knight-Stand\GAME1007_PlatformerExample\GAME1007_SDLTemplate\Engine.cpp(91,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gnief\Desktop\GitHub\GAME1014_One-Knight-Stand\GAME1007_PlatformerExample\GAME1007_SDLTemplate\Engine.cpp(97,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gnief\Desktop\GitHub\GAME1014_One-Knight-Stand\GAME1007_PlatformerExample\GAME1007_SDLTemplate\Engine.cpp(103,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  GAME1007_SDLTemplate.vcxproj -> C:\Users\gnief\Desktop\GitHub\GAME1014_One-Knight-Stand\GAME1007_PlatformerExample\Debug\GAME1007_SDLTemplate.exe

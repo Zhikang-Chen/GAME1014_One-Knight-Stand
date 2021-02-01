@@ -9,6 +9,7 @@ class PlatformPlayer
 {
 private:
 	bool m_grounded; //In most platforming games, the player actually starts in the air
+	bool m_alive; //Game runs while player is alive, shows black screen when dead.
 	double m_accelX, //Acceleration on the X axis, horizontal force
 		m_accelY,//Acceleration on the Y axis, vertical force
 		m_velX, //Velocity for X 
@@ -32,6 +33,8 @@ public:
 	void SetAccelY(double a);
 	bool IsGrounded();
 	bool SetGrounded(bool g);
+	bool GetAlive();
+	void SetAlive(bool a);
 	double GetVelX();
 	double GetVelY();
 	void SetX(float x);

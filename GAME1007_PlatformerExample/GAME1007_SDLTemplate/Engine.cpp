@@ -122,6 +122,13 @@ void Engine::Update()
 	//Update the player
 	m_player.Update();
 	CheckCollision();
+
+	//If the player falls down a pit, lock controls.
+	if (m_player.GetRect().y > HEIGHT)
+	{
+		m_player.Stop();
+		m_player.SetAlive(false);
+	}
 }
 
 void Engine::Render()
@@ -138,6 +145,12 @@ void Engine::Render()
 		SDL_RenderFillRect(m_pRenderer, &m_platforms[i]);
 	}
 	m_player.Render();
+
+	if (m_player.GetAlive() == false)
+	{
+		SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, 0);
+		SDL_RenderClear(m_pRenderer);
+	}
 	SDL_RenderPresent(m_pRenderer); // Flip buffers - send data to window.
 }
 

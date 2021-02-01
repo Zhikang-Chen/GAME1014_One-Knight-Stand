@@ -6,6 +6,7 @@ void PlatformPlayer::Init(SDL_Renderer* r)
 	m_rend = r;
 	m_rect = {487, 500, 50, 100};
 	m_grounded = false;
+	m_alive = true;
 	m_accelX = m_accelY = m_velX = m_velY = 0.0; //All of these have a value of 0. Value is passed down
 	m_maxVelX = 10.0;
 	m_maxVelY = JUMPFORCE;
@@ -61,6 +62,10 @@ void PlatformPlayer::SetAccelY(double a) { m_accelY = a; }
 bool PlatformPlayer::IsGrounded(){return m_grounded;}
 
 bool PlatformPlayer::SetGrounded(bool g) { return m_grounded = g; }
+
+bool PlatformPlayer::GetAlive() { return m_alive; }
+
+void PlatformPlayer::SetAlive(bool a) { m_alive = a; }
 
 double PlatformPlayer::GetVelX(){ return m_velX;}
 
