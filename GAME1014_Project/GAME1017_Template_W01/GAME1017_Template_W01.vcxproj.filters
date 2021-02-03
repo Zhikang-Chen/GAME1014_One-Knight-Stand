@@ -70,6 +70,9 @@
     <ClCompile Include="..\src\Box.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\PlatformPlayer.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -122,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="..\src\Sprite.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PlatformPlayer.h">
+      <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

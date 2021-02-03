@@ -9,6 +9,7 @@ class EventManager
 public: // Public methods.
 	static void Init();
 	static void HandleEvents();
+	static bool KeyDown(const SDL_Scancode c);
 	static bool KeyHeld(const SDL_Scancode c);
 	static bool KeyPressed(const SDL_Scancode c);
 	static bool KeyReleased(const SDL_Scancode c);

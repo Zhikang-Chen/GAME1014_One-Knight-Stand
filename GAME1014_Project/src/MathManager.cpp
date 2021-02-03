@@ -42,6 +42,12 @@ SDL_Rect MathManager::ConvertFRect2Rect(const SDL_FRect& r)
 	return temp;
 }
 
+SDL_FRect MathManager::ConvertRect2FRect(const SDL_Rect& r)
+{
+	SDL_FRect temp = { (float)r.x, (float)r.y, (float)r.w, (float)r.h };
+	return temp;
+}
+
 double MathManager::Angle180(double a)
 { // Constrains an angle between -180 and 180.
 	a = fmod(a + 180.0, 360.0);

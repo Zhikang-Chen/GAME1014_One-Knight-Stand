@@ -54,6 +54,15 @@ bool EventManager::KeyHeld(const SDL_Scancode c)
 	return false;
 }
 
+bool EventManager::KeyDown(const SDL_Scancode c)
+{
+	if (s_keysCurr[c] == 1)
+	{
+		return true;
+	}
+	else return false;
+}
+
 bool EventManager::KeyPressed(const SDL_Scancode c)
 {
 	return (s_keysCurr[c] > s_keysLast[c]);

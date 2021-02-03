@@ -7,6 +7,7 @@
 #include "States.h"
 #include <vector>
 
+
 class StateManager
 {
 public: // Public properties.
@@ -22,6 +23,7 @@ public:// Public methods.
 	static std::vector<State*>& GetStates();
 private: // Private methods.
 	StateManager() {}
+	
 };
 
 typedef StateManager STMA;

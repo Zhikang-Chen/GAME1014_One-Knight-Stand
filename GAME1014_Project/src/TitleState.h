@@ -4,6 +4,7 @@
 #include "Label.h"
 #include "States.h"
 
+#include "PlatformPlayer.h"
 
 class TitleState : public State
 {
@@ -16,6 +17,9 @@ public:
 
 private:
 	Label *m_plabel;
+	PlatformPlayer *fml;
+
+	SDL_FRect* m_platforms;
 };
 
 #endif
