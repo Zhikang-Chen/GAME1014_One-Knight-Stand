@@ -105,36 +105,43 @@ void TitleState::Update()
 	m_player->Update();
 	CollisionCheck();
 
-	if (m_player->GetDstP()->x > (WIDTH / 2) + 100)
+	if (m_player->GetDstP()->x > (WIDTH / 2))
 	{
 		std::cout << "Right" << endl;
-		m_camOffset = (WIDTH / 2) - m_player->GetDstP()->x;
-		//cout << m_camOffset;
+		m_camOffset = (WIDTH / 2) - (m_player->GetDstP()->x - (m_player->GetDstP()->w / 2));
+		cout << m_camOffset;
 	}
 
-	else if (m_player->GetDstP()->x < (WIDTH / 2) - 100)
+	else if (m_player->GetDstP()->x < (WIDTH / 2))
 	{
 		std::cout << "Left" << endl;
-		m_camOffset = (WIDTH / 2) - m_player->GetDstP()->x;
-		//cout << m_camOffset;
+		m_camOffset = (WIDTH / 2) - (m_player->GetDstP()->x - ( m_player->GetDstP()->w / 2));
+		cout << m_camOffset;
+	}
+	
+	int camspeed = 0;
+	if (m_camOffset > 0)
+	{
+		camspeed = 5;
+		//if (m_camOffset > 100)
+		//{
+		//	camspeed = 10;
+		//}
+	}
+	else if(m_camOffset < 0)
+	{
+		camspeed = -5;
+		//if (m_camOffset > -100)
+		//{
+		//	camspeed = -10;
+		//}
 	}
 
-	if (m_camOffset > 100)
+	for (int i = 0; i < 5; i++)
 	{
-		for (int i = 0; i < 5; i++)
-		{
-			m_platforms[i].x += 10;
-		}
-		m_player->GetDstP()->x += 10;
+		m_platforms[i].x += camspeed;
 	}
-	else if(m_camOffset < -100)
-	{
-		for (int i = 0; i < 5; i++)
-		{
-			m_platforms[i].x -= 10;
-		}
-		m_player->GetDstP()->x -= 10;
-	}
+	m_player->GetDstP()->x += camspeed;
 	
 	
 	//m_camOffset = (WIDTH / 2) - m_player->GetDstP()->y;
