@@ -76,6 +76,52 @@ void TitleState::CollisionCheck()
 	}
 }
 
+void TitleState::UpdateCam()
+{
+	int camspeed = 0;
+	if (m_player->GetDstP()->x > (WIDTH / 2) + 100)
+	{
+		//std::cout << "Right" << endl;
+		//m_camOffset = (WIDTH / 2) - (m_player->GetDstP()->x - (m_player->GetDstP()->w / 2));
+		//cout << m_camOffset;
+		camspeed = -5;
+	}
+
+	else if (m_player->GetDstP()->x < (WIDTH / 2) - 100)
+	{
+		//std::cout << "Left" << endl;
+		//m_camOffset = (WIDTH / 2) - (m_player->GetDstP()->x - ( m_player->GetDstP()->w / 2));
+		//cout << m_camOffset;
+		camspeed = 5;
+	}
+
+	//if (m_camOffset > 0)
+	//{
+	//	camspeed = 5;
+	//	//if (m_camOffset > 100)
+	//	//{
+	//	//	camspeed = 15;
+	//	//}
+	//}
+	//else if(m_camOffset < 0)
+	//{
+	//	camspeed = -5;
+	//	//if (m_camOffset > -100)
+	//	//{
+	//	//	camspeed = -15;
+	//	//}
+	//}
+
+	for (int i = 0; i < 5; i++)
+	{
+		m_platforms[i].x += camspeed;
+	}
+	m_player->GetDstP()->x += camspeed;
+
+
+	//m_camOffset = (WIDTH / 2) - m_player->GetDstP()->y;
+}
+
 void TitleState::Update()
 {
 	//if (EVMA::KeyPressed(SDL_SCANCODE_N))
@@ -104,47 +150,8 @@ void TitleState::Update()
 	
 	m_player->Update();
 	CollisionCheck();
+	UpdateCam();
 
-	if (m_player->GetDstP()->x > (WIDTH / 2) + 100 )
-	{
-		std::cout << "Right" << endl;
-		m_camOffset = (WIDTH / 2) - (m_player->GetDstP()->x - (m_player->GetDstP()->w / 2));
-		cout << m_camOffset;
-	}
-
-	else if (m_player->GetDstP()->x < (WIDTH / 2) - 100)
-	{
-		std::cout << "Left" << endl;
-		m_camOffset = (WIDTH / 2) - (m_player->GetDstP()->x - ( m_player->GetDstP()->w / 2));
-		cout << m_camOffset;
-	}
-	
-	int camspeed = 0;
-	if (m_camOffset > 0)
-	{
-		camspeed = 5;
-		//if (m_camOffset > 100)
-		//{
-		//	camspeed = 10;
-		//}
-	}
-	else if(m_camOffset < 0)
-	{
-		camspeed = -5;
-		//if (m_camOffset > -100)
-		//{
-		//	camspeed = -10;
-		//}
-	}
-
-	for (int i = 0; i < 5; i++)
-	{
-		m_platforms[i].x += camspeed;
-	}
-	m_player->GetDstP()->x += camspeed;
-	
-	
-	//m_camOffset = (WIDTH / 2) - m_player->GetDstP()->y;
 }
 
 void TitleState::Render()

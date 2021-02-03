@@ -15,6 +15,7 @@ public:
 	virtual void Render();
 	virtual void Exit();
 	void CollisionCheck();
+	void UpdateCam();
 
 private:
 	Label *m_plabel;
