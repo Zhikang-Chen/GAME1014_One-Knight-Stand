@@ -13,7 +13,7 @@ TitleState::TitleState() {}
 
 void TitleState::Enter()
 {
-	m_plabel = new Label("Minecraft", HEIGHT/2, WIDTH/2, "Fuck my life", {0,0,0,0});
+	m_plabel = new Label("Minecraft", HEIGHT/2, WIDTH/2, "UWU What's this", {0,0,0,0});
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/aPlayer.png", "life");
 	
