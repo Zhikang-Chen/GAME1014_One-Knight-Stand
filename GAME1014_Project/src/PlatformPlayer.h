@@ -5,8 +5,9 @@
 #define JUMPFORCE 60.0; //Acceleration
 #include "Sprite.h"
 #include "TextureManager.h"
+#include "MathManager.h"
 
-class PlatformPlayer : public Sprite
+class PlatformPlayer : public AnimatedSprite
 {
 public:
 	PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t);
@@ -16,8 +17,9 @@ public:
 	
 	void Init();
 	void Update();
-	//void Render();
+	void Render();
 
+	void ShowHitbox();
 	
 	void Stop();
 	void StopX();
@@ -37,6 +39,7 @@ private:
 	// Private member
 	bool m_grounded; //In most platforming games, the player actually starts in the air
 	bool m_alive; //Game runs while player is alive, shows black screen when dead.
+	bool m_showHitbox;
 	double m_accelX, //Acceleration on the X axis, horizontal force
 		m_accelY,//Acceleration on the Y axis, vertical force
 		m_velX, //Velocity for X 

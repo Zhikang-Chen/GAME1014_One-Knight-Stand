@@ -18,7 +18,7 @@ public:
 
 private:
 	Label *m_plabel;
-	PlatformPlayer *fml;
+	PlatformPlayer *m_player;
 
 	SDL_FRect *m_platforms;
 };

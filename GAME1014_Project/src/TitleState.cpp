@@ -15,14 +15,14 @@ void TitleState::Enter()
 {
 	m_plabel = new Label("Minecraft", HEIGHT/2, WIDTH/2, "UWU What's this", {0,0,0,0});
 
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/aPlayer.png", "life");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_RUNNING_AND_IDLE.png", "Knight");
 	
 	//SDL_Rect src{ 20,20,100,100 }, dir{0,0,100,100};
 	int width, height;
 	
-	SDL_QueryTexture(TEMA::GetTexture("life"), nullptr, nullptr, &width, &height);	
-	fml = new PlatformPlayer({ 0,0, width,height }, { 0,0, float(width),float(height) }, Engine::Instance().GetRenderer(), TEMA::GetTexture("life"));
-	fml->Init();
+	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &width, &height);	
+	m_player = new PlatformPlayer({ 0,0, width/14,height }, { 0,0, float(width / 14),float(height) }, Engine::Instance().GetRenderer(), TEMA::GetTexture("Knight"));
+	m_player->Init();
 	m_platforms = new SDL_FRect[5];
 	m_platforms[0] = { 462, 648, 100, 20 }; //0
 	m_platforms[1] = {200, 468, 100, 20};  //1
@@ -46,32 +46,32 @@ void TitleState::CollisionCheck()
 {
 	for (int i = 0; i < 5; i++)
 	{
-		if (COMA::AABBCheck(m_platforms[i], fml->GetDst()))
+		if (COMA::AABBCheck(m_platforms[i], m_player->GetDst()))
 		{
-			//cout << fml->GetDstP()->h << endl;
-			if ((fml->GetDstP()->y + fml->GetDstP()->h) - (float)fml->GetVelY() <= m_platforms[i].y)
+			//cout << m_player->GetDstP()->h << endl;
+			if ((m_player->GetDstP()->y + m_player->GetDstP()->h) - (float)m_player->GetVelY() <= m_platforms[i].y)
 			{//Collliding with the top side of the platform
-				fml->SetGrounded(true);
-				fml->StopY();
-				fml->SetY(m_platforms[i].y - fml->GetDstP()->h);
+				m_player->SetGrounded(true);
+				m_player->StopY();
+				m_player->SetY(m_platforms[i].y - m_player->GetDstP()->h);
 				//cout << "insanity" << endl;
 			}
-			else if (fml->GetDstP()->y - (float)fml->GetVelY() >= (m_platforms[i].y + m_platforms[i].h))
+			else if (m_player->GetDstP()->y - (float)m_player->GetVelY() >= (m_platforms[i].y + m_platforms[i].h))
 			{//Collliding with the bottom side of the platform
-				fml->StopY();
-				fml->SetY(m_platforms[i].y + m_platforms[i].h);
+				m_player->StopY();
+				m_player->SetY(m_platforms[i].y + m_platforms[i].h);
 			}
 
-			else if ((fml->GetDstP()->x + fml->GetDstP()->w) - (float)fml->GetVelX() <= m_platforms[i].x)
+			else if ((m_player->GetDstP()->x + m_player->GetDstP()->w) - (float)m_player->GetVelX() <= m_platforms[i].x)
 			{//Collliding with the left side of the platform
-				fml->StopX();
-				fml->SetX(m_platforms[i].x - fml->GetDstP()->w);
+				m_player->StopX();
+				m_player->SetX(m_platforms[i].x - m_player->GetDstP()->w);
 			}
 
-			else if (fml->GetDstP()->x - (float)fml->GetVelX() >= (m_platforms[i].x + m_platforms[i].w))
+			else if (m_player->GetDstP()->x - (float)m_player->GetVelX() >= (m_platforms[i].x + m_platforms[i].w))
 			{//Collliding with the right side of the platform
-				fml->StopX();
-				fml->SetX(m_platforms[i].x + m_platforms[i].w);
+				m_player->StopX();
+				m_player->SetX(m_platforms[i].x + m_platforms[i].w);
 			}
 		}
 	}
@@ -82,22 +82,27 @@ void TitleState::Update()
 	//if (EVMA::KeyPressed(SDL_SCANCODE_N))
 	//	STMA::ChangeState(new GameState());// Change to new GameState
 
-	if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && fml->IsGrounded())
+
+	if (EVMA::KeyPressed(SDL_SCANCODE_H))
+		m_player->ShowHitbox();
+	
+	if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_player->IsGrounded())
 	{
-		fml->SetAccelY(-60.0); //<- JUMPFORCE
-		fml->SetGrounded(false);
+		m_player->SetAccelY(-60.0); //<- JUMPFORCE
+		m_player->SetGrounded(false);
 	}
 
 	if (EVMA::KeyDown(SDL_SCANCODE_A))
-		fml->SetAccelX(-1.0);
+		m_player->SetAccelX(-1.0);
 	if (EVMA::KeyDown(SDL_SCANCODE_D))
-		fml->SetAccelX(1.0);
+		m_player->SetAccelX(1.0);
 
-	//Wrap the player
-	if (fml->GetDstP()->x < -51.0) fml->SetX(1024.0);
-	else if (fml->GetDstP()->x > 1024.0) fml->SetX(-50.0);
 	
-	fml->Update();
+	//Wrap the player
+	if (m_player->GetDstP()->x < -51.0) m_player->SetX(1024.0);
+	else if (m_player->GetDstP()->x > 1024.0) m_player->SetX(-50.0);
+	
+	m_player->Update();
 	CollisionCheck();
 }
 
@@ -110,11 +115,9 @@ void TitleState::Render()
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 0, 255);
 	SDL_RenderFillRectsF(Engine::Instance().GetRenderer(), m_platforms,5);
 
-	//SDL_RenderFillRect(Engine::Instance().GetRenderer(), fml->GetDstP());
-	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 0, 0, 255);
-	SDL_RenderFillRect(Engine::Instance().GetRenderer(), &MAMA::ConvertFRect2Rect(fml->GetDst()));
+	//SDL_RenderFillRect(Engine::Instance().GetRenderer(), m_player->GetDstP());
 	m_plabel->Render();
-	fml->Render();
+	m_player->Render();
 	
 	State::Render();
 }
