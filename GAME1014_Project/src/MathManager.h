@@ -17,6 +17,7 @@ public: // Public methods.
 	static double Deg2Rad(const double angle);
 	static double Rad2Deg(const double angle);
 	static SDL_Rect ConvertFRect2Rect(const SDL_FRect& r);
+	static SDL_Rect ConvertFRect2Rect(const SDL_FRect* r);
 	static SDL_FRect ConvertRect2FRect(const SDL_Rect& r);
 	static double Angle180(double a);
 	static double Angle360(double a);

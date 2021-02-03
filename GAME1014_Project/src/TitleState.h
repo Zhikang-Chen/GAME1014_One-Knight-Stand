@@ -5,6 +5,11 @@
 #include "States.h"
 
 #include "PlatformPlayer.h"
+#include "CollisionManager.h"
+#include "Engine.h"
+#include "EventManager.h"
+#include "StateManager.h"
+#include "TextureManager.h"
 
 class TitleState : public State
 {
@@ -19,10 +24,7 @@ public:
 
 private:
 	Label *m_plabel;
-	PlatformPlayer *m_player;
-	int m_camOffset;
-	
-	SDL_FRect *m_platforms;
+
 };
 
 #endif

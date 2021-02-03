@@ -42,6 +42,12 @@ SDL_Rect MathManager::ConvertFRect2Rect(const SDL_FRect& r)
 	return temp;
 }
 
+SDL_Rect MathManager::ConvertFRect2Rect(const SDL_FRect* r)
+{
+	const SDL_Rect temp = { (int)r->x, (int)r->y, (int)r->w, (int)r->h };
+	return temp;
+}
+
 SDL_FRect MathManager::ConvertRect2FRect(const SDL_Rect& r)
 {
 	const SDL_FRect temp = { (float)r.x, (float)r.y, (float)r.w, (float)r.h };
