@@ -6,7 +6,6 @@
 #include "EventManager.h"
 #include "GameState.h"
 #include "StateManager.h"
-
 #include "TextureManager.h"
 
 TitleState::TitleState() {}
@@ -21,7 +20,7 @@ void TitleState::Enter()
 	int width, height;
 	
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &width, &height);	
-	m_player = new PlatformPlayer({ 0,0, width/14,height }, { 0,0, float(width / 14),float(height) }, Engine::Instance().GetRenderer(), TEMA::GetTexture("Knight"));
+	m_player = new PlatformPlayer({ 0, 0, width/14,height }, { WIDTH / 2,HEIGHT / 2, float(width / 14),float(height) }, Engine::Instance().GetRenderer(), TEMA::GetTexture("Knight"));
 	m_player->Init();
 	m_platforms = new SDL_FRect[5];
 	m_platforms[0] = { 462, 648, 100, 20 }; //0
@@ -82,7 +81,8 @@ void TitleState::Update()
 	//if (EVMA::KeyPressed(SDL_SCANCODE_N))
 	//	STMA::ChangeState(new GameState());// Change to new GameState
 
-
+	m_camOffset = 0;
+	
 	if (EVMA::KeyPressed(SDL_SCANCODE_H))
 		m_player->ShowHitbox();
 	
@@ -104,6 +104,40 @@ void TitleState::Update()
 	
 	m_player->Update();
 	CollisionCheck();
+
+	if (m_player->GetDstP()->x > (WIDTH / 2) + 100)
+	{
+		std::cout << "Right" << endl;
+		m_camOffset = (WIDTH / 2) - m_player->GetDstP()->x;
+		//cout << m_camOffset;
+	}
+
+	else if (m_player->GetDstP()->x < (WIDTH / 2) - 100)
+	{
+		std::cout << "Left" << endl;
+		m_camOffset = (WIDTH / 2) - m_player->GetDstP()->x;
+		//cout << m_camOffset;
+	}
+
+	if (m_camOffset > 100)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			m_platforms[i].x += 10;
+		}
+		m_player->GetDstP()->x += 10;
+	}
+	else if(m_camOffset < -100)
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			m_platforms[i].x -= 10;
+		}
+		m_player->GetDstP()->x -= 10;
+	}
+	
+	
+	//m_camOffset = (WIDTH / 2) - m_player->GetDstP()->y;
 }
 
 void TitleState::Render()

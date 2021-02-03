@@ -19,7 +19,8 @@ public:
 private:
 	Label *m_plabel;
 	PlatformPlayer *m_player;
-
+	int m_camOffset;
+	
 	SDL_FRect *m_platforms;
 };
 
