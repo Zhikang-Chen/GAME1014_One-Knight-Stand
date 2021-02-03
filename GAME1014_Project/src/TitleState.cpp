@@ -105,14 +105,14 @@ void TitleState::Update()
 	m_player->Update();
 	CollisionCheck();
 
-	if (m_player->GetDstP()->x > (WIDTH / 2))
+	if (m_player->GetDstP()->x > (WIDTH / 2) + 100 )
 	{
 		std::cout << "Right" << endl;
 		m_camOffset = (WIDTH / 2) - (m_player->GetDstP()->x - (m_player->GetDstP()->w / 2));
 		cout << m_camOffset;
 	}
 
-	else if (m_player->GetDstP()->x < (WIDTH / 2))
+	else if (m_player->GetDstP()->x < (WIDTH / 2) - 100)
 	{
 		std::cout << "Left" << endl;
 		m_camOffset = (WIDTH / 2) - (m_player->GetDstP()->x - ( m_player->GetDstP()->w / 2));
