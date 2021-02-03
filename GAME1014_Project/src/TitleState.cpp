@@ -33,37 +33,30 @@ void TitleState::Enter()
 	//std::cout << "Entering TitleState..." << std::endl;
 }
 
-void TitleState::Update()
+
+/*
+I SPENT 5 HOURS TRYING TO FIGURE OUT WHY DOESN'T THE COLLISION CHECK WORK....
+IT WAS A SEMICOLON AT THE END OF THE IF STATEMENT. A FUCKING SEMICOLON!
+I HAVEN'T BEEN THIS CLOSE TO KILLING MYSELF SINCE LAST SUMMER.
+I am not only an idiot I am also blind.
+*/
+
+//Check collision between platforms and the player
+void TitleState::CollisionCheck()
 {
-	//if (EVMA::KeyPressed(SDL_SCANCODE_N))
-	//	STMA::ChangeState(new GameState());// Change to new GameState
-
-	if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && fml->IsGrounded())
-	{
-		fml->SetAccelY(-60.0); //<- JUMPFORCE
-		fml->SetGrounded(false);
-	}
-
-	if (EVMA::KeyDown(SDL_SCANCODE_A))
-		fml->SetAccelX(-1.0);
-	if (EVMA::KeyDown(SDL_SCANCODE_D))
-		fml->SetAccelX(1.0);
-
-
-
 	for (int i = 0; i < 5; i++)
 	{
-		if (COMA::AABBCheck(fml->GetDst(), m_platforms[i]) == 0);
+		if (COMA::AABBCheck(m_platforms[i], fml->GetDst()))
 		{
-			cout << COMA::AABBCheck(fml->GetDst(), m_platforms[i]) << endl;
+			//cout << fml->GetDstP()->h << endl;
 			if ((fml->GetDstP()->y + fml->GetDstP()->h) - (float)fml->GetVelY() <= m_platforms[i].y)
 			{//Collliding with the top side of the platform
 				fml->SetGrounded(true);
 				fml->StopY();
 				fml->SetY(m_platforms[i].y - fml->GetDstP()->h);
+				//cout << "insanity" << endl;
 			}
 			else if (fml->GetDstP()->y - (float)fml->GetVelY() >= (m_platforms[i].y + m_platforms[i].h))
-
 			{//Collliding with the bottom side of the platform
 				fml->StopY();
 				fml->SetY(m_platforms[i].y + m_platforms[i].h);
@@ -80,12 +73,32 @@ void TitleState::Update()
 				fml->StopX();
 				fml->SetX(m_platforms[i].x + m_platforms[i].w);
 			}
-
-
 		}
 	}
+}
 
+void TitleState::Update()
+{
+	//if (EVMA::KeyPressed(SDL_SCANCODE_N))
+	//	STMA::ChangeState(new GameState());// Change to new GameState
+
+	if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && fml->IsGrounded())
+	{
+		fml->SetAccelY(-60.0); //<- JUMPFORCE
+		fml->SetGrounded(false);
+	}
+
+	if (EVMA::KeyDown(SDL_SCANCODE_A))
+		fml->SetAccelX(-1.0);
+	if (EVMA::KeyDown(SDL_SCANCODE_D))
+		fml->SetAccelX(1.0);
+
+	//Wrap the player
+	if (fml->GetDstP()->x < -51.0) fml->SetX(1024.0);
+	else if (fml->GetDstP()->x > 1024.0) fml->SetX(-50.0);
+	
 	fml->Update();
+	CollisionCheck();
 }
 
 void TitleState::Render()
@@ -98,7 +111,8 @@ void TitleState::Render()
 	SDL_RenderFillRectsF(Engine::Instance().GetRenderer(), m_platforms,5);
 
 	//SDL_RenderFillRect(Engine::Instance().GetRenderer(), fml->GetDstP());
-	
+	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 0, 0, 255);
+	SDL_RenderFillRect(Engine::Instance().GetRenderer(), &MAMA::ConvertFRect2Rect(fml->GetDst()));
 	m_plabel->Render();
 	fml->Render();
 	

@@ -14,12 +14,13 @@ public:
 	virtual void Update();
 	virtual void Render();
 	virtual void Exit();
+	void CollisionCheck();
 
 private:
 	Label *m_plabel;
 	PlatformPlayer *fml;
 
-	SDL_FRect* m_platforms;
+	SDL_FRect *m_platforms;
 };
 
 #endif

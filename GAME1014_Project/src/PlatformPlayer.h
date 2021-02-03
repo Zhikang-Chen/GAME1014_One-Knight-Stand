@@ -45,7 +45,7 @@ private:
 		m_maxVelY,
 		m_drag,
 		m_grav;
-	SDL_Rect m_rect;
+	//SDL_Rect m_rect;
 	SDL_Renderer* m_rend;
 
 

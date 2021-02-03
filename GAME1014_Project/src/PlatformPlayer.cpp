@@ -69,8 +69,8 @@ double PlatformPlayer::GetVelX() { return m_velX; }
 
 double PlatformPlayer::GetVelY() { return m_velY; }
 
-void PlatformPlayer::SetX(float x) { m_rect.x = x; }
+void PlatformPlayer::SetX(float x) { this->GetDstP()->x = x; }
 
 
-void PlatformPlayer::SetY(float y) { m_rect.y = y; }
+void PlatformPlayer::SetY(float y) { this->GetDstP()->y = y; }
 
