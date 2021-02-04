@@ -5,8 +5,7 @@ GameState::GameState() {}
 
 void GameState::Enter()
 {
-	m_plabel = new Label("Minecraft", HEIGHT / 2, WIDTH / 2, "UWU What's this", { 0,0,0,0 });
-
+	m_plabel = new Label("Minecraft", HEIGHT / 2, WIDTH / 2, "UWU? What's dis", { 0,0,0,0 });
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_RUNNING_AND_IDLE.png", "Knight");
 
 	//SDL_Rect src{ 20,20,100,100 }, dir{0,0,100,100};
@@ -69,29 +68,36 @@ void GameState::CollisionCheck()
 	}
 }
 
+/*To do
+ *Fix a bug where the player can get out of bound vai jumping
+ */
+
 void GameState::UpdateCam()
 {
 	int camspeed = 0;
-	if (m_player->GetDstP()->x > (WIDTH / 2) + 100)
+	if (m_player->GetDstP()->x >= (WIDTH / 2) + 100)
 	{
 		//std::cout << "Right" << endl;
-		m_camOffset = (WIDTH / 2) - (m_player->GetDstP()->x - (m_player->GetDstP()->w / 2));
-		cout << m_camOffset << endl;
-		camspeed = -5;
+		//m_camOffset = (WIDTH / 2) - (m_player->GetDstP()->x - (m_player->GetDstP()->w / 2));
+		//cout << m_camOffset << endl;
+		camspeed = -7;
 	}
-	else if (m_player->GetDstP()->x < (WIDTH / 2) - 100)
+	else if (m_player->GetDstP()->x <= (WIDTH / 2) - 100)
 	{
 		//std::cout << "Left" << endl;
-		m_camOffset = (WIDTH / 2) - (m_player->GetDstP()->x - ( m_player->GetDstP()->w / 2));
-		cout << m_camOffset << endl;
-		camspeed = 5;
+		//m_camOffset = (WIDTH / 2) - (m_player->GetDstP()->x + ( m_player->GetDstP()->w / 2));
+		//cout << m_camOffset << endl;
+		camspeed = 7;
 	}
 
 	for (auto &platform : m_pPlatforms)
 	{
 		platform->x += camspeed;
 	}
-	m_player->GetDstP()->x += camspeed;
+
+	
+	
+	m_player->SetX(m_player->GetDstP()->x + camspeed);
 
 
 }
@@ -102,25 +108,30 @@ void GameState::Update()
 	//	STMA::ChangeState(new GameState());// Change to new GameState
 
 	m_camOffset = 0;
+	double A = 0;
 
 	if (EVMA::KeyPressed(SDL_SCANCODE_H))
 		m_player->ShowHitbox();
 
 	if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_player->IsGrounded())
 	{
-		m_player->SetAccelY(-60.0); //<- JUMPFORCE
+		m_player->SetAccelY(-60.0); //<- JUMPFORCE	
 		m_player->SetGrounded(false);
 	}
 
 	if (EVMA::KeyDown(SDL_SCANCODE_A))
-		m_player->SetAccelX(-1.0);
+	{
+		A = -1;
+	}
 	if (EVMA::KeyDown(SDL_SCANCODE_D))
-		m_player->SetAccelX(1.0);
-
+	{
+		A = 1;
+	}	
+	m_player->SetAccelX(A);
 
 	//Wrap the player
-	if (m_player->GetDstP()->x < -51.0) m_player->SetX(1024.0);
-	else if (m_player->GetDstP()->x > 1024.0) m_player->SetX(-50.0);
+	//if (m_player->GetDstP()->x < -51.0) m_player->SetX(1024.0);
+	//else if (m_player->GetDstP()->x > 1024.0) m_player->SetX(-50.0);
 
 	m_player->Update();
 	CollisionCheck();

@@ -10,6 +10,7 @@
 class FontManager
 {
 public: // Public methods.
+	static void Init();
 	static void RegisterFont(const char* path, const std::string key, const int size);
 	static void SetSize(const char* path, const std::string key, const int size);
 	static TTF_Font* GetFont(const std::string key);

@@ -23,7 +23,10 @@ public:
 	void UpdateCam();
 
 private:
-	Label *m_plabel;
+	Label* m_pTitle;
+	Label *m_pSubTitle;
+	Label* something;
+	Sprite* m_pBackground;
 
 };
 

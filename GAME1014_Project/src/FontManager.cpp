@@ -1,20 +1,32 @@
 #include "FontManager.h"
 #include <iostream>
 
-void FontManager::RegisterFont(const char * path, const std::string key, const int size)
+void FontManager::Init()
 {
 	if (!TTF_WasInit() && TTF_Init() == 0)
 		std::cout << "Font init success!" << std::endl;
-	else 
+	else
 	{
 		std::cout << "Font init failed: Error - " << TTF_GetError() << std::endl;
 		return;
 	}
-	TTF_Font* temp = TTF_OpenFont(path, size);
-	if (temp == nullptr)
-		std::cout << "Could not load font: Error - " << TTF_GetError() << std::endl;
+}
+
+void FontManager::RegisterFont(const char * path, const std::string key, const int size)
+{
+	if (TTF_WasInit() == 1)
+	{
+		TTF_Font* temp = TTF_OpenFont(path, size);
+		if (temp == nullptr)
+			std::cout << "Could not load font: Error - " << TTF_GetError() << std::endl;
+		else
+			s_fonts.emplace(key, temp);
+	}
 	else
-		s_fonts.emplace(key, temp);
+	{
+		std::cout << "Font register failed: Error - " << TTF_GetError() << std::endl;
+		return;
+	}
 }
 
 void FontManager::SetSize(const char * path, const std::string key, const int size)

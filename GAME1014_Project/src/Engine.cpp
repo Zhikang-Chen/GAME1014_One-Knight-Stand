@@ -27,7 +27,7 @@ bool Engine::Init(const char* title, int xpos, int ypos, int width, int height, 
 				EVMA::Init();
 				SOMA::Init();
 				TEMA::Init();
-				FOMA::RegisterFont("../GAME1017_Template_W01/minecraft_font.ttf", "Minecraft", 16);
+				FOMA::Init();
 			}
 			else return false; // Renderer init fail.
 		}
@@ -37,6 +37,10 @@ bool Engine::Init(const char* title, int xpos, int ypos, int width, int height, 
 	// Final engine initialization calls.
 	m_fps = (Uint32)round((1 / (double)FPS) * 1000); // Sets FPS in milliseconds and rounds.
 	m_running = true; // Everything is okay, start the engine.
+
+	FOMA::RegisterFont("../GAME1017_Template_W01/Font/minecraft_font.ttf", "Minecraft", 16);
+	FOMA::RegisterFont("../GAME1017_Template_W01/Font/zh-cn_0.ttf", "Genshi_font", 64);
+	
 	STMA::PushState(new TitleState());
 	cout << "Engine Init success!" << endl;
 	return true;
