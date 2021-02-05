@@ -3,17 +3,19 @@
 #define _PLATFORMPLAYER_H_
 #define GRAV 6.0 //Gravity
 #define JUMPFORCE 60.0; //Acceleration
-#include "Sprite.h"
+#include "SpriteObject.h"
 #include "TextureManager.h"
 #include "MathManager.h"
 
-class PlatformPlayer : public AnimatedSprite
+enum PlayerState {STATE_IDLING, STATE_RUNNING, STATE_JUMPING};
+
+class PlatformPlayer : public AnimatedSpriteObject
 {
 public:
-	PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t);
+	PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t);
 
 	//PlatformPlayer(SDL_Rect s, SDL_Rect d, SDL_Renderer* r, SDL_Texture* t)
-	//	:Sprite(s, { static_cast<float>(d.x, d.y, d.w, d.h)}, r, t) {}
+	//	:SpriteObject(s, { static_cast<float>(d.x, d.y, d.w, d.h)}, r, t) {}
 	
 	void Init();
 	void Update();
@@ -39,7 +41,9 @@ private:
 	// Private member
 	bool m_grounded; //In most platforming games, the player actually starts in the air
 	bool m_alive; //Game runs while player is alive, shows black screen when dead.
+	bool m_facingLeft;
 	bool m_showHitbox;
+	PlayerState m_state;
 	double m_accelX, //Acceleration on the X axis, horizontal force
 		m_accelY,//Acceleration on the Y axis, vertical force
 		m_velX, //Velocity for X 
@@ -49,7 +53,8 @@ private:
 		m_drag,
 		m_grav;
 	//SDL_Rect m_rect;
-	SDL_Renderer* m_rend;
+
+	
 
 
 	

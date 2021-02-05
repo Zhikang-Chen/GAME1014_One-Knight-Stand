@@ -2,7 +2,10 @@
 #ifndef _STATES_H_
 #define _STATES_H_
 
+#include <map>
 #include <SDL.h>
+#include <string>
+#include "GameObject.h"
 
 class State // This is the abstract base class for all specific states.
 {
@@ -15,6 +18,7 @@ public: // Public methods.
 
 protected: // Private but inherited.
 	State() {}
+	std::map<std::string, GameObject*> m_objects;
 };
 
 #endif

@@ -2,14 +2,14 @@
 #ifndef _BUTTON_H_
 #define _BUTTON_H_
 
-#include "Sprite.h"
+#include "SpriteObject.h"
 #include <SDL.h>
 
 // Button will be an example of the command design pattern.
-class Button : public Sprite
+class Button : public SpriteObject
 {
 public: // Public methods.
-	int Update();
+	void Update();
 	void Render();
 protected: // Private but inherited!
 	Button(SDL_Rect src, SDL_FRect dst, SDL_Renderer* r, SDL_Texture* t);

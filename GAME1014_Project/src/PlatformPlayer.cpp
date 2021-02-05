@@ -2,35 +2,111 @@
 #include <algorithm>
 
 
-PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t) : AnimatedSprite(s, d, r, t, 0, 0, 13, 10){}
+#include "Engine.h"
+#include "EventManager.h"
 
+//For some reason m_maxVelY can't take JUMPFORCE
+//Will fix someday
 
-void PlatformPlayer::Init()
+PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : AnimatedSpriteObject(s, d, t, 0, 0, 13, 10),
+m_state(STATE_JUMPING), m_grounded(false), m_facingLeft(false), m_maxVelX(10.0), m_maxVelY(60.0), m_grav(GRAV), m_drag(0.8)
 {
-	m_grounded = false;
-	m_alive = true;
-	m_showHitbox = false;
-	m_accelX = m_accelY = m_velX = m_velY = 0.0; //All of these have a value of 0. Value is passed down
-	m_maxVelX = 10.0;
-	m_maxVelY = JUMPFORCE;
-	m_grav = GRAV;
-	m_drag = 0.88;
+	m_accelX = m_accelY = m_velX = m_velY = 0.0;
+	//SetAnimation(1, 8, 9); // Initialize jump animation.
 }
+
 
 void PlatformPlayer::Update()
 {
+
+	if (EVMA::KeyPressed(SDL_SCANCODE_H))
+		ShowHitbox();
+	
+	// Checking states.
+	switch (m_state)
+	{
+	case STATE_IDLING:
+		// Transition to run.
+		if (EVMA::KeyPressed(SDL_SCANCODE_A) || EVMA::KeyPressed(SDL_SCANCODE_D))
+		{
+			m_state = STATE_RUNNING;
+			//SetAnimation(3, 0, 8, 256); // , 256
+		}
+		// Transition to jump.
+		else if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
+		{
+			m_accelY = -JUMPFORCE; // SetAccelY(-JUMPFORCE);
+			m_grounded = false; // SetGrounded(false);
+			m_state = STATE_JUMPING;
+			//SetAnimation(1, 8, 9, 256);
+		}
+		break;
+	case STATE_RUNNING:
+		// Move left and right.
+		if (EVMA::KeyHeld(SDL_SCANCODE_A) && m_dst.x > 0)
+		{
+			m_accelX = -1.5;
+			if (!m_facingLeft)
+				m_facingLeft = true;
+		}
+		else if (EVMA::KeyHeld(SDL_SCANCODE_D) && m_dst.x < WIDTH - m_dst.w)
+		{
+			m_accelX = 1.5;
+			if (m_facingLeft)
+				m_facingLeft = false;
+		}
+		// Transition to jump.
+		if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
+		{
+			m_accelY = -JUMPFORCE;
+			m_grounded = false;
+			m_state = STATE_JUMPING;
+			//SetAnimation(1, 8, 9, 256);
+		}
+		// Transition to idle.
+		if (!EVMA::KeyHeld(SDL_SCANCODE_A) && !EVMA::KeyHeld(SDL_SCANCODE_D))
+		{
+			m_state = STATE_IDLING;
+			//SetAnimation(1, 0, 1, 256); // , 256
+		}
+		break;
+	case STATE_JUMPING:
+		// Move in mid-air is cool.
+		if (EVMA::KeyHeld(SDL_SCANCODE_A) && m_dst.x > 0)
+		{
+			m_accelX = -1.5;
+			if (!m_facingLeft)
+				m_facingLeft = true;
+		}
+		else if (EVMA::KeyHeld(SDL_SCANCODE_D) && m_dst.x < WIDTH - m_dst.w)
+		{
+			m_accelX = 1.5;
+			if (m_facingLeft)
+				m_facingLeft = false;
+		}
+		// Hit the ground, transition to run.
+		if (m_grounded)
+		{
+			m_state = STATE_RUNNING;
+			//SetAnimation(3, 0, 8, 256);
+		}
+		break;
+	}
+
+	
 	// x axis
 	m_velX += m_accelX;
 	m_velX *= (m_grounded ? m_drag : 1.0);
 
 	//Velocity clamping
 	m_velX = std::min(std::max(m_velX, -m_maxVelX), m_maxVelX); //std::max first check, std::min second
-	this->GetDstP()->x += (int)m_velX;
+	m_dst.x += m_velX;
 	// y axis
 
 	m_velY += m_accelY + m_grav;
 	m_velY = std::min(std::max(m_velY, -m_maxVelY), (m_grav * 4.0)); //m_grav is how fast you're going to fall
-	this->GetDstP()->y += (int)m_velY;
+	m_dst.y += m_velY;
+
 
 	//Reset acceleration
 	m_accelX = m_accelY = 0.0; //Similar to a keyup event
@@ -41,10 +117,10 @@ void PlatformPlayer::Render()
 {
 	if (m_showHitbox)
 	{
-		SDL_SetRenderDrawColor(m_pRend, 255, 0, 0, 255);
-		SDL_RenderFillRect(m_pRend, &MAMA::ConvertFRect2Rect(this->GetDst()));
+		SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 0, 0, 255);
+		SDL_RenderFillRect(Engine::Instance().GetRenderer(), &MAMA::ConvertFRect2Rect(m_dst));
 	}
-	SDL_RenderCopyExF(m_pRend, m_pText, GetSrcP(), GetDstP(), m_angle, 0, SDL_FLIP_NONE);
+	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, GetSrcP(), GetDstP(), m_angle, 0, SDL_FLIP_NONE);
 }
 
 void PlatformPlayer::ShowHitbox()

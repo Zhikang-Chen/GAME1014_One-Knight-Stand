@@ -8,7 +8,6 @@ void FontManager::Init()
 	else
 	{
 		std::cout << "Font init failed: Error - " << TTF_GetError() << std::endl;
-		return;
 	}
 }
 
@@ -25,7 +24,6 @@ void FontManager::RegisterFont(const char * path, const std::string key, const i
 	else
 	{
 		std::cout << "Font register failed: Error - " << TTF_GetError() << std::endl;
-		return;
 	}
 }
 

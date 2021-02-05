@@ -6,14 +6,15 @@ GameState::GameState() {}
 void GameState::Enter()
 {
 	m_plabel = new Label("Minecraft", HEIGHT / 2, WIDTH / 2, "UWU? What's dis", { 0,0,0,0 });
+	m_objects.emplace("Label", m_plabel);
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_RUNNING_AND_IDLE.png", "Knight");
 
 	//SDL_Rect src{ 20,20,100,100 }, dir{0,0,100,100};
 	int width, height;
 
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &width, &height);
-	m_player = new PlatformPlayer({ 0, 0, width / 14,height }, { WIDTH / 2,HEIGHT / 2, float(width / 14),float(height) }, Engine::Instance().GetRenderer(), TEMA::GetTexture("Knight"));
-	m_player->Init();
+	m_player = new PlatformPlayer({ 0, 0, width / 14,height }, { WIDTH / 2,HEIGHT / 2, float(width / 14),float(height) }, TEMA::GetTexture("Knight"));
+	m_objects.emplace("Player", m_player);
 
 	m_pPlatforms.push_back(new SDL_FRect { 462, 648, 100, 20 }); //0
 	m_pPlatforms.push_back(new SDL_FRect{ 200, 468, 100, 20 });  //1
@@ -47,11 +48,11 @@ void GameState::CollisionCheck()
 				m_player->SetY(platform->y - m_player->GetDstP()->h);
 				//cout << "insanity" << endl;
 			}
-			else if (m_player->GetDstP()->y - (float)m_player->GetVelY() >= (platform->y + platform->h))
-			{//Collliding with the bottom side of the platform
-				m_player->StopY();
-				m_player->SetY(platform->y + platform->h);
-			}
+			//else if (m_player->GetDstP()->y - (float)m_player->GetVelY() >= (platform->y + platform->h))
+			//{//Collliding with the bottom side of the platform
+			//	m_player->StopY();
+			//	m_player->SetY(platform->y + platform->h);
+			//}
 
 			else if ((m_player->GetDstP()->x + m_player->GetDstP()->w) - (float)m_player->GetVelX() <= platform->x)
 			{//Collliding with the left side of the platform
@@ -94,8 +95,6 @@ void GameState::UpdateCam()
 	{
 		platform->x += camspeed;
 	}
-
-	
 	
 	m_player->SetX(m_player->GetDstP()->x + camspeed);
 
@@ -104,36 +103,10 @@ void GameState::UpdateCam()
 
 void GameState::Update()
 {
-	//if (EVMA::KeyPressed(SDL_SCANCODE_N))
-	//	STMA::ChangeState(new GameState());// Change to new GameState
-
-	m_camOffset = 0;
-	double A = 0;
-
-	if (EVMA::KeyPressed(SDL_SCANCODE_H))
-		m_player->ShowHitbox();
-
-	if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_player->IsGrounded())
-	{
-		m_player->SetAccelY(-60.0); //<- JUMPFORCE	
-		m_player->SetGrounded(false);
-	}
-
-	if (EVMA::KeyDown(SDL_SCANCODE_A))
-	{
-		A = -1;
-	}
-	if (EVMA::KeyDown(SDL_SCANCODE_D))
-	{
-		A = 1;
-	}	
-	m_player->SetAccelX(A);
-
-	//Wrap the player
-	//if (m_player->GetDstP()->x < -51.0) m_player->SetX(1024.0);
-	//else if (m_player->GetDstP()->x > 1024.0) m_player->SetX(-50.0);
-
-	m_player->Update();
+	
+	for (map<std::string, GameObject*>::iterator i = m_objects.begin(); i != m_objects.end(); i++)
+		i->second->Update();
+	
 	CollisionCheck();
 	UpdateCam();
 
@@ -149,11 +122,12 @@ void GameState::Render()
 
 	for(auto &platform : m_pPlatforms)
 		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), platform);
-
-	//SDL_RenderFillRect(Engine::Instance().GetRenderer(), m_player->GetDstP());
-	m_plabel->Render();
-	m_player->Render();
-
+	
+	for (map<std::string, GameObject*>::iterator i = m_objects.begin(); i != m_objects.end(); i++)
+		i->second->Render();
+	if (dynamic_cast<GameState*>(STMA::GetStates().back())) // Check to see if current state is of type GameState
+		State::Render();
+	
 	State::Render();
 }
 
@@ -165,6 +139,13 @@ void GameState::Exit()
 		delete platform;
 		platform = nullptr;
 	}
+
+	for (map<std::string, GameObject*>::iterator i = m_objects.begin(); i != m_objects.end(); i++)
+	{
+		delete i->second;
+		i->second = nullptr;
+	}
+	m_objects.clear();
 	
 	std::cout << "Exiting TitleState..." << std::endl;
 }

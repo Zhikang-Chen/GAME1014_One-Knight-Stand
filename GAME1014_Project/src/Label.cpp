@@ -18,7 +18,7 @@ Label::~Label()
 
 void Label::Render()
 {
-	SDL_RenderCopyF(Engine::Instance().GetRenderer(), m_pTexture, 0, &m_rTextRect);
+	SDL_RenderCopyF(Engine::Instance().GetRenderer(), m_pTexture, 0, &m_dst);
 }
 
 void Label::SetText(const char* str)
@@ -33,14 +33,14 @@ void Label::SetText(const char* str)
 	{
 		SDL_DestroyTexture(m_pTexture);
 		m_pTexture = SDL_CreateTextureFromSurface(Engine::Instance().GetRenderer(), fontSurf);
-		m_rTextRect = { m_rTextRect.x, m_rTextRect.y, (float)fontSurf->w, (float)fontSurf->h };
+		m_dst = { m_dst.x, m_dst.y, (float)fontSurf->w, (float)fontSurf->h };
 		SDL_FreeSurface(fontSurf);
 	}
 }
 
 void Label::SetPos(const float x, const float y)
 {
-	m_rTextRect = { x, y, m_rTextRect.w, m_rTextRect.h };
+	m_dst = { x, y, m_dst.w, m_dst.h };
 }
 
 void Label::SetColor(const SDL_Color& col)

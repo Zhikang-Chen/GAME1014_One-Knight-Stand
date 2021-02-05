@@ -67,12 +67,10 @@
     <ClCompile Include="..\src\Label.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Box.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\PlatformPlayer.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Background.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -120,13 +118,16 @@
     <ClInclude Include="..\src\Label.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Box.h">
+    <ClInclude Include="..\src\PlatformPlayer.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Sprite.h">
+    <ClInclude Include="..\src\GameObject.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\PlatformPlayer.h">
+    <ClInclude Include="..\src\SpriteObject.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Background.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>

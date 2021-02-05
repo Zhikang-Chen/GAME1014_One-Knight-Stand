@@ -5,12 +5,15 @@
 #include "SDL.h"
 #include <iostream>
 
-class Sprite // Inline class.
+#include "Engine.h"
+#include "GameObject.h"
+
+class SpriteObject : public GameObject // Inline class.
 {
 public: // Inherited and public.
-	Sprite(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t)
-		:m_src(s), m_dst(d), m_pRend(r), m_pText(t), m_angle(0.0) {}
-	virtual void Render() {	SDL_RenderCopyExF(m_pRend, m_pText, GetSrcP(), GetDstP(), m_angle, 0, SDL_FLIP_NONE); }
+	SpriteObject(SDL_Rect s, SDL_FRect d, SDL_Texture* t)
+		:m_src(s), m_dst(d), m_pText(t), m_angle(0.0) {}
+	virtual void Render() {	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, GetSrcP(), GetDstP(), m_angle, 0, SDL_FLIP_NONE); }
 	SDL_Rect* GetSrcP() { return &m_src; }
 	SDL_FRect* GetDstP() { return &m_dst; }
 	SDL_FRect GetDst() { return m_dst; };
@@ -20,16 +23,15 @@ protected: // Private BUT inherited.
 	double m_angle;
 	SDL_Rect m_src;
 	SDL_FRect m_dst;
-	SDL_Renderer* m_pRend;
 	SDL_Texture* m_pText;
 private: // Private NOT inherited.
 };
 
-class AnimatedSprite : public Sprite// Also inline.
+class AnimatedSpriteObject : public SpriteObject// Also inline.
 {
 public:
-	AnimatedSprite(SDL_Rect s, SDL_FRect d, SDL_Renderer* r, SDL_Texture* t, int sstart, int smin, int smax, int nf)
-		:Sprite(s, d, r, t), m_sprite(sstart), m_spriteMin(smin), m_spriteMax(smax), m_frameMax(nf) {}
+	AnimatedSpriteObject(SDL_Rect s, SDL_FRect d, SDL_Texture* t, int sstart, int smin, int smax, int nf)
+		:SpriteObject(s, d, t), m_sprite(sstart), m_spriteMin(smin), m_spriteMax(smax), m_frameMax(nf) {}
 	void Animate()
 	{
 		if (m_frame++ == m_frameMax) // Post-increment ensures m_frame starts at 0.

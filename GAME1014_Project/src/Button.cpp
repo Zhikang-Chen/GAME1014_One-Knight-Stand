@@ -6,7 +6,7 @@
 #include <SDL.h>
 
 Button::Button(SDL_Rect src, SDL_FRect dst, SDL_Renderer* r, SDL_Texture* t)
-	: Sprite(src, dst, r, t), m_state(STATE_UP) {}
+	: SpriteObject(src, dst, t), m_state(STATE_UP) {}
 
 bool Button::MouseCollision()
 {
@@ -16,7 +16,7 @@ bool Button::MouseCollision()
 		    my < (m_dst.y + m_dst.h) && my > m_dst.y);
 }
 
-int Button::Update()
+void Button::Update()
 {
 	bool col = MouseCollision();
 	switch (m_state)
@@ -39,20 +39,18 @@ int Button::Update()
 				m_state = STATE_OVER;
 				// Execute new "callback".
 				Execute();
-				return 1;
 			}
 			else 
 				m_state = STATE_UP;
 		}
 		break;
 	}
-	return 0;
 }
 
 void Button::Render()
 {
 	m_src.x = m_src.w * (int)m_state;
-	SDL_RenderCopyF(m_pRend, m_pText, &m_src, &m_dst);
+	SDL_RenderCopyF(Engine::Instance().GetRenderer(), m_pText, &m_src, &m_dst);
 }
 
 // Create button subclasses and their overridden Execute methods below...

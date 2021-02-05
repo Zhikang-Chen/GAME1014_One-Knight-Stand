@@ -1,6 +1,7 @@
 ﻿#pragma once
 #ifndef _TITLESTATE_H_
 #define _TITLESTATE_H_
+#include "Background.h"
 #include "Label.h"
 #include "States.h"
 
@@ -26,7 +27,7 @@ private:
 	Label* m_pTitle;
 	Label *m_pSubTitle;
 	Label* something;
-	Sprite* m_pBackground;
+	Background* m_pBackground;
 
 };
 
