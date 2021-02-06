@@ -5,8 +5,17 @@ GameState::GameState() {}
 
 void GameState::Enter()
 {
-	m_plabel = new Label("Minecraft", HEIGHT / 2, WIDTH / 2, "UWU? What's dis", { 0,0,0,0 });
-	m_objects.emplace("Label", m_plabel);
+	//m_plabel = new Label("Minecraft", HEIGHT / 2, WIDTH / 2, "UWU? What's dis", { 0,0,0,0 });
+
+	//Ui test and i am not sorry for typing those
+	//Remove when use
+	m_objects.emplace("Label", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 20, "UWU? What's dis", { 0,0,0,0 }));
+	m_objects.emplace("Label2", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 40, "I am your cute UI GF", { 0,0,0,0 }));
+	m_objects.emplace("Label3", new Label("Minecraft", 10, 40, "I luv u OWO", { 0,0,0,0 }));
+
+	m_objects.emplace("Label4", new Label("Minecraft", WIDTH / 2 - 20, 10, "I am not responsible for the lost of your sanity -Ken", { 0,0,0,0 }));
+
+	
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_RUNNING_AND_IDLE.png", "Knight");
 
 	//SDL_Rect src{ 20,20,100,100 }, dir{0,0,100,100};
@@ -91,11 +100,11 @@ void GameState::UpdateCam()
 		camspeed = 7;
 	}
 
-	for (auto &platform : m_pPlatforms)
+	for (auto& platform : m_pPlatforms)
 	{
 		platform->x += camspeed;
 	}
-	
+	m_objects["Label4"]->GetDst()->x += camspeed;
 	m_player->SetX(m_player->GetDstP()->x + camspeed);
 
 
@@ -104,6 +113,7 @@ void GameState::UpdateCam()
 void GameState::Update()
 {
 	
+	//m_plabel->SetText());
 	for (map<std::string, GameObject*>::iterator i = m_objects.begin(); i != m_objects.end(); i++)
 		i->second->Update();
 	

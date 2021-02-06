@@ -17,7 +17,7 @@ void TitleState::Enter()
 	m_pTitle = new Label("Genshi_font", WIDTH / 25, HEIGHT / 27, "One Knight Stand", { 0,0,0,0 });
 	m_objects.emplace("Title", m_pTitle);
 
-	something = new Label("Minecraft", WIDTH /25, HEIGHT - 50, "Press 'n' to get to game state. I am too lazy to put the button ", { 0,0,0,0 });
+	something = new Label("Minecraft", WIDTH /25, HEIGHT - 50, "Press 'n' to get to game state. I am too lazy to code the button ", { 0,0,0,0 });
 	m_objects.emplace("idk", something);
 	//std::cout << "Entering TitleState..." << std::endl;
 }
