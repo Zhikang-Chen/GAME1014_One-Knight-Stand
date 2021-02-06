@@ -15,7 +15,7 @@ void GameState::Enter()
 
 	m_objects.emplace("Label4", new Label("Minecraft", WIDTH / 2 - 20, 10, "I am not responsible for the lost of your sanity -Ken", { 0,0,0,0 }));
 
-	
+	m_objects.emplace("Label5", new Label("Minecraft", WIDTH + 200, 10, "You can't run human kun", { 0,0,0,0 }));
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_RUNNING_AND_IDLE.png", "Knight");
 
 	//SDL_Rect src{ 20,20,100,100 }, dir{0,0,100,100};
@@ -105,6 +105,7 @@ void GameState::UpdateCam()
 		platform->x += camspeed;
 	}
 	m_objects["Label4"]->GetDst()->x += camspeed;
+	m_objects["Label5"]->GetDst()->x += camspeed;
 	m_player->SetX(m_player->GetDstP()->x + camspeed);
 
 
