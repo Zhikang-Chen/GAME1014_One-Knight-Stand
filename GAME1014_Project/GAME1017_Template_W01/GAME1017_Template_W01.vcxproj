@@ -124,6 +124,7 @@
     <ClCompile Include="..\src\EventManager.cpp" />
     <ClCompile Include="..\src\FontManager.cpp" />
     <ClCompile Include="..\src\GameState.cpp" />
+    <ClCompile Include="..\src\Heart.cpp" />
     <ClCompile Include="..\src\Label.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="..\src\MathManager.cpp" />
@@ -131,6 +132,7 @@
     <ClCompile Include="..\src\SoundManager.cpp" />
     <ClCompile Include="..\src\StateManager.cpp" />
     <ClCompile Include="..\src\States.cpp" />
+    <ClCompile Include="..\src\SwordSkill.cpp" />
     <ClCompile Include="..\src\TextureManager.cpp" />
     <ClCompile Include="..\src\TitleState.cpp" />
   </ItemGroup>
@@ -144,6 +146,7 @@
     <ClInclude Include="..\src\FontManager.h" />
     <ClInclude Include="..\src\GameObject.h" />
     <ClInclude Include="..\src\GameState.h" />
+    <ClInclude Include="..\src\Heart.h" />
     <ClInclude Include="..\src\Label.h" />
     <ClInclude Include="..\src\MathManager.h" />
     <ClInclude Include="..\src\PlatformPlayer.h" />
@@ -151,6 +154,7 @@
     <ClInclude Include="..\src\SpriteObject.h" />
     <ClInclude Include="..\src\StateManager.h" />
     <ClInclude Include="..\src\States.h" />
+    <ClInclude Include="..\src\SwordSkill.h" />
     <ClInclude Include="..\src\TextureManager.h" />
     <ClInclude Include="..\src\TitleState.h" />
     <ClInclude Include="resource.h" />

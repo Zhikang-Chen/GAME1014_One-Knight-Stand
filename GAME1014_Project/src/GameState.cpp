@@ -11,12 +11,23 @@ void GameState::Enter()
 	//Remove when use
 	m_objects.emplace("Label", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 20, "UWU? What's dis", { 0,0,0,0 }));
 	m_objects.emplace("Label2", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 40, "I am your cute UI GF", { 0,0,0,0 }));
-	m_objects.emplace("Label3", new Label("Minecraft", 10, 40, "I luv u OWO", { 0,0,0,0 }));
+	m_objects.emplace("Label3", new Label("Minecraft", 10, 40, "Health: ", { 0,0,0,0 }));
 
 	m_objects.emplace("Label4", new Label("Minecraft", WIDTH / 2 - 20, 10, "I am not responsible for the lost of your sanity -Ken", { 0,0,0,0 }));
 
 	m_objects.emplace("Label5", new Label("Minecraft", WIDTH + 200, 10, "You can't run human kun", { 0,0,0,0 }));
+	m_objects.emplace("Label6", new Label("Minecraft", 30, 645, "Q", { 0,0,0,0 }));
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_RUNNING_AND_IDLE.png", "Knight");
+<<<<<<< Updated upstream
+=======
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/sword.png", "IDK");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordskill2.png", "SwordSkill1");
+	
+
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar1");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heartempty.png", "EmptyHeart");
+>>>>>>> Stashed changes
 
 	//SDL_Rect src{ 20,20,100,100 }, dir{0,0,100,100};
 	int width, height;
@@ -25,6 +36,33 @@ void GameState::Enter()
 	m_player = new PlatformPlayer({ 0, 0, width / 14,height }, { WIDTH / 2,HEIGHT / 2, float(width / 14),float(height) }, TEMA::GetTexture("Knight"));
 	m_objects.emplace("Player", m_player);
 
+<<<<<<< Updated upstream
+=======
+	SDL_QueryTexture(TEMA::GetTexture("HeartBar"), nullptr, nullptr, &width, &height);
+    m_pHeartbar = new Heart({0,0 , width,height }, { 10,70, float(width),float(height) }, TEMA::GetTexture("HeartBar"));
+	m_objects.emplace("HeartBar", m_pHeartbar);
+	m_pFullHeart = new Heart({ 0,0 , width,height }, { 40,70, float(width),float(height) }, TEMA::GetTexture("HeartBar1"));
+	m_objects.emplace("HeartBar1", m_pFullHeart);
+
+	SDL_QueryTexture(TEMA::GetTexture("EmptyHeart"), nullptr, nullptr, &width, &height);
+	m_pEmptyHeart = new Heart({ 0,0 , width,height }, { 70,70, float(width),float(height) }, TEMA::GetTexture("EmptyHeart"));
+	m_objects.emplace("EmptyHeart", m_pEmptyHeart);
+	
+	
+	
+
+	SDL_QueryTexture(TEMA::GetTexture("SwordSkill1"), nullptr, nullptr, &width, &height);
+	m_pSwordSkill1 = new SwordSkill({ 0,0,width,height }, { 10,595, float(width),float(height) }, TEMA::GetTexture("SwordSkill1"));
+	m_objects.emplace("SwordSkill1", m_pSwordSkill1);
+	
+	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &width, &height);
+	m_pWeapon = new Sword({ 0,0,width,height }, { 0,0, float(width),float(height) }, TEMA::GetTexture("IDK"));
+	
+	m_pWeapon->SetTarget(m_player->GetDstP());
+	m_objects.emplace("Weapon", m_pWeapon);
+
+	
+>>>>>>> Stashed changes
 	m_pPlatforms.push_back(new SDL_FRect { 462, 648, 100, 20 }); //0
 	m_pPlatforms.push_back(new SDL_FRect{ 200, 468, 100, 20 });  //1
 	m_pPlatforms.push_back(new SDL_FRect{ 724, 468, 100, 20 });  //2
@@ -117,7 +155,12 @@ void GameState::Update()
 	//m_plabel->SetText());
 	for (map<std::string, GameObject*>::iterator i = m_objects.begin(); i != m_objects.end(); i++)
 		i->second->Update();
-	
+
+	if (EVMA::KeyPressed(SDL_SCANCODE_Q))
+	{
+		m_weaponSkillActive = new Label("Genshi_font", WIDTH / 25, HEIGHT / 27, "SKILL ACTIVATED", { 0,0,0 ,0 });
+		m_objects.emplace("Title", m_weaponSkillActive);
+	}
 	CollisionCheck();
 	UpdateCam();
 

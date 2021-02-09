@@ -9,6 +9,9 @@
 #include "TextureManager.h"
 #include <vector>
 
+#include "Heart.h"
+#include "SwordSkill.h"
+
 class GameState : public State
 {
 public:
@@ -23,9 +26,19 @@ public:
 
 private:
 	Label* m_plabel;
+	Label* m_weaponSkillActive;
 	PlatformPlayer* m_player;
 	int m_camOffset;
 
+<<<<<<< Updated upstream
+=======
+	Sword* m_pWeapon;
+	SwordSkill* m_pSwordSkill1;
+	Heart* m_pHeartbar;
+	Heart* m_pFullHeart;
+	Heart* m_pEmptyHeart;
+
+>>>>>>> Stashed changes
 	vector<SDL_FRect*> m_pPlatforms;
 };
 
