@@ -133,6 +133,7 @@
     <ClCompile Include="..\src\States.cpp" />
     <ClCompile Include="..\src\TextureManager.cpp" />
     <ClCompile Include="..\src\TitleState.cpp" />
+    <ClCompile Include="..\src\WeaponObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Background.h" />
@@ -153,6 +154,7 @@
     <ClInclude Include="..\src\States.h" />
     <ClInclude Include="..\src\TextureManager.h" />
     <ClInclude Include="..\src\TitleState.h" />
+    <ClInclude Include="..\src\WeaponObject.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

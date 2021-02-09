@@ -6,8 +6,10 @@
 #include "SoundManager.h"
 #include "StateManager.h"
 #include "TextureManager.h"
+#include <iostream>
 #include <ctime>
 #include <iostream>
+#include <SDL.h>
 
 Engine::Engine():m_running(false){ cout << "Engine class constructed!" << endl; }
 

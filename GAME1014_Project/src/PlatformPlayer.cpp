@@ -118,7 +118,7 @@ void PlatformPlayer::Render()
 	if (m_showHitbox)
 	{
 		SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 0, 0, 255);
-		SDL_RenderFillRect(Engine::Instance().GetRenderer(), &MAMA::ConvertFRect2Rect(m_dst));
+		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_dst);
 	}
 	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, GetSrcP(), GetDstP(), m_angle, 0, SDL_FLIP_NONE);
 }

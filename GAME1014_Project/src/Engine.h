@@ -3,14 +3,11 @@
 #define _ENGINE_H_
 
 // Do not include any macros, initialized properties or full function definitions in this header.
-#include <iostream>
-#include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
 // Example-specific includes.
 #include <vector>
-#include "Box.h"
 
 #define WIDTH 1024
 #define HEIGHT 768

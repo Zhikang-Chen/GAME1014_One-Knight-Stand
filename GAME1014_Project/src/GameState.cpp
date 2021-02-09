@@ -17,14 +17,22 @@ void GameState::Enter()
 
 	m_objects.emplace("Label5", new Label("Minecraft", WIDTH + 200, 10, "You can't run human kun", { 0,0,0,0 }));
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_RUNNING_AND_IDLE.png", "Knight");
-
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/sword.png", "IDK");
 	//SDL_Rect src{ 20,20,100,100 }, dir{0,0,100,100};
 	int width, height;
 
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &width, &height);
 	m_player = new PlatformPlayer({ 0, 0, width / 14,height }, { WIDTH / 2,HEIGHT / 2, float(width / 14),float(height) }, TEMA::GetTexture("Knight"));
+	
 	m_objects.emplace("Player", m_player);
 
+	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &width, &height);
+	m_pWeapon = new Sword({ 0,0,width,height }, { 0,0, float(width),float(height) }, TEMA::GetTexture("IDK"));
+	
+	m_pWeapon->SetTarget(m_player->GetDstP());
+	m_objects.emplace("Weapon", m_pWeapon);
+
+	
 	m_pPlatforms.push_back(new SDL_FRect { 462, 648, 100, 20 }); //0
 	m_pPlatforms.push_back(new SDL_FRect{ 200, 468, 100, 20 });  //1
 	m_pPlatforms.push_back(new SDL_FRect{ 724, 468, 100, 20 });  //2

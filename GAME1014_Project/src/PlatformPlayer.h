@@ -4,8 +4,7 @@
 #define GRAV 6.0 //Gravity
 #define JUMPFORCE 60.0; //Acceleration
 #include "SpriteObject.h"
-#include "TextureManager.h"
-#include "MathManager.h"
+#include "WeaponObject.h"
 
 enum PlayerState {STATE_IDLING, STATE_RUNNING, STATE_JUMPING};
 
@@ -16,8 +15,7 @@ public:
 
 	//PlatformPlayer(SDL_Rect s, SDL_Rect d, SDL_Renderer* r, SDL_Texture* t)
 	//	:SpriteObject(s, { static_cast<float>(d.x, d.y, d.w, d.h)}, r, t) {}
-	
-	void Init();
+
 	void Update();
 	void Render();
 
@@ -52,6 +50,7 @@ private:
 		m_maxVelY,
 		m_drag,
 		m_grav;
+	//vector<WeaponObject*> m_pWeapon;
 	//SDL_Rect m_rect;
 
 	
