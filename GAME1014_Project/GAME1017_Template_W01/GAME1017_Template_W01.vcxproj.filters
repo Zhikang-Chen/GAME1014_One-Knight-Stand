@@ -76,6 +76,9 @@
     <ClCompile Include="..\src\WeaponObject.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\TiledLevel.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -136,6 +139,9 @@
       <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\WeaponObject.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TiledLevel.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>

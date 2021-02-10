@@ -1,7 +1,7 @@
 ﻿#pragma once
 #ifndef _PLATFORMPLAYER_H_
 #define _PLATFORMPLAYER_H_
-#define GRAV 6.0 //Gravity
+#define GRAV 8.0 //Gravity
 #define JUMPFORCE 60.0; //Acceleration
 #include "SpriteObject.h"
 #include "WeaponObject.h"

@@ -132,6 +132,7 @@
     <ClCompile Include="..\src\StateManager.cpp" />
     <ClCompile Include="..\src\States.cpp" />
     <ClCompile Include="..\src\TextureManager.cpp" />
+    <ClCompile Include="..\src\TiledLevel.cpp" />
     <ClCompile Include="..\src\TitleState.cpp" />
     <ClCompile Include="..\src\WeaponObject.cpp" />
   </ItemGroup>
@@ -153,6 +154,7 @@
     <ClInclude Include="..\src\StateManager.h" />
     <ClInclude Include="..\src\States.h" />
     <ClInclude Include="..\src\TextureManager.h" />
+    <ClInclude Include="..\src\TiledLevel.h" />
     <ClInclude Include="..\src\TitleState.h" />
     <ClInclude Include="..\src\WeaponObject.h" />
     <ClInclude Include="resource.h" />

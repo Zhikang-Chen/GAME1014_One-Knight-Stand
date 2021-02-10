@@ -15,7 +15,7 @@ protected: // Attributes.
 protected: // Methods.
 	GameObject() :m_dst({ 0,0,0,0 }) {}
 	GameObject(const SDL_FRect d) :m_dst(d) {}
-	
+
 };
 
 //class SpriteObject : public GameObject

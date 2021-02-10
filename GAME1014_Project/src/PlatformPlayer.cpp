@@ -11,6 +11,7 @@
 PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : AnimatedSpriteObject(s, d, t, 0, 0, 13, 10),
 m_state(STATE_JUMPING), m_grounded(false), m_facingLeft(false), m_maxVelX(10.0), m_maxVelY(60.0), m_grav(GRAV), m_drag(0.8)
 {
+	cout << addressof(m_dst) << endl;
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
 	//SetAnimation(1, 8, 9); // Initialize jump animation.
 }
@@ -120,7 +121,7 @@ void PlatformPlayer::Render()
 		SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 0, 0, 255);
 		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_dst);
 	}
-	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, GetSrcP(), GetDstP(), m_angle, 0, SDL_FLIP_NONE);
+	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, &m_src, &m_dst, m_angle, 0, SDL_FLIP_NONE);
 }
 
 void PlatformPlayer::ShowHitbox()
@@ -154,8 +155,8 @@ double PlatformPlayer::GetVelX() { return m_velX; }
 
 double PlatformPlayer::GetVelY() { return m_velY; }
 
-void PlatformPlayer::SetX(float x) { this->GetDstP()->x = x; }
+void PlatformPlayer::SetX(float x) { this->GetDst()->x = x; }
 
 
-void PlatformPlayer::SetY(float y) { this->GetDstP()->y = y; }
+void PlatformPlayer::SetY(float y) { this->GetDst()->y = y; }
 
