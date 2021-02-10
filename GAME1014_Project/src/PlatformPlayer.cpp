@@ -9,7 +9,7 @@
 //Will fix someday
 
 PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : AnimatedSpriteObject(s, d, t, 0, 0, 13, 10),
-m_state(STATE_JUMPING), m_grounded(false), m_facingLeft(false), m_maxVelX(10.0), m_maxVelY(60.0), m_grav(GRAV), m_drag(0.8)
+m_state(STATE_JUMPING), m_grounded(false), m_facingLeft(false), m_secondJump(false),m_maxVelX(10.0), m_maxVelY(60.0), m_grav(GRAV), m_drag(0.8)
 {
 	cout << addressof(m_dst) << endl;
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
@@ -38,6 +38,7 @@ void PlatformPlayer::Update()
 		{
 			m_accelY = -JUMPFORCE; // SetAccelY(-JUMPFORCE);
 			m_grounded = false; // SetGrounded(false);
+			m_secondJump = true;
 			m_state = STATE_JUMPING;
 			//SetAnimation(1, 8, 9, 256);
 		}
@@ -61,6 +62,7 @@ void PlatformPlayer::Update()
 		{
 			m_accelY = -JUMPFORCE;
 			m_grounded = false;
+			m_secondJump = true;
 			m_state = STATE_JUMPING;
 			//SetAnimation(1, 8, 9, 256);
 		}
@@ -85,6 +87,15 @@ void PlatformPlayer::Update()
 			if (m_facingLeft)
 				m_facingLeft = false;
 		}
+
+		if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_secondJump)
+		{
+			m_accelY = -JUMPFORCE;
+			m_grounded = false;
+			m_secondJump = false;
+			//SetAnimation(1, 8, 9, 256);
+		}
+		
 		// Hit the ground, transition to run.
 		if (m_grounded)
 		{
@@ -121,7 +132,7 @@ void PlatformPlayer::Render()
 		SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 0, 0, 255);
 		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_dst);
 	}
-	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, &m_src, &m_dst, m_angle, 0, SDL_FLIP_NONE);
+	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, &m_src, &m_dst, m_angle, 0, m_facingLeft?SDL_FLIP_HORIZONTAL:SDL_FLIP_NONE);
 }
 
 void PlatformPlayer::ShowHitbox()

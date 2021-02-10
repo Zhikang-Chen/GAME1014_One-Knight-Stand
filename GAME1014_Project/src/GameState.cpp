@@ -9,7 +9,7 @@ void GameState::Enter()
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tiles.png", "tiles");
 
-	m_objects.emplace("level", new TiledLevel(24, 32, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.txt", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
+	m_objects.emplace("level", new TiledLevel(24, 48, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.txt", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
 	//m_plabel = new Label("Minecraft", HEIGHT / 2, WIDTH / 2, "UWU? What's dis", { 0,0,0,0 });
 
 	//Ui test and i am not sorry for typing those

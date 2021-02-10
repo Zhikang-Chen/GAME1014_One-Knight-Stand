@@ -1,8 +1,8 @@
 ﻿#pragma once
 #ifndef _PLATFORMPLAYER_H_
 #define _PLATFORMPLAYER_H_
-#define GRAV 8.0 //Gravity
-#define JUMPFORCE 60.0; //Acceleration
+#define GRAV 4.0 //Gravity
+#define JUMPFORCE 40.0; //Acceleration
 #include "SpriteObject.h"
 #include "WeaponObject.h"
 
@@ -40,6 +40,7 @@ private:
 	bool m_grounded; //In most platforming games, the player actually starts in the air
 	bool m_alive; //Game runs while player is alive, shows black screen when dead.
 	bool m_facingLeft;
+	bool m_secondJump;
 	bool m_showHitbox;
 	PlayerState m_state;
 	double m_accelX, //Acceleration on the X axis, horizontal force
