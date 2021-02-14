@@ -116,15 +116,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-<<<<<<< HEAD:GAME1007_PlatformerExample/GAME1007_SDLTemplate/GAME1007_SDLTemplate.vcxproj
-    <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="PlatformPlayer.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Engine.h" />
-    <ClInclude Include="PlatformPlayer.h" />
-=======
     <ClCompile Include="..\src\Background.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CollisionManager.cpp" />
@@ -167,7 +158,6 @@
     <ClInclude Include="..\src\TitleState.h" />
     <ClInclude Include="..\src\WeaponObject.h" />
     <ClInclude Include="resource.h" />
->>>>>>> Test-branch:GAME1014_Project/GAME1017_Template_W01/GAME1017_Template_W01.vcxproj
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

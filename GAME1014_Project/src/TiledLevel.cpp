@@ -1,5 +1,8 @@
 #include "TiledLevel.h"
 
+//note: 250 seem to be the best it can get before lag
+//To do fix this
+
 TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int w, const int h, 
 	const char* tileData, const char* levelData, const char* tileKey) :m_rows(r), m_cols(c), m_tileKey(tileKey)
 {
@@ -12,10 +15,8 @@ TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int
 		while (!inFile.eof())
 		{
 			inFile >> key >> x >> y >> obs >> haz;
-			if(key != '*')
-				m_tiles.emplace(key, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey) ,obs, haz));
-			else
-				m_tiles.emplace(key, new Tile({ 1000, 1000, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey), obs, haz));
+			m_tiles.emplace(key, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey) ,obs, haz));
+
 		}
 	}
 	inFile.close();
