@@ -45,13 +45,13 @@ void PlatformPlayer::Update()
 		break;
 	case STATE_RUNNING:
 		// Move left and right.
-		if (EVMA::KeyHeld(SDL_SCANCODE_A) && m_dst.x > 0)
+		if (EVMA::KeyHeld(SDL_SCANCODE_A))
 		{
 			m_accelX = -1.5;
 			if (!m_facingLeft)
 				m_facingLeft = true;
 		}
-		else if (EVMA::KeyHeld(SDL_SCANCODE_D) && m_dst.x < WIDTH - m_dst.w)
+		else if (EVMA::KeyHeld(SDL_SCANCODE_D))
 		{
 			m_accelX = 1.5;
 			if (m_facingLeft)
@@ -75,13 +75,13 @@ void PlatformPlayer::Update()
 		break;
 	case STATE_JUMPING:
 		// Move in mid-air is cool.
-		if (EVMA::KeyHeld(SDL_SCANCODE_A) && m_dst.x > 0)
+		if (EVMA::KeyHeld(SDL_SCANCODE_A))
 		{
 			m_accelX = -1.5;
 			if (!m_facingLeft)
 				m_facingLeft = true;
 		}
-		else if (EVMA::KeyHeld(SDL_SCANCODE_D) && m_dst.x < WIDTH - m_dst.w)
+		else if (EVMA::KeyHeld(SDL_SCANCODE_D))
 		{
 			m_accelX = 1.5;
 			if (m_facingLeft)
@@ -110,11 +110,12 @@ void PlatformPlayer::Update()
 	m_velX += m_accelX;
 	m_velX *= (m_grounded ? m_drag : 1.0);
 
+	
 	//Velocity clamping
 	m_velX = std::min(std::max(m_velX, -m_maxVelX), m_maxVelX); //std::max first check, std::min second
 	m_dst.x += m_velX;
+	
 	// y axis
-
 	m_velY += m_accelY + m_grav;
 	m_velY = std::min(std::max(m_velY, -m_maxVelY), (m_grav * 4.0)); //m_grav is how fast you're going to fall
 	m_dst.y += m_velY;

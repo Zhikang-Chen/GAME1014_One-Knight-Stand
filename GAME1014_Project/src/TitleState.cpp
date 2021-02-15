@@ -1,6 +1,8 @@
 ﻿// Begin TitleState
 #include "TitleState.h"
 
+#include "EndState.h"
+
 TitleState::TitleState() {}
 
 void TitleState::Enter()

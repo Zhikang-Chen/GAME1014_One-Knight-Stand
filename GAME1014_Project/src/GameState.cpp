@@ -1,5 +1,7 @@
 ﻿// Begin GameState
 #include "GameState.h"
+
+#include "EndState.h"
 #include "TiledLevel.h"
 
 GameState::GameState() {}
@@ -59,23 +61,33 @@ void GameState::CollisionCheck()
 				pp->SetY(t->y - p->h);
 				pp->SetGrounded(true);
 			}
-			else if (p->y - static_cast<float>(pp->GetVelY()) >= (t->y + t->h))
-			{ // Colliding with bottom side of tile.
-				pp->StopY();
-				pp->SetY(t->y + t->h);
-			}
+			//else if (p->y - static_cast<float>(pp->GetVelY()) >= (t->y + t->h))
+			//{ // Colliding with bottom side of tile.
+			//	pp->StopY();
+			//	pp->SetY(t->y + t->h);
+			//}
 			else if ((p->x + p->w) - static_cast<float>(pp->GetVelX()) <= t->x)
 			{ // Colliding with left side of tile.
 				pp->StopX();
+				cout << "Heading Right: " << pp->GetVelX() << endl;
 				pp->SetX(t->x - p->w);
 			}
 			else if (p->x  - static_cast<float>(pp->GetVelX()) >= (t->x + t->w))
 			{ // Colliding with right side of tile.
 				pp->StopX();
+				cout << "Heading Left: " << pp->GetVelX() << endl;
 				pp->SetX(t->x + t->w);
 			}
 		}
 	}
+
+	if(p->y >= HEIGHT)
+	{
+		STMA::ChangeState(new EndState());
+	}
+
+	
+	cout << pp->GetVelX() << endl;
 }
 
 /*To do
@@ -84,20 +96,21 @@ void GameState::CollisionCheck()
 
 void GameState::UpdateCam()
 {
-	int camspeed = 0;
-	if (m_objects["Player"]->GetDst()->x >= (WIDTH / 2) + 50)
+	float camspeed = 0.0;
+	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(m_objects["Player"]);
+	if (pp->GetDst()->x >= (WIDTH / 2) + 50)
 	{
 		//std::cout << "Right" << endl;
 		//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x - (m_player->GetDst()->w / 2));
 		//cout << m_camOffset << endl;
-		camspeed = -7;
+		camspeed = -7.0f;
 	}
-	else if (m_objects["Player"]->GetDst()->x <= (WIDTH / 2) - 50)
+	else if (pp->GetDst()->x <= (WIDTH / 2) - 50)
 	{
 		//std::cout << "Left" << endl;
 		//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x + ( m_player->GetDst()->w / 2));
 		//cout << m_camOffset << endl;
-		camspeed = 7;
+		camspeed = 7.0f;
 	}
 
 	for (int i = 0; i < dynamic_cast<TiledLevel*>(m_objects["level"])->GetObstacles().size(); i++)

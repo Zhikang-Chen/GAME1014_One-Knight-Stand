@@ -31,10 +31,12 @@ TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int
 			for (unsigned short col = 0; col < m_cols; col++)
 			{
 				inFile >> key;
+
 				m_level[row][col] = m_tiles[key]->Clone(); // Common prototype method.
 				m_level[row][col]->SetXY((float)(col * w), (float)(row * h));
 				if (m_level[row][col]->IsObstacle())
 					m_obstacles.push_back(m_level[row][col]);
+				
 			}
 		}
 	}
@@ -69,7 +71,7 @@ void TiledLevel::Render()
 	{
 		for (unsigned short col = 0; col < m_cols; col++)
 		{
-			SDL_RenderCopyF(Engine::Instance().GetRenderer(),TEMA::GetTexture(m_tileKey),
+			SDL_RenderCopyF(Engine::Instance().GetRenderer(), TEMA::GetTexture(m_tileKey),
 				m_level[row][col]->GetSrc(), m_level[row][col]->GetDst());
 		}
 	}

@@ -120,6 +120,7 @@
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CollisionManager.cpp" />
     <ClCompile Include="..\src\DebugManager.cpp" />
+    <ClCompile Include="..\src\EndState.cpp" />
     <ClCompile Include="..\src\Engine.cpp" />
     <ClCompile Include="..\src\EventManager.cpp" />
     <ClCompile Include="..\src\FontManager.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="..\src\Button.h" />
     <ClInclude Include="..\src\CollisionManager.h" />
     <ClInclude Include="..\src\DebugManager.h" />
+    <ClInclude Include="..\src\EndState.h" />
     <ClInclude Include="..\src\Engine.h" />
     <ClInclude Include="..\src\EventManager.h" />
     <ClInclude Include="..\src\FontManager.h" />
