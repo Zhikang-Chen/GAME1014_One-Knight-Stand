@@ -80,14 +80,11 @@ void GameState::CollisionCheck()
 			}
 		}
 	}
-
-	if(p->y >= HEIGHT)
+	if (p->y >= HEIGHT)
 	{
 		STMA::ChangeState(new EndState());
 	}
-
-	
-	cout << pp->GetVelX() << endl;
+	//cout << pp->GetVelX() << endl;
 }
 
 /*To do
@@ -131,9 +128,7 @@ void GameState::Update()
 	UpdateCam();
 	for (map<std::string, GameObject*>::iterator i = m_objects.begin(); i != m_objects.end(); i++)
 		i->second->Update();
-	
 	CollisionCheck();
-
 }
 
 void GameState::Render()
@@ -152,13 +147,6 @@ void GameState::Render()
 
 void GameState::Exit()
 {
-
-	for (auto& platform : m_pPlatforms)
-	{
-		delete platform;
-		platform = nullptr;
-	}
-
 	for (map<std::string, GameObject*>::iterator i = m_objects.begin(); i != m_objects.end(); i++)
 	{
 		delete i->second;

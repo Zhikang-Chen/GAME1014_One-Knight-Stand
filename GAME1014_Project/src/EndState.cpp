@@ -19,11 +19,14 @@ void EndState::Enter()
 	int width, height;
 	SDL_QueryTexture(TEMA::GetTexture("NoIdea"), nullptr, nullptr, &width, &height);
 	m_objects.emplace("image", new SpriteObject({0,0,width, height }, {( WIDTH/2 ) - (float)width/4 ,HEIGHT / 2, (float)width/2,(float)height/2 }, TEMA::GetTexture("NoIdea")));
-	
+
  }
 
 void EndState::Update()
 {
+	SpriteObject* I = static_cast<SpriteObject*>(m_objects["image"]);
+	I->SetAngle(++I->GetAngle());
+	
 	if(EVMA::MousePressed(1))
 	{
 		STMA::ChangeState(new TitleState());
@@ -44,6 +47,12 @@ void EndState::Render()
 
 void EndState::Exit()
 {
+	for (map<std::string, GameObject*>::iterator i = m_objects.begin(); i != m_objects.end(); i++)
+	{
+		delete i->second;
+		i->second = nullptr;
+	}
+	m_objects.clear();
 	std::cout << "Exiting End State" << std::endl;
 }
 

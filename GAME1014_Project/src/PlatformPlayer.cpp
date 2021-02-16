@@ -112,7 +112,7 @@ void PlatformPlayer::Update()
 
 	
 	//Velocity clamping
-	m_velX = std::min(std::max(m_velX, -m_maxVelX), m_maxVelX); //std::max first check, std::min second
+	m_velX = std::min(std::max(m_velX, -m_maxVelX), m_maxVelX); //std::max first check, std::min second	
 	m_dst.x += m_velX;
 	
 	// y axis
