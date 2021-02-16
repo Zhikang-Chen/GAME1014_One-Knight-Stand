@@ -30,6 +30,17 @@ class AnimatedSpriteObject : public SpriteObject// Also inline.
 public:
 	AnimatedSpriteObject(SDL_Rect s, SDL_FRect d, SDL_Texture* t, int sstart, int smin, int smax, int nf)
 		:SpriteObject(s, d, t), m_sprite(sstart), m_spriteMin(smin), m_spriteMax(smax), m_frameMax(nf) {}
+
+protected:
+	void SetAnimation(const unsigned short fMax, const unsigned short sMin, const unsigned short sMax, const int srcY = 0)
+	{
+		m_frame = 0;
+		m_frameMax = fMax;
+		m_sprite = m_spriteMin = sMin;
+		m_spriteMax = sMax;
+		m_src.x = m_src.w * m_sprite;
+		m_src.y = srcY;
+	}
 	void Animate()
 	{
 		if (m_frame++ == m_frameMax) // Post-increment ensures m_frame starts at 0.
@@ -40,7 +51,6 @@ public:
 		}
 		m_src.x = m_src.w * m_sprite;
 	}
-protected:
 	int m_sprite,		// The current sprite index in row.
 		m_spriteMin,	// The sprite index to start animation on.
 		m_spriteMax,	// The sprite index to end animation on.

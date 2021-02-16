@@ -11,10 +11,12 @@ void EndState::Enter()
 	Label* LP = dynamic_cast<Label*>(m_objects["GameoverText"]);
 	LP->SetPos((WIDTH - LP->GetDst()->w)/2, HEIGHT / 4);
 
+	// Add text
 	m_objects.emplace("SubText", new Label("Minecraft", WIDTH / 2, HEIGHT / 2, "Press anywhere to get back to title", SDL_Color{ 255,255,255,255 }));
 	Label* ST = dynamic_cast<Label*>(m_objects["SubText"]);
 	ST->SetPos((WIDTH - ST->GetDst()->w) / 2, HEIGHT / 3);
 
+	// Adds an Image
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/20191103_131848.png", "NoIdea");
 	int width, height;
 	SDL_QueryTexture(TEMA::GetTexture("NoIdea"), nullptr, nullptr, &width, &height);
@@ -24,6 +26,7 @@ void EndState::Enter()
 
 void EndState::Update()
 {
+	// Spin the image
 	SpriteObject* I = static_cast<SpriteObject*>(m_objects["image"]);
 	I->SetAngle(++I->GetAngle());
 	

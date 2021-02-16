@@ -25,7 +25,6 @@ private:
 	Label* m_plabel;
 	PlatformPlayer* m_player;
 	int m_camOffset;
-
 	Sword* m_pWeapon;
 	
 	vector<SDL_FRect*> m_pPlatforms;

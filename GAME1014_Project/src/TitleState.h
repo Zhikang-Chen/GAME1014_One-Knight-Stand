@@ -20,8 +20,6 @@ public:
 	virtual void Update();
 	virtual void Render();
 	virtual void Exit();
-	void CollisionCheck();
-	void UpdateCam();
 
 private:
 	Label* m_pTitle;
