@@ -14,14 +14,14 @@ class Tile : public SpriteObject
 {
 public:
 	Tile(SDL_Rect s, SDL_FRect d, SDL_Texture* t,bool o, bool h)
-		:SpriteObject(s, d, t), m_obstacle(o), m_hazard(h) {}
+		:SpriteObject(s, d, t), m_obstacle(o), m_hazard(h), m_activate(false) {}
 	Tile* Clone() {	return new Tile(m_src, m_dst, m_pText ,m_obstacle, m_hazard); }
 	bool IsObstacle() { return m_obstacle; }
 	void SetXY(float x, float y) { m_dst.x = x; m_dst.y = y; }
 	void Update() {}
 	void Render() {}
 private:
-	bool m_obstacle, m_hazard;
+	bool m_obstacle, m_hazard, m_activate;
 };
 
 class TiledLevel : public GameObject

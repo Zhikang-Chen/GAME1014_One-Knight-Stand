@@ -2,6 +2,7 @@
 #ifndef _TITLESTATE_H_
 #define _TITLESTATE_H_
 #include "Background.h"
+#include "Button.h"
 #include "Label.h"
 #include "States.h"
 
@@ -25,6 +26,9 @@ private:
 	Label* m_pTitle;
 	Label *m_pSubTitle;
 	Label* something;
+
+	BoolButton* b;
+	
 	Background* m_pBackground;
 
 };

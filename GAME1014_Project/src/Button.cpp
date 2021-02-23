@@ -5,7 +5,7 @@
 #include "StateManager.h"
 #include <SDL.h>
 
-Button::Button(SDL_Rect src, SDL_FRect dst, SDL_Renderer* r, SDL_Texture* t)
+Button::Button(SDL_Rect src, SDL_FRect dst, SDL_Texture* t)
 	: SpriteObject(src, dst, t), m_state(STATE_UP) {}
 
 bool Button::MouseCollision()
@@ -54,3 +54,8 @@ void Button::Render()
 }
 
 // Create button subclasses and their overridden Execute methods below...
+
+void BoolButton::Execute()
+{
+	m_changeState = true;
+}

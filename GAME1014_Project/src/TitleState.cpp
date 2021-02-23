@@ -8,29 +8,36 @@ TitleState::TitleState() {}
 void TitleState::Enter()
 {
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/DotC-LgXoAMrpqi.png", "Background_1");
-	int width, height;
-	SDL_QueryTexture(TEMA::GetTexture("Background_1"), nullptr, nullptr, &width, &height);
-	m_pBackground = new Background({ 0,0,(int)width,(int)height }, {0,0, (float)width*5, (float)height*5 }, TEMA::GetTexture("Background_1"));
-	m_objects.emplace("Background", m_pBackground);
+	int w, h;
+	SDL_QueryTexture(TEMA::GetTexture("Background_1"), nullptr, nullptr, &w, &h);
+	m_pBackground = new Background({ 0,0,(int)w,(int)h }, {0,0, (float)w*5, (float)h*5 }, TEMA::GetTexture("Background_1"));
+	m_objects.push_back(make_pair("Background", m_pBackground));
 	
 	m_pSubTitle = new Label("Minecraft",WIDTH / 20, HEIGHT / 7, "Insert sub title here", { 0,0,0,0 });
-	m_objects.emplace("Subtitle", m_pSubTitle);
+	m_objects.push_back(make_pair("Subtitle", m_pSubTitle));
 	
 	m_pTitle = new Label("Genshi_font", WIDTH / 25, HEIGHT / 27, "One Knight Stand", { 0,0,0,0 });
-	m_objects.emplace("Title", m_pTitle);
+	m_objects.push_back(make_pair("Title", m_pTitle));
 
-	something = new Label("Minecraft", WIDTH /25, HEIGHT - 50, "Press 'n' to get to game state. I am too lazy to code the button ", { 0,0,0,0 });
-	m_objects.emplace("idk", something);
+	something = new Label("Minecraft", WIDTH /25, HEIGHT - 50, "I made the button but you can still use 'n' because I am too lazy to remove it", { 0,0,0,0 });
+	m_objects.push_back(make_pair("idk", something));
+
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/p.png", "Play");
+	SDL_QueryTexture(TEMA::GetTexture("Play"), nullptr, nullptr, &w, &h);
+	b = new BoolButton({ 0,0,w/3,h }, { ((float)WIDTH / 2) - ((w/3) / 2),((float)HEIGHT / 2) - (h / 2) , (float)w/3, (float)h }, TEMA::GetTexture("Play"));
+	//m_objects.emplace("no", b);
+	m_objects.push_back(make_pair("no", b));
+	
 	//std::cout << "Entering TitleState..." << std::endl;
 }
 
 
 void TitleState::Update()
 {
-	for (map<std::string, GameObject*>::iterator i = m_objects.begin(); i != m_objects.end(); i++)
+	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
 		i->second->Update();
 	
-	if (EVMA::KeyPressed(SDL_SCANCODE_N))
+	if (EVMA::KeyPressed(SDL_SCANCODE_N) || b->GetChangeState())
 		STMA::ChangeState(new GameState());// Change to new GameState
 }
 
@@ -41,7 +48,7 @@ void TitleState::Render()
 	SDL_RenderClear(Engine::Instance().GetRenderer());
 	
 	//m_pBackground->Render();
-	for (map<std::string, GameObject*>::iterator i = m_objects.begin(); i != m_objects.end(); i++)
+	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
 		i->second->Render();
 	
 	State::Render();
@@ -49,7 +56,7 @@ void TitleState::Render()
 
 void TitleState::Exit()
 {
-	for (map<std::string, GameObject*>::iterator i = m_objects.begin(); i != m_objects.end(); i++)
+	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
 	{
 		delete i->second;
 		i->second = nullptr;

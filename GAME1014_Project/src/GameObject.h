@@ -10,11 +10,13 @@ public: // Methods.
 	virtual void Update() = 0;
 	virtual void Render() = 0;
 	SDL_FRect* GetDst() { return &m_dst; }
+	void SetEnable(bool e) { m_enable = e; }
 protected: // Attributes.
 	SDL_FRect m_dst;
+	bool m_enable;
 protected: // Methods.
-	GameObject() :m_dst({ 0,0,0,0 }) {}
-	GameObject(const SDL_FRect d) :m_dst(d) {}
+	GameObject() :m_dst({ 0,0,0,0 }), m_enable(true) {}
+	GameObject(const SDL_FRect d) :m_dst(d), m_enable(true) {}
 
 };
 
