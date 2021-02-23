@@ -14,8 +14,14 @@ public: // Inherited and public.
 	SpriteObject(SDL_Rect s, SDL_FRect d, SDL_Texture* t)
 		:m_src(s), GameObject(d), m_pText(t), m_angle(0.0) {}
 	virtual void Update() {};
-	virtual void Render() {	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, GetSrc(), GetDst(), m_angle, 0, SDL_FLIP_NONE); }
+	virtual void Render()
+	{
+		if(m_enable)
+			SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, GetSrc(), GetDst(), m_angle, 0, SDL_FLIP_NONE);
+	}
+	
 	SDL_Rect* GetSrc() { return &m_src; }
+	SDL_Texture* GetTexture() { return m_pText; }
 	double& GetAngle() { return m_angle; }
 	void SetAngle(double a) { m_angle = a; }
 protected: // Private BUT inherited.

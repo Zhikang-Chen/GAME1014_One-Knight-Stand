@@ -78,5 +78,3 @@ void TiledLevel::Render()
 }
 
 vector<Tile*>& TiledLevel::GetObstacles() { return m_obstacles; }
-
-

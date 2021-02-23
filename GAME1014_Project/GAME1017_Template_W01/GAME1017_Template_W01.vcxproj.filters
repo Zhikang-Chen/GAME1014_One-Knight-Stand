@@ -76,11 +76,17 @@
     <ClCompile Include="..\src\WeaponObject.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\EndState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PauseState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\TiledLevel.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\EndState.cpp">
-      <Filter>States</Filter>
+    <ClCompile Include="..\src\ItemObject.cpp">
+      <Filter>Game Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +155,12 @@
     </ClInclude>
     <ClInclude Include="..\src\EndState.h">
       <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PauseState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\ItemObject.h">
+      <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

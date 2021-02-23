@@ -26,7 +26,6 @@ private:
 	SDL_FRect* m_pTarget;
 	
 	void Update() override;
-	void Render() override;
 	
 public:
 	void SetTarget(SDL_FRect* d);

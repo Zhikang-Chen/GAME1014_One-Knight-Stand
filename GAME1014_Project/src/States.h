@@ -5,6 +5,9 @@
 #include <map>
 #include <SDL.h>
 #include <string>
+#include <vector>
+#include <algorithm> 
+
 #include "GameObject.h"
 
 class State // This is the abstract base class for all specific states.
@@ -18,7 +21,8 @@ public: // Public methods.
 
 protected: // Private but inherited.
 	State() {}
-	std::map<std::string, GameObject*> m_objects;
+	//std::map<std::string, GameObject*> m_objects;
+	std::vector<std::pair<std::string, GameObject*>> m_objects;
 };
 
 #endif

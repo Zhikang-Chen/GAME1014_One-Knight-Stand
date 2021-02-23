@@ -2,40 +2,53 @@
 #include "GameState.h"
 
 #include "EndState.h"
+#include "PauseState.h"
 #include "TiledLevel.h"
 
 GameState::GameState() {}
 
 void GameState::Enter()
 {
+	int w, h;
 
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tileset.png", "tiles");
+	SDL_QueryTexture(TEMA::GetTexture("Background_1"), nullptr, nullptr, &w, &h);
+	m_objects.emplace_back("Background", new Background({ 0,0,(int)w,(int)h }, { 0,0, (float)w * 5, (float)h * 5 }, TEMA::GetTexture("Background_1")));
 
-	m_objects.emplace("level", new TiledLevel(24, 249, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.txt", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
 	//Ui test and i am not sorry for typing those
 	//Remove when use
-	m_objects.emplace("Label", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 20, "UWU? What's dis", { 0,0,0,0 }));
-	m_objects.emplace("Label2", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 40, "I am your cute UI GF", { 0,0,0,0 }));
-	m_objects.emplace("Label3", new Label("Minecraft", 10, 40, "I luv u OWO", { 0,0,0,0 }));
-	m_objects.emplace("Label4", new Label("Minecraft", WIDTH / 2 - 20, 10, "I am not responsible for the lost of your sanity -Ken", { 0,0,0,0 }));
-	m_objects.emplace("Label5", new Label("Minecraft", WIDTH + 200, 10, "You can't run human kun", { 0,0,0,0 }));
+	m_objects.emplace_back("Label", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 20, "UWU? What's dis", { 0,0,0,0 }));
+	m_objects.emplace_back("Label2", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 40, "I am your cute UI GF", { 0,0,0,0 }));
+	m_objects.emplace_back("Label3", new Label("Minecraft", 10, 40, "I luv u OWO", { 0,0,0,0 }));
+	m_objects.emplace_back("Label4", new Label("Minecraft", WIDTH / 2 - 20, 10, "I am not responsible for the lost of your sanity -Ken", { 0,0,0,0 }));
+	m_objects.emplace_back("Label5", new Label("Minecraft", WIDTH + 200, 10, "You can't run human kun", { 0,0,0,0 }));
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_RUNNING_AND_IDLE.png", "Knight");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/sword.png", "IDK");
 	
 	//SDL_Rect src{ 20,20,100,100 }, dir{0,0,100,100};
-	int width, height;
 
-	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &width, &height);
-	//m_player = new PlatformPlayer({ 0, 0, width / 14,height }, { 0,0, float(width / 14),float(height) }, TEMA::GetTexture("Knight"));
-	m_objects.emplace("Player", new PlatformPlayer({ 0, 0, width / 14,height }, { 0,0, static_cast<float>(width / 14),static_cast<float>(height) }, TEMA::GetTexture("Knight")));
-
-	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &width, &height);
-	m_pWeapon = new Sword({ 0,0,width,height }, { 0,0, static_cast<float>(width),static_cast<float>(height) }, TEMA::GetTexture("IDK"));
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tileset.png", "tiles");
+	m_objects.emplace_back("level", new TiledLevel(24, 249, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.txt", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
 	
-	m_pWeapon->SetTarget(m_objects["Player"]->GetDst());
-	m_objects.emplace("Weapon", m_pWeapon);
+	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
+	//m_player = new PlatformPlayer({ 0, 0, width / 14,height }, { 0,0, float(width / 14),float(height) }, TEMA::GetTexture("Knight"));
+	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { 0,0, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
+
+	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
+	m_pWeapon = new Sword({ 0,0,w,h }, { 0,0, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
+
+	//Use to test item class remove when done
+	m_pWeapon->SetTarget(Find("Player")->GetDst());
+	m_pWeapon->SetEnable(false);
+	m_objects.emplace_back("sword", m_pWeapon);
+	
+
+	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
+	AnItem = new ItemObject({ 0,0,w,h }, { 0,650, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
+	m_objects.emplace_back("Weapon", AnItem);
+	
 	std::cout << "Entering TitleState..." << std::endl;
 }
+
 
 
 /*
@@ -48,11 +61,11 @@ I am not only an idiot I am also blind.
 //Check collision between platforms and the player
 void GameState::CollisionCheck()
 {
-	SDL_FRect* p = m_objects["Player"]->GetDst(); // Copies address of player m_dst.
-	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(m_objects["Player"]);
-	for (int i = 0; i < dynamic_cast<TiledLevel*>(m_objects["level"])->GetObstacles().size(); i++)
+	SDL_FRect* p = Find("Player")->GetDst(); // Copies address of player m_dst.
+	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(Find("Player"));
+	for (int i = 0; i < dynamic_cast<TiledLevel*>(Find("level"))->GetObstacles().size(); i++)
 	{
-		SDL_FRect* t = dynamic_cast<TiledLevel*>(m_objects["level"])->GetObstacles()[i]->GetDst();
+		SDL_FRect* t = dynamic_cast<TiledLevel*>(Find("level"))->GetObstacles()[i]->GetDst();
 		if (COMA::AABBCheck(*p, *t)) // Collision check between player rect and tile rect.
 		{
 			if ((p->y + p->h) - static_cast<float>(pp->GetVelY()) <= t->y)
@@ -80,10 +93,23 @@ void GameState::CollisionCheck()
 			}
 		}
 	}
+
+	// Use to test 
+	if (COMA::AABBCheck(*p, *AnItem->GetDst()))
+	{
+		if(EVMA::KeyPressed(SDL_SCANCODE_E))
+		{
+			AnItem->Activate();
+			m_pWeapon->SetEnable(true);
+		}
+	}
+
+	//This has to be at the end
 	if (p->y >= HEIGHT)
 	{
 		STMA::ChangeState(new EndState());
 	}
+	
 	//cout << pp->GetVelX() << endl;
 }
 
@@ -94,7 +120,7 @@ void GameState::CollisionCheck()
 void GameState::UpdateCam()
 {
 	float camspeed = 0.0;
-	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(m_objects["Player"]);
+	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(Find("Player"));
 	if (pp->GetDst()->x >= (WIDTH / 2) + 50)
 	{
 		//std::cout << "Right" << endl;
@@ -110,25 +136,33 @@ void GameState::UpdateCam()
 		camspeed = 7.0f;
 	}
 
-	for (int i = 0; i < dynamic_cast<TiledLevel*>(m_objects["level"])->GetObstacles().size(); i++)
+	for (int i = 0; i < dynamic_cast<TiledLevel*>(Find("level"))->GetObstacles().size(); i++)
 	{
-		SDL_FRect* t = dynamic_cast<TiledLevel*>(m_objects["level"])->GetObstacles()[i]->GetDst();
+		SDL_FRect* t = dynamic_cast<TiledLevel*>(Find("level"))->GetObstacles()[i]->GetDst();
 		t->x += camspeed;
 	}
 	
-	m_objects["Label4"]->GetDst()->x += camspeed;
-	m_objects["Label5"]->GetDst()->x += camspeed;
-	m_objects["Player"]->GetDst()->x += camspeed;
-
+	Find("Label4")->GetDst()->x += camspeed;
+	Find("Label5")->GetDst()->x += camspeed;
+	Find("Player")->GetDst()->x += camspeed;
+	
+	Find("Weapon")->GetDst()->x += camspeed;
 
 }
 
 void GameState::Update()
 {
 	UpdateCam();
-	for (map<std::string, GameObject*>::iterator i = m_objects.begin(); i != m_objects.end(); i++)
+	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
 		i->second->Update();
 	CollisionCheck();
+
+	if(EVMA::KeyPressed(SDL_SCANCODE_P))
+	{
+		STMA::PushState(new PauseState);
+	}
+
+	
 }
 
 void GameState::Render()
@@ -137,7 +171,7 @@ void GameState::Render()
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 255);
 	SDL_RenderClear(Engine::Instance().GetRenderer());
 	
-	for (map<std::string, GameObject*>::iterator i = m_objects.begin(); i != m_objects.end(); i++)
+	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
 		i->second->Render();
 	
 	if (dynamic_cast<GameState*>(STMA::GetStates().back())) // Check to see if current state is of type GameState
@@ -147,7 +181,7 @@ void GameState::Render()
 
 void GameState::Exit()
 {
-	for (map<std::string, GameObject*>::iterator i = m_objects.begin(); i != m_objects.end(); i++)
+	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
 	{
 		delete i->second;
 		i->second = nullptr;
