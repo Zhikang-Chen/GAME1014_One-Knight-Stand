@@ -18,6 +18,8 @@ public: // Public methods.
 	virtual void Enter() = 0;  // Virtual keyword means we can override in derived class.
 	virtual void Exit() = 0;
 	virtual void Resume();
+	// A temporary solution. waiting for Alex to teach us how to deal with pair
+	GameObject* FindObject(std::string id);
 
 protected: // Private but inherited.
 	State() {}

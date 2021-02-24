@@ -31,13 +31,13 @@ void GameState::Enter()
 	
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
 	//m_player = new PlatformPlayer({ 0, 0, width / 14,height }, { 0,0, float(width / 14),float(height) }, TEMA::GetTexture("Knight"));
-	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { 0,0, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
+	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { WIDTH/2,0, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
 	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
 	m_pWeapon = new Sword({ 0,0,w,h }, { 0,0, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
 
 	//Use to test item class remove when done
-	m_pWeapon->SetTarget(Find("Player")->GetDst());
+	m_pWeapon->SetTarget(FindObject("Player")->GetDst());
 	m_pWeapon->SetEnable(false);
 	m_objects.emplace_back("sword", m_pWeapon);
 	
@@ -61,11 +61,11 @@ I am not only an idiot I am also blind.
 //Check collision between platforms and the player
 void GameState::CollisionCheck()
 {
-	SDL_FRect* p = Find("Player")->GetDst(); // Copies address of player m_dst.
-	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(Find("Player"));
-	for (int i = 0; i < dynamic_cast<TiledLevel*>(Find("level"))->GetObstacles().size(); i++)
+	SDL_FRect* p = FindObject("Player")->GetDst(); // Copies address of player m_dst.
+	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
+	for (int i = 0; i < dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles().size(); i++)
 	{
-		SDL_FRect* t = dynamic_cast<TiledLevel*>(Find("level"))->GetObstacles()[i]->GetDst();
+		SDL_FRect* t = dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles()[i]->GetDst();
 		if (COMA::AABBCheck(*p, *t)) // Collision check between player rect and tile rect.
 		{
 			if ((p->y + p->h) - static_cast<float>(pp->GetVelY()) <= t->y)
@@ -120,33 +120,33 @@ void GameState::CollisionCheck()
 void GameState::UpdateCam()
 {
 	float camspeed = 0.0;
-	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(Find("Player"));
-	if (pp->GetDst()->x >= (WIDTH / 2) + 50)
+	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
+	if (pp->GetDst()->x >= (WIDTH / 2) + 64)
 	{
 		//std::cout << "Right" << endl;
 		//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x - (m_player->GetDst()->w / 2));
 		//cout << m_camOffset << endl;
-		camspeed = -7.0f;
+		camspeed = -8.0f;
 	}
-	else if (pp->GetDst()->x <= (WIDTH / 2) - 50)
+	else if (pp->GetDst()->x <= (WIDTH / 2) - 64)
 	{
 		//std::cout << "Left" << endl;
 		//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x + ( m_player->GetDst()->w / 2));
 		//cout << m_camOffset << endl;
-		camspeed = 7.0f;
+		camspeed = 8.0f;
 	}
 
-	for (int i = 0; i < dynamic_cast<TiledLevel*>(Find("level"))->GetObstacles().size(); i++)
+	for (int i = 0; i < dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles().size(); i++)
 	{
-		SDL_FRect* t = dynamic_cast<TiledLevel*>(Find("level"))->GetObstacles()[i]->GetDst();
+		SDL_FRect* t = dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles()[i]->GetDst();
 		t->x += camspeed;
 	}
 	
-	Find("Label4")->GetDst()->x += camspeed;
-	Find("Label5")->GetDst()->x += camspeed;
-	Find("Player")->GetDst()->x += camspeed;
+	FindObject("Label4")->GetDst()->x += camspeed;
+	FindObject("Label5")->GetDst()->x += camspeed;
+	FindObject("Player")->GetDst()->x += camspeed;
 	
-	Find("Weapon")->GetDst()->x += camspeed;
+	FindObject("Weapon")->GetDst()->x += camspeed;
 
 }
 

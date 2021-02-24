@@ -32,17 +32,6 @@ private:
 	
 	vector<SDL_FRect*> m_pPlatforms;
 
-	// A temporary solution. waiting for Alex to teach us how to deal with pair
-	GameObject* Find(string id)
-	{
-		for(const auto &object:m_objects)
-		{
-			if(object.first == id)
-			{
-				return(object.second);
-			}
-		}
-	}
 };
 
 #endif
