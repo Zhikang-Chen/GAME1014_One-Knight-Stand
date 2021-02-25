@@ -41,6 +41,8 @@ bool Engine::Init(const char* title, int xpos, int ypos, int width, int height, 
 	m_running = true; // Everything is okay, start the engine.
 
 	//SDL_SetRenderDrawBlendMode(m_pRenderer, SDL_BLENDMODE_BLEND);
+
+	SOMA::Load("../GAME1017_Template_W01/Aud/mendelssohn_songs_without_words_opus_38_5.mp3","Pause",SOUND_MUSIC);
 	
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/20191103_131848.png", "NoIdea");
 	

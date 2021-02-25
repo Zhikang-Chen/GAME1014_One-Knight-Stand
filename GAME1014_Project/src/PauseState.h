@@ -16,7 +16,7 @@ private:
 	virtual void Render();
 	virtual void Exit();
 
-	//BoolButton* m_pbutton;
+	BoolButton* m_pbutton;
 	//SpriteObject* m_pBackground;
 	
 };

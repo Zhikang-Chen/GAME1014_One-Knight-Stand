@@ -9,7 +9,7 @@
 //Will fix someday
 
 PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : AnimatedSpriteObject(s, d, t, 0, 0, 13, 10),
-m_state(STATE_JUMPING), m_grounded(false), m_facingLeft(false), m_secondJump(false),m_maxVelX(10.0), m_maxVelY(60.0), m_grav(GRAV), m_drag(0.8)
+m_state(STATE_JUMPING), m_grounded(false), m_facingLeft(false), m_secondJump(false),m_maxVelX(10.0), m_maxVelY(40.0), m_grav(GRAV), m_drag(0.85)
 {
 	cout << addressof(m_dst) << endl;
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
@@ -108,7 +108,7 @@ void PlatformPlayer::Update()
 	
 	// x axis
 	m_velX += m_accelX;
-	m_velX *= (m_grounded ? m_drag : 1.0);
+	m_velX *= (m_grounded ? m_drag : 1.0f);
 
 	
 	//Velocity clamping
@@ -117,7 +117,7 @@ void PlatformPlayer::Update()
 	
 	// y axis
 	m_velY += m_accelY + m_grav;
-	m_velY = std::min(std::max(m_velY, -m_maxVelY), (m_grav * 4.0)); //m_grav is how fast you're going to fall
+	m_velY = std::min(std::max(m_velY, -m_maxVelY), (m_grav * 4.0f)); //m_grav is how fast you're going to fall
 	m_dst.y += m_velY;
 
 
@@ -163,9 +163,9 @@ bool PlatformPlayer::GetAlive() { return m_alive; }
 
 void PlatformPlayer::SetAlive(bool a) { m_alive = a; }
 
-double PlatformPlayer::GetVelX() { return m_velX; }
+float PlatformPlayer::GetVelX() { return m_velX; }
 
-double PlatformPlayer::GetVelY() { return m_velY; }
+float PlatformPlayer::GetVelY() { return m_velY; }
 
 void PlatformPlayer::SetX(float x) { this->GetDst()->x = x; }
 

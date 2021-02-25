@@ -11,11 +11,18 @@ PauseState::PauseState()
 
 void PauseState::Enter()
 {
+	//Testing music remove later
+	SOMA::SetMusicVolume(8);
 	SOMA::PlayMusic("Pause");
-	int w, h;	
+	
+	int w, h;
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/resume.png", "Back");
 	SDL_QueryTexture(TEMA::GetTexture("Back"), nullptr, nullptr, &w, &h);
-	//m_pbutton = new BoolButton({ 0,0,w,h }, { WIDTH / 2 - (float)w / 2,HEIGHT / 2,(float)w, (float)h }, TEMA::GetTexture("Back"));
-	//m_objects.push_back(pair<string, GameObject*>("button", m_pbutton));
+	m_pbutton = new BoolButton({ 0,0,w/3,h }, { WIDTH / 2 - (float)w / 6,HEIGHT / 2,(float)w/3, (float)h }, TEMA::GetTexture("Back"));
+	m_objects.emplace_back("button", m_pbutton);
+
+
+	
 	cout << "Entering PauseState" << endl;
 }
 
@@ -29,15 +36,15 @@ void PauseState::Update()
 		STMA::PopState();
 	}
 	
-	//if(m_pbutton->GetChangeState())
-	//{
-	//	STMA::PopState();
-	//}
+	if(m_pbutton->GetChangeState())
+	{
+		STMA::PopState();
+	}
 }
 
 void PauseState::Render()
 {
-	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 128);
+	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 0, 128);
 	//SDL_RenderClear(Engine::Instance().GetRenderer());
 	SDL_SetRenderDrawBlendMode(Engine::Instance().GetRenderer(), SDL_BLENDMODE_BLEND);
 	SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &SDL_FRect({ 0, 0, (float)WIDTH, (float)HEIGHT }));
@@ -50,5 +57,12 @@ void PauseState::Render()
 
 void PauseState::Exit()
 {
+	SOMA::StopMusic();
+	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
+	{
+		delete i->second;
+		i->second = nullptr;
+	}
+	m_objects.clear();
 	cout << "Exiting PauseState" << endl;
 }

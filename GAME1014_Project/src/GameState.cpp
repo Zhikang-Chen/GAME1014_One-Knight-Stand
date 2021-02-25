@@ -40,8 +40,8 @@ void GameState::Enter()
 	m_pWeapon->SetTarget(FindObject("Player")->GetDst());
 	m_pWeapon->SetEnable(false);
 	m_objects.emplace_back("sword", m_pWeapon);
-	
 
+	
 	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
 	AnItem = new ItemObject({ 0,0,w,h }, { 0,650, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
 	m_objects.emplace_back("Weapon", AnItem);
@@ -68,32 +68,31 @@ void GameState::CollisionCheck()
 		SDL_FRect* t = dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles()[i]->GetDst();
 		if (COMA::AABBCheck(*p, *t)) // Collision check between player rect and tile rect.
 		{
-			if ((p->y + p->h) - static_cast<float>(pp->GetVelY()) <= t->y)
+			if ((p->y + p->h) - pp->GetVelY() <= t->y)
 			{ // Colliding with top side of tile.
 				pp->StopY();
 				pp->SetY(t->y - p->h);
 				pp->SetGrounded(true);
 			}
-			//else if (p->y - static_cast<float>(pp->GetVelY()) >= (t->y + t->h))
-			//{ // Colliding with bottom side of tile.
-			//	pp->StopY();
-			//	pp->SetY(t->y + t->h);
-			//}
-			else if ((p->x + p->w) - static_cast<float>(pp->GetVelX()) <= t->x)
+			else if (p->y - pp->GetVelY() >= (t->y + t->h))
+			{ // Colliding with bottom side of tile.
+				pp->StopY();
+				pp->SetY(t->y + t->h);
+			}
+			else if (p->x - pp->GetVelX() <= t->x - t->w)
 			{ // Colliding with left side of tile.
 				pp->StopX();
-				cout << "Heading Right: " << pp->GetVelX() << endl;
 				pp->SetX(t->x - p->w);
 			}
-			else if (p->x  - static_cast<float>(pp->GetVelX()) >= (t->x + t->w))
+			else if (p->x  - pp->GetVelX() >= t->x + t->w)
 			{ // Colliding with right side of tile.
 				pp->StopX();
-				cout << "Heading Left: " << pp->GetVelX() << endl;
 				pp->SetX(t->x + t->w);
 			}
+			
 		}
 	}
-
+	
 	// Use to test 
 	if (COMA::AABBCheck(*p, *AnItem->GetDst()))
 	{
@@ -105,17 +104,12 @@ void GameState::CollisionCheck()
 	}
 
 	//This has to be at the end
-	if (p->y >= HEIGHT)
+	if (p->y >= HEIGHT + p->h)
 	{
 		STMA::ChangeState(new EndState());
 	}
 	
-	//cout << pp->GetVelX() << endl;
 }
-
-/*To do
- *Fix a bug where the player can get out of bound vai jumping
- */
 
 void GameState::UpdateCam()
 {
@@ -126,14 +120,20 @@ void GameState::UpdateCam()
 		//std::cout << "Right" << endl;
 		//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x - (m_player->GetDst()->w / 2));
 		//cout << m_camOffset << endl;
-		camspeed = -8.0f;
+		//camspeed = -6.0f;
+		//
+		//if (pp->GetDst()->x >= (WIDTH / 2) + 128)
+			camspeed = pp->GetVelX() * -1;
 	}
 	else if (pp->GetDst()->x <= (WIDTH / 2) - 64)
 	{
 		//std::cout << "Left" << endl;
 		//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x + ( m_player->GetDst()->w / 2));
 		//cout << m_camOffset << endl;
-		camspeed = 8.0f;
+		//camspeed = 6.0f;
+		//
+		//if (pp->GetDst()->x <= (WIDTH / 2) - 128)
+			camspeed = pp->GetVelX() * -1;
 	}
 
 	for (int i = 0; i < dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles().size(); i++)
@@ -141,11 +141,13 @@ void GameState::UpdateCam()
 		SDL_FRect* t = dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles()[i]->GetDst();
 		t->x += camspeed;
 	}
+
+	//for (auto& m_object : m_objects)
+	//	m_object.second->GetDst()->x += camspeed;
 	
 	FindObject("Label4")->GetDst()->x += camspeed;
 	FindObject("Label5")->GetDst()->x += camspeed;
 	FindObject("Player")->GetDst()->x += camspeed;
-	
 	FindObject("Weapon")->GetDst()->x += camspeed;
 
 }
@@ -153,16 +155,13 @@ void GameState::UpdateCam()
 void GameState::Update()
 {
 	UpdateCam();
-	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
-		i->second->Update();
+	for (auto& m_object : m_objects)
+		m_object.second->Update();
 	CollisionCheck();
-
 	if(EVMA::KeyPressed(SDL_SCANCODE_P))
 	{
 		STMA::PushState(new PauseState);
 	}
-
-	
 }
 
 void GameState::Render()
@@ -170,9 +169,12 @@ void GameState::Render()
 	//std::cout << "Rendering TitleState..." << std::endl;
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 255);
 	SDL_RenderClear(Engine::Instance().GetRenderer());
+
+	for (auto& i : m_UIObject)
+		i.second->Render();
 	
-	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
-		i->second->Render();
+	for (auto& m_object : m_objects)
+		m_object.second->Render();
 	
 	if (dynamic_cast<GameState*>(STMA::GetStates().back())) // Check to see if current state is of type GameState
 		State::Render();
@@ -181,10 +183,10 @@ void GameState::Render()
 
 void GameState::Exit()
 {
-	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
+	for (auto& m_object : m_objects)
 	{
-		delete i->second;
-		i->second = nullptr;
+		delete m_object.second;
+		m_object.second = nullptr;
 	}
 	m_objects.clear();
 	
