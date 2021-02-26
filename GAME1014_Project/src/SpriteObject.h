@@ -57,6 +57,7 @@ protected:
 		}
 		m_src.x = m_src.w * m_sprite;
 	}
+
 	int m_sprite,		// The current sprite index in row.
 		m_spriteMin,	// The sprite index to start animation on.
 		m_spriteMax,	// The sprite index to end animation on.

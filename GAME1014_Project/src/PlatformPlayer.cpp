@@ -88,13 +88,13 @@ void PlatformPlayer::Update()
 				m_facingLeft = false;
 		}
 
-		if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_secondJump)
-		{
-			m_accelY = -JUMPFORCE;
-			m_grounded = false;
-			m_secondJump = false;
-			//SetAnimation(1, 8, 9, 256);
-		}
+		//if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_secondJump)
+		//{
+		//	m_accelY = -JUMPFORCE;
+		//	m_grounded = false;
+		//	m_secondJump = false;
+		//	//SetAnimation(1, 8, 9, 256);
+		//}
 		
 		// Hit the ground, transition to run.
 		if (m_grounded)

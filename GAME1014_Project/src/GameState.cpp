@@ -43,7 +43,7 @@ void GameState::Enter()
 
 	
 	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
-	AnItem = new ItemObject({ 0,0,w,h }, { 0,650, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
+	AnItem = new ItemObject({ 0,0,w,h }, { 32*5,650, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
 	m_objects.emplace_back("Weapon", AnItem);
 	
 	std::cout << "Entering TitleState..." << std::endl;
@@ -61,8 +61,8 @@ I am not only an idiot I am also blind.
 //Check collision between platforms and the player
 void GameState::CollisionCheck()
 {
-	SDL_FRect* p = FindObject("Player")->GetDst(); // Copies address of player m_dst.
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
+	SDL_FRect* p = pp->GetDst();
 	for (int i = 0; i < dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles().size(); i++)
 	{
 		SDL_FRect* t = dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles()[i]->GetDst();
