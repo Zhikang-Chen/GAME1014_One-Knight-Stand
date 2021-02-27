@@ -19,6 +19,6 @@ GameObject* State::FindObject(std::string id)
 			return(object.second);
 		}
 	}
-	return nullptr;
+	cout << id << " Not found" << endl;
 }
 // End State.

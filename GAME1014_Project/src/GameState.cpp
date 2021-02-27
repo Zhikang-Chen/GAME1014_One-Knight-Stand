@@ -46,17 +46,9 @@ void GameState::Enter()
 	AnItem = new ItemObject({ 0,0,w,h }, { 32*5,650, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
 	m_objects.emplace_back("Weapon", AnItem);
 	
-	std::cout << "Entering TitleState..." << std::endl;
+	std::cout << "Entering GameState..." << std::endl;
 }
 
-
-
-/*
-I SPENT 5 HOURS TRYING TO FIGURE OUT WHY DOESN'T THE COLLISION CHECK WORK....
-IT WAS A SEMICOLON AT THE END OF THE IF STATEMENT. A FUCKING SEMICOLON!
-I HAVEN'T BEEN THIS CLOSE TO KILLING MYSELF SINCE LAST SUMMER.
-I am not only an idiot I am also blind.
-*/
 
 //Check collision between platforms and the player
 void GameState::CollisionCheck()
@@ -89,7 +81,6 @@ void GameState::CollisionCheck()
 				pp->StopX();
 				pp->SetX(t->x + t->w);
 			}
-			
 		}
 	}
 	
@@ -144,7 +135,6 @@ void GameState::UpdateCam()
 
 	//for (auto& m_object : m_objects)
 	//	m_object.second->GetDst()->x += camspeed;
-	
 	FindObject("Label4")->GetDst()->x += camspeed;
 	FindObject("Label5")->GetDst()->x += camspeed;
 	FindObject("Player")->GetDst()->x += camspeed;
@@ -160,7 +150,7 @@ void GameState::Update()
 	CollisionCheck();
 	if(EVMA::KeyPressed(SDL_SCANCODE_P))
 	{
-		STMA::PushState(new PauseState);
+		STMA::PushState(new PauseState());
 	}
 }
 
@@ -190,10 +180,11 @@ void GameState::Exit()
 	}
 	m_objects.clear();
 	
-	std::cout << "Exiting TitleState..." << std::endl;
+	std::cout << "Exiting GameState..." << std::endl;
 }
 
 void GameState::Resume()
 {
+	cout << "Resuming GameState" << endl;
 }
 // End GameState
