@@ -30,8 +30,8 @@ public:
 	bool SetGrounded(bool g);
 	bool GetAlive();
 	void SetAlive(bool a);
-	double GetVelX();
-	double GetVelY();
+	float GetVelX();
+	float GetVelY();
 	void SetX(float x);
 	void SetY(float y);
 
@@ -43,7 +43,7 @@ private:
 	bool m_secondJump;
 	bool m_showHitbox;
 	PlayerState m_state;
-	double m_accelX, //Acceleration on the X axis, horizontal force
+	float m_accelX, //Acceleration on the X axis, horizontal force
 		m_accelY,//Acceleration on the Y axis, vertical force
 		m_velX, //Velocity for X 
 		m_maxVelX, //Maximum velocity

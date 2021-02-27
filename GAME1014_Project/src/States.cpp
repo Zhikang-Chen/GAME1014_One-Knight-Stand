@@ -8,4 +8,17 @@ void State::Render()
 	SDL_RenderPresent(Engine::Instance().GetRenderer());
 }
 void State::Resume() {}
+
+
+GameObject* State::FindObject(std::string id)
+{
+	for (const auto& object : m_objects)
+	{
+		if (object.first == id)
+		{
+			return(object.second);
+		}
+	}
+	cout << id << " Not found" << endl;
+}
 // End State.

@@ -23,26 +23,9 @@ public:
 	void UpdateCam();
 
 private:
-	Label* m_plabel;
-	PlatformPlayer* m_player;
-	int m_camOffset;
 	Sword* m_pWeapon;
-
 	ItemObject* AnItem;
-	
-	vector<SDL_FRect*> m_pPlatforms;
-
-	// A temporary solution. waiting for Alex to teach us how to deal with pair
-	GameObject* Find(string id)
-	{
-		for(const auto &object:m_objects)
-		{
-			if(object.first == id)
-			{
-				return(object.second);
-			}
-		}
-	}
+	std::vector<std::pair<std::string, GameObject*>> m_UIObject; //Almost the same as m_objecst but those wont move with the camera
 };
 
 #endif
