@@ -15,6 +15,7 @@ TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int
 		while (!inFile.eof())
 		{
 			inFile >> key >> x >> y >> obs >> haz;
+
 			m_tiles.emplace(key, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey) ,obs, haz));
 
 		}
@@ -36,6 +37,9 @@ TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int
 				m_level[row][col]->SetXY((float)(col * w), (float)(row * h));
 				if (m_level[row][col]->IsObstacle())
 					m_obstacles.push_back(m_level[row][col]);
+
+				if (key == 'S')
+					m_pStartingTile = m_level[row][col];
 				
 			}
 		}
@@ -56,6 +60,7 @@ TiledLevel::~TiledLevel()
 	}
 	m_level.clear();
 	m_obstacles.clear();
+	m_pStartingTile = nullptr;
 	// Clear the original tiles.
 	for (map<char, Tile*>::iterator i = m_tiles.begin(); i != m_tiles.end(); i++)
 	{
