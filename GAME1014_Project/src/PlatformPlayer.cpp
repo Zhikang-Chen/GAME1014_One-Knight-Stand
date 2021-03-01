@@ -11,7 +11,7 @@
 PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : AnimatedSpriteObject(s, d, t, 0, 0, 13, 10),
 m_state(STATE_JUMPING), m_grounded(false), m_facingLeft(false), m_secondJump(false),m_maxVelX(10.0), m_maxVelY(40.0), m_grav(GRAV), m_drag(0.85)
 {
-	cout << addressof(m_dst) << endl;
+	//cout << addressof(m_dst) << endl;
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
 	//SetAnimation(1, 8, 9); // Initialize jump animation.
 }
@@ -70,6 +70,7 @@ void PlatformPlayer::Update()
 		if (!EVMA::KeyHeld(SDL_SCANCODE_A) && !EVMA::KeyHeld(SDL_SCANCODE_D))
 		{
 			m_state = STATE_IDLING;
+			//m_velX = 0;
 			//SetAnimation(1, 0, 1, 256); // , 256
 		}
 		break;
@@ -105,7 +106,6 @@ void PlatformPlayer::Update()
 		break;
 	}
 
-	
 	// x axis
 	m_velX += m_accelX;
 	m_velX *= (m_grounded ? m_drag : 1.0f);
@@ -147,6 +147,8 @@ void PlatformPlayer::Stop()
 	StopY();
 }
 
+PlayerState PlatformPlayer::GetState() { return m_state; }
+
 void PlatformPlayer::StopX() { m_velX = 0.0; }
 
 void PlatformPlayer::StopY() { m_velY = 0.0; }
@@ -168,7 +170,6 @@ float PlatformPlayer::GetVelX() { return m_velX; }
 float PlatformPlayer::GetVelY() { return m_velY; }
 
 void PlatformPlayer::SetX(float x) { this->GetDst()->x = x; }
-
 
 void PlatformPlayer::SetY(float y) { this->GetDst()->y = y; }
 

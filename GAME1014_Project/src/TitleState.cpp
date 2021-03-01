@@ -24,7 +24,7 @@ void TitleState::Enter()
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/p.png", "Play");
 	SDL_QueryTexture(TEMA::GetTexture("Play"), nullptr, nullptr, &w, &h);
-	b = new BoolButton({ 0,0,w/3,h }, { ((float)WIDTH / 2) - ((w/3) / 2),((float)HEIGHT / 2) - (h / 2) , (float)w/3, (float)h }, TEMA::GetTexture("Play"));
+	b = new BoolButton({ 0,0,w/3,h }, { (float)WIDTH / 2 - w/3 / 2,(float)HEIGHT / 2 - h / 2 , (float)w/3, (float)h }, TEMA::GetTexture("Play"));
 	//m_objects.emplace("no", b);
 	m_objects.emplace_back("no", b);
 	

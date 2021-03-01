@@ -25,7 +25,7 @@ public:
 private:
 	Sword* m_pWeapon;
 	ItemObject* AnItem;
-	std::vector<std::pair<std::string, GameObject*>> m_UIObject; //Almost the same as m_objecst but those wont move with the camera
+	//std::vector<std::pair<std::string, GameObject*>> m_UIObject; //Almost the same as m_object but those wont move with the camera
 };
 
 #endif

@@ -37,12 +37,12 @@ void GameState::Enter()
 	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { r->x,r->y, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
 	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
-	m_pWeapon = new Sword({ 0,0,w,h }, { 0,0, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
+	m_pWeapon = new Sword({ 0,0,w,h }, { 0,0, static_cast<float>(w)/6,static_cast<float>(h)/6 }, TEMA::GetTexture("IDK"));
 
 	//Use to test item class remove when done
-	m_pWeapon->SetTarget(FindObject("Player")->GetDst());
-	m_pWeapon->SetEnable(false);
-	m_objects.emplace_back("sword", m_pWeapon);
+	//m_pWeapon->SetTarget(FindObject("Player")->GetDst());
+	//m_pWeapon->SetEnable(false);
+	//m_objects.emplace_back("sword", m_pWeapon);
 
 	
 	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
@@ -116,7 +116,7 @@ void GameState::UpdateCam()
 		//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x - (m_player->GetDst()->w / 2));
 		//cout << m_camOffset << endl;
 		camspeed = -7.0f;
-		if (pp->GetVelX() != 0)
+		if (pp->GetState() != STATE_IDLING)
 			camspeed = pp->GetVelX() * -1;
 	}
 	else if (pp->GetDst()->x <= (WIDTH / 2) - 64)
@@ -125,7 +125,7 @@ void GameState::UpdateCam()
 		//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x + ( m_player->GetDst()->w / 2));
 		//cout << m_camOffset << endl;
 		camspeed = 7.0f;
-		if (pp->GetVelX() != 0)
+		if (pp->GetState() != STATE_IDLING)
 			camspeed = pp->GetVelX() * -1;
 	}
 
