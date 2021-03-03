@@ -33,8 +33,8 @@ void GameState::Enter()
 	//m_player = new PlatformPlayer({ 0, 0, width / 14,height }, { 0,0, float(width / 14),float(height) }, TEMA::GetTexture("Knight"));
 
 	SDL_FRect* r = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile()->GetDst();
-	
-	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { r->x,r->y, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
+	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { WIDTH/2,HEIGHT-64*2, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
+	//m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { r->x,r->y, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
 	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
 	m_pWeapon = new Sword({ 0,0,w,h }, { 0,0, static_cast<float>(w)/6,static_cast<float>(h)/6 }, TEMA::GetTexture("IDK"));
@@ -115,8 +115,8 @@ void GameState::UpdateCam()
 		//std::cout << "Right" << endl;
 		//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x - (m_player->GetDst()->w / 2));
 		//cout << m_camOffset << endl;
-		camspeed = -7.0f;
-		if (pp->GetState() != STATE_IDLING)
+		//camspeed = -10.0f;
+		//if (pp->GetState() != STATE_IDLING)
 			camspeed = pp->GetVelX() * -1;
 	}
 	else if (pp->GetDst()->x <= (WIDTH / 2) - 64)
@@ -124,8 +124,8 @@ void GameState::UpdateCam()
 		//std::cout << "Left" << endl;
 		//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x + ( m_player->GetDst()->w / 2));
 		//cout << m_camOffset << endl;
-		camspeed = 7.0f;
-		if (pp->GetState() != STATE_IDLING)
+		//camspeed = 10.0f;
+		//if (pp->GetState() != STATE_IDLING)
 			camspeed = pp->GetVelX() * -1;
 	}
 

@@ -10,7 +10,7 @@
 #include "SpriteObject.h"
 #include "TextureManager.h"
 
-enum Tag { NONE = -1 ,START, END};
+enum Tag { NONE = -1 ,START, AIR ,END};
 
 class Tile : public SpriteObject
 {

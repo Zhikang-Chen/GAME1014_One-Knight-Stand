@@ -1,7 +1,7 @@
 #include "TiledLevel.h"
 
 //note: 250 seem to be the best it can get before lag
-//To do fix this
+//To do: fix this
 
 TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int w, const int h, 
 	const char* tileData, const char* levelData, const char* tileKey) :m_rows(r), m_cols(c), m_tileKey(tileKey)
@@ -15,8 +15,10 @@ TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int
 		while (!inFile.eof())
 		{
 			inFile >> key >> x >> y >> obs >> haz;
-
-			m_tiles.emplace(key, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey) ,obs, haz));
+			if(key != '*')
+				m_tiles.emplace(key, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey) ,obs, haz));
+			else
+				m_tiles.emplace(key, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey), obs, haz, AIR));
 
 		}
 	}
@@ -76,8 +78,8 @@ void TiledLevel::Render()
 	{
 		for (unsigned short col = 0; col < m_cols; col++)
 		{
-			SDL_RenderCopyF(Engine::Instance().GetRenderer(), TEMA::GetTexture(m_tileKey),
-				m_level[row][col]->GetSrc(), m_level[row][col]->GetDst());
+			if(m_level[row][col]->GetTag() != AIR)
+				SDL_RenderCopyF(Engine::Instance().GetRenderer(), TEMA::GetTexture(m_tileKey),m_level[row][col]->GetSrc(), m_level[row][col]->GetDst());
 		}
 	}
 }
