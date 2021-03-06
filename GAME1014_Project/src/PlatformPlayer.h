@@ -22,6 +22,7 @@ public:
 	void ShowHitbox();
 	
 	void Stop();
+	PlayerState GetState();
 	void StopX();
 	void StopY();
 	void SetAccelX(double a);

@@ -1,26 +1,56 @@
 #include "TiledLevel.h"
 
 //note: 250 seem to be the best it can get before lag
-//To do fix this
+//To do: fix this
 
 TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int w, const int h, 
 	const char* tileData, const char* levelData, const char* tileKey) :m_rows(r), m_cols(c), m_tileKey(tileKey)
 {
-	ifstream inFile(tileData);
-	if (inFile.is_open())
-	{
-		char key;
-		int x, y;
-		bool obs, haz;
-		while (!inFile.eof())
-		{
-			inFile >> key >> x >> y >> obs >> haz;
-			m_tiles.emplace(key, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey) ,obs, haz));
+	//ifstream inFile(tileData);	
+	//if (inFile.is_open())
+	//{
+	//	char key;
+	//	int x, y;
+	//	bool obs, haz;
+	//	while (!inFile.eof())
+	//	{
+	//		inFile >> key >> x >> y >> obs >> haz;
+	//		if(key != '*')
+	//			m_tiles.emplace(key, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey) ,obs, haz));
+	//		else
+	//			m_tiles.emplace(key, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey), obs, haz, AIR));
 
-		}
+	//	}
+	//}
+	//inFile.close();
+
+	xmlDoc.LoadFile(tileData);
+	XMLNode* pRoot = xmlDoc.FirstChildElement("Data");
+	XMLElement* pElement = pRoot->FirstChildElement("Tile");
+
+	while(pElement != nullptr)
+	{
+		//It can only take one character as a key cause i don't want to deal with c string anymore
+		const char* key;
+		int x, y, obs, haz;
+		//pElement->QueryStringAttribute("key", &key);
+
+		key = pElement->Attribute("key");
+		pElement->QueryAttribute("x", &x);
+		pElement->QueryAttribute("y", &y);
+		pElement->QueryAttribute("obs", &obs);
+		pElement->QueryAttribute("haz", &haz);
+
+		char k = key[0];
+		if(k != '*')
+			m_tiles.emplace(k, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey), obs, haz));
+		else
+			m_tiles.emplace(k, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey), obs, haz, AIR));
+		pElement = pElement->NextSiblingElement("Tile");
+		
 	}
-	inFile.close();
-	inFile.open(levelData);
+
+	ifstream inFile(levelData);
 	if (inFile.is_open())
 	{
 		char key;
@@ -36,6 +66,9 @@ TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int
 				m_level[row][col]->SetXY((float)(col * w), (float)(row * h));
 				if (m_level[row][col]->IsObstacle())
 					m_obstacles.push_back(m_level[row][col]);
+
+				if (key == 'S')
+					m_pStartingTile = m_level[row][col];
 				
 			}
 		}
@@ -56,6 +89,7 @@ TiledLevel::~TiledLevel()
 	}
 	m_level.clear();
 	m_obstacles.clear();
+	m_pStartingTile = nullptr;
 	// Clear the original tiles.
 	for (map<char, Tile*>::iterator i = m_tiles.begin(); i != m_tiles.end(); i++)
 	{
@@ -71,8 +105,8 @@ void TiledLevel::Render()
 	{
 		for (unsigned short col = 0; col < m_cols; col++)
 		{
-			SDL_RenderCopyF(Engine::Instance().GetRenderer(), TEMA::GetTexture(m_tileKey),
-				m_level[row][col]->GetSrc(), m_level[row][col]->GetDst());
+			if(m_level[row][col]->GetTag() != AIR)
+				SDL_RenderCopyF(Engine::Instance().GetRenderer(), TEMA::GetTexture(m_tileKey),m_level[row][col]->GetSrc(), m_level[row][col]->GetDst());
 		}
 	}
 }

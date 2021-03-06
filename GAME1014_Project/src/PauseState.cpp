@@ -11,6 +11,7 @@ PauseState::PauseState()
 
 void PauseState::Enter()
 {
+	SOMA::Load("../GAME1017_Template_W01/Aud/mendelssohn_songs_without_words_opus_38_5.mp3", "Pause", SOUND_MUSIC);
 	//Testing music remove later
 	SOMA::SetMusicVolume(8);
 	SOMA::PlayMusic("Pause");
@@ -30,13 +31,8 @@ void PauseState::Update()
 {
 	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
 		i->second->Update();
-
-	if(EVMA::KeyPressed(SDL_SCANCODE_R))
-	{
-		STMA::PopState();
-	}
 	
-	if(m_pbutton->GetChangeState())
+	if(m_pbutton->GetChangeState() || EVMA::KeyPressed(SDL_SCANCODE_R))
 	{
 		STMA::PopState();
 	}
