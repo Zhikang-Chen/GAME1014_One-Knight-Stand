@@ -27,7 +27,7 @@ void GameState::Enter()
 	//SDL_Rect src{ 20,20,100,100 }, dir{0,0,100,100};
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tileset.png", "tiles");
-	m_objects.emplace_back("level", new TiledLevel(24, 249, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.txt", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
+	m_objects.emplace_back("level", new TiledLevel(24, 120, 32, 32, "../GAME1017_Template_W01/Dat/TileData.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
 	
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
 	//m_player = new PlatformPlayer({ 0, 0, width / 14,height }, { 0,0, float(width / 14),float(height) }, TEMA::GetTexture("Knight"));
@@ -108,25 +108,18 @@ void GameState::CollisionCheck()
 
 void GameState::UpdateCam()
 {
+	//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x - (m_player->GetDst()->w / 2));
 	float camspeed = 0.0;
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
 	if (pp->GetDst()->x >= (WIDTH / 2) + 64)
 	{
 		//std::cout << "Right" << endl;
-		//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x - (m_player->GetDst()->w / 2));
-		//cout << m_camOffset << endl;
-		//camspeed = -10.0f;
-		//if (pp->GetState() != STATE_IDLING)
-			camspeed = pp->GetVelX() * -1;
+		camspeed = pp->GetVelX() * -1;
 	}
 	else if (pp->GetDst()->x <= (WIDTH / 2) - 64)
 	{
 		//std::cout << "Left" << endl;
-		//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x + ( m_player->GetDst()->w / 2));
-		//cout << m_camOffset << endl;
-		//camspeed = 10.0f;
-		//if (pp->GetState() != STATE_IDLING)
-			camspeed = pp->GetVelX() * -1;
+		camspeed = pp->GetVelX() * -1;
 	}
 
 	for (int i = 0; i < dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles().size(); i++)

@@ -9,6 +9,9 @@
 #include "GameObject.h"
 #include "SpriteObject.h"
 #include "TextureManager.h"
+#include "tinyxml2.h"
+
+using namespace tinyxml2;
 
 enum Tag { NONE = -1 ,START, AIR ,END};
 
@@ -39,6 +42,7 @@ public:
 	void Render();
 	vector<Tile*>& GetObstacles();
 	Tile* GetStartingTile() const { return m_pStartingTile; }
+	XMLDocument xmlDoc;
 
 private:
 	const char* m_tileKey;

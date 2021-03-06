@@ -23,6 +23,9 @@
     <Filter Include="TinyXml2">
       <UniqueIdentifier>{f78fd133-8ddb-4d40-96d1-40b1ca797472}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Datas">
+      <UniqueIdentifier>{bc8133be-e415-48a4-872f-29f1131ce2a1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\CollisionManager.cpp">
@@ -171,5 +174,24 @@
     <ClInclude Include="..\src\tinyxml2.h">
       <Filter>TinyXml2</Filter>
     </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Dat\Mario_test.txt">
+      <Filter>Datas</Filter>
+    </Text>
+    <Text Include="Dat\Tiledata.txt">
+      <Filter>Datas</Filter>
+    </Text>
+    <Text Include="Dat\Level1.txt">
+      <Filter>Datas</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Dat\TileData.xml">
+      <Filter>Datas</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

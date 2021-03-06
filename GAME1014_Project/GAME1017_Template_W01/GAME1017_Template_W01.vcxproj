@@ -166,6 +166,15 @@
     <ClInclude Include="..\src\TitleState.h" />
     <ClInclude Include="..\src\WeaponObject.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Dat\Level1.txt" />
+    <Text Include="Dat\Mario_test.txt" />
+    <Text Include="Dat\Tiledata.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Dat\TileData.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

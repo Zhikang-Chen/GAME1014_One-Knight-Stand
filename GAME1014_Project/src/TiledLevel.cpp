@@ -6,24 +6,51 @@
 TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int w, const int h, 
 	const char* tileData, const char* levelData, const char* tileKey) :m_rows(r), m_cols(c), m_tileKey(tileKey)
 {
-	ifstream inFile(tileData);
-	if (inFile.is_open())
-	{
-		char key;
-		int x, y;
-		bool obs, haz;
-		while (!inFile.eof())
-		{
-			inFile >> key >> x >> y >> obs >> haz;
-			if(key != '*')
-				m_tiles.emplace(key, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey) ,obs, haz));
-			else
-				m_tiles.emplace(key, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey), obs, haz, AIR));
+	//ifstream inFile(tileData);	
+	//if (inFile.is_open())
+	//{
+	//	char key;
+	//	int x, y;
+	//	bool obs, haz;
+	//	while (!inFile.eof())
+	//	{
+	//		inFile >> key >> x >> y >> obs >> haz;
+	//		if(key != '*')
+	//			m_tiles.emplace(key, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey) ,obs, haz));
+	//		else
+	//			m_tiles.emplace(key, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey), obs, haz, AIR));
 
-		}
+	//	}
+	//}
+	//inFile.close();
+
+	xmlDoc.LoadFile(tileData);
+	XMLNode* pRoot = xmlDoc.FirstChildElement("Data");
+	XMLElement* pElement = pRoot->FirstChildElement("Tile");
+
+	while(pElement != nullptr)
+	{
+		//It can only take one character as a key cause i don't want to deal with c string anymore
+		const char* key;
+		int x, y, obs, haz;
+		//pElement->QueryStringAttribute("key", &key);
+
+		key = pElement->Attribute("key");
+		pElement->QueryAttribute("x", &x);
+		pElement->QueryAttribute("y", &y);
+		pElement->QueryAttribute("obs", &obs);
+		pElement->QueryAttribute("haz", &haz);
+
+		char k = key[0];
+		if(k != '*')
+			m_tiles.emplace(k, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey), obs, haz));
+		else
+			m_tiles.emplace(k, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey), obs, haz, AIR));
+		pElement = pElement->NextSiblingElement("Tile");
+		
 	}
-	inFile.close();
-	inFile.open(levelData);
+
+	ifstream inFile(levelData);
 	if (inFile.is_open())
 	{
 		char key;
