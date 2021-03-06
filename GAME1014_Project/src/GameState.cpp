@@ -22,7 +22,7 @@ void GameState::Enter()
 	m_objects.emplace_back("Label4", new Label("Minecraft", WIDTH / 2 - 20, 10, "I am not responsible for the lost of your sanity -Ken", { 0,0,0,0 }));
 	m_objects.emplace_back("Label5", new Label("Minecraft", WIDTH + 200, 10, "You can't run human kun", { 0,0,0,0 }));
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_RUNNING_AND_IDLE.png", "Knight");
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/ak47.png", "IDK");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Sign_End.png", "IDK");
 	
 	//SDL_Rect src{ 20,20,100,100 }, dir{0,0,100,100};
 
@@ -46,7 +46,7 @@ void GameState::Enter()
 
 	
 	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
-	AnItem = new ItemObject({ 0,0,w,h }, { 32*5,650, static_cast<float>(w)/6,static_cast<float>(h)/6 }, TEMA::GetTexture("IDK"));
+	AnItem = new ItemObject({ 0,0,w,h }, { 32*5.5,HEIGHT - 32.0f*2.0f - h, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
 	m_objects.emplace_back("Trigger", AnItem);
 	
 	std::cout << "Entering GameState..." << std::endl;
