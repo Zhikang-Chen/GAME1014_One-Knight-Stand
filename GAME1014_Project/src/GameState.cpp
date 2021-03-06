@@ -25,7 +25,7 @@ void GameState::Enter()
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_ALL_ANIMATION-Sheet.png", "Knight");
 
 	
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/sword.png", "IDK"); 
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Sign_End.png", "IDK");
 	//TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_Attacking.png", "Knight-Attack");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordskill.png", "SwordSkill1");
 
@@ -37,23 +37,18 @@ void GameState::Enter()
 	//SDL_Rect src{ 20,20,100,100 }, dir{0,0,100,100};
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tileset.png", "tiles");
-	m_objects.emplace_back("level", new TiledLevel(24, 249, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.txt", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
+	m_objects.emplace_back("level", new TiledLevel(24, 120, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
 	
+	SDL_FRect* r = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile()->GetDst();
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
-	//m_player = new PlatformPlayer({ 0, 0, width / 14,height }, { 0,0, float(width / 14),float(height) }, TEMA::GetTexture("Knight"));
-	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { WIDTH/2,0, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
+	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { WIDTH / 2, HEIGHT - 64*3, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
+
+	//m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { r->x,r->y, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
+
 
 	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
-	m_pWeapon = new Sword({ 0,0,w,h }, { 0,0, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
-
-	//Use to test item class remove when done
-	m_pWeapon->SetTarget(FindObject("Player")->GetDst());
-	m_pWeapon->SetEnable(false);
-	m_objects.emplace_back("sword", m_pWeapon);
-
-	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
-	AnItem = new ItemObject({ 0,0,w,h }, { 32*5,650, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
-	m_objects.emplace_back("Weapon", AnItem);
+	AnItem = new ItemObject({ 0,0,w,h }, { 32 * 5.5,HEIGHT - 32.0f * 2.0f - h, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
+	m_objects.emplace_back("Trigger", AnItem);
 
 	SDL_QueryTexture(TEMA::GetTexture("HeartBar"), nullptr, nullptr, &w, &h);
 	m_pHeartbar = new Heart({ 0,0 , w,h }, { 10,70, float(w),float(h) }, TEMA::GetTexture("HeartBar"));
@@ -99,55 +94,47 @@ void GameState::CollisionCheck()
 				pp->StopX();
 				pp->SetX(t->x - p->w);
 			}
-			else if (p->x  - pp->GetVelX() >= t->x + t->w)
+			else if (p->x - pp->GetVelX() >= t->x + t->w)
 			{ // Colliding with right side of tile.
 				pp->StopX();
 				pp->SetX(t->x + t->w);
 			}
 		}
 	}
-	
+
 	// Use to test 
-	if (COMA::AABBCheck(*p, *AnItem->GetDst()))
+	if (COMA::AABBCheck(*p, *AnItem->GetDst()) && dynamic_cast<GameState*>(STMA::GetStates().back()))
 	{
-		if(EVMA::KeyPressed(SDL_SCANCODE_E))
+		if (EVMA::KeyPressed(SDL_SCANCODE_E))
 		{
-			AnItem->Activate();
-			m_pWeapon->SetEnable(true);
+			STMA::ChangeState(new TitleState());
+			//AnItem->Activate();
+			//m_pWeapon->SetEnable(true);
 		}
 	}
 
 	//This has to be at the end
-	if (p->y >= HEIGHT + p->h)
+	if (p->y >= HEIGHT + p->h && dynamic_cast<GameState*>(STMA::GetStates().back()))
 	{
 		STMA::ChangeState(new EndState());
 	}
-	
+
 }
 
 void GameState::UpdateCam()
 {
+	//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x - (m_player->GetDst()->w / 2));
 	float camspeed = 0.0;
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
 	if (pp->GetDst()->x >= (WIDTH / 2) + 64)
 	{
 		//std::cout << "Right" << endl;
-		//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x - (m_player->GetDst()->w / 2));
-		//cout << m_camOffset << endl;
-		//camspeed = -6.0f;
-		//
-		//if (pp->GetDst()->x >= (WIDTH / 2) + 128)
-			camspeed = pp->GetVelX() * -1;
+		camspeed = pp->GetVelX() * -1;
 	}
 	else if (pp->GetDst()->x <= (WIDTH / 2) - 64)
 	{
 		//std::cout << "Left" << endl;
-		//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x + ( m_player->GetDst()->w / 2));
-		//cout << m_camOffset << endl;
-		//camspeed = 6.0f;
-		//
-		//if (pp->GetDst()->x <= (WIDTH / 2) - 128)
-			camspeed = pp->GetVelX() * -1;
+		camspeed = pp->GetVelX() * -1;
 	}
 
 	for (int i = 0; i < dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles().size(); i++)
@@ -161,7 +148,7 @@ void GameState::UpdateCam()
 	//FindObject("Label4")->GetDst()->x += camspeed;
 	//FindObject("Label5")->GetDst()->x += camspeed;
 	FindObject("Player")->GetDst()->x += camspeed;
-	FindObject("Weapon")->GetDst()->x += camspeed;
+	FindObject("Trigger")->GetDst()->x += camspeed;
 
 }
 

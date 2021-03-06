@@ -33,7 +33,7 @@ void PlatformPlayer::Update()
 			m_state = STATE_RUNNING;
 			SetAnimation(6, 6, 12); // , 256
 		}
-		if (EVMA::KeyPressed(SDL_SCANCODE_J))
+		else if (EVMA::KeyPressed(SDL_SCANCODE_J))
 		{
 			m_state = STATE_ATTACKING;
 			SetAnimation(5, 0, 5);
@@ -93,6 +93,13 @@ void PlatformPlayer::Update()
 			if (m_facingLeft)
 				m_facingLeft = false;
 		}
+		// Hit the ground, transition to run.
+		if (m_grounded)
+		{
+			m_state = STATE_RUNNING;
+			//SetAnimation(3, 0, 8, 256);
+		}
+		break;
 		
 	case STATE_ATTACKING:
 		if (!EVMA::KeyHeld(SDL_SCANCODE_A) && !EVMA::KeyHeld(SDL_SCANCODE_D) && !EVMA::KeyDown(SDL_SCANCODE_J))
@@ -151,6 +158,8 @@ void PlatformPlayer::Stop()
 	StopX();
 	StopY();
 }
+
+PlayerState PlatformPlayer::GetState() { return m_state; }
 
 void PlatformPlayer::StopX() { m_velX = 0.0; }
 
