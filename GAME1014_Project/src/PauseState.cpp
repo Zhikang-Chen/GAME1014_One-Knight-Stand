@@ -31,13 +31,8 @@ void PauseState::Update()
 {
 	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
 		i->second->Update();
-
-	if(EVMA::KeyPressed(SDL_SCANCODE_R))
-	{
-		STMA::PopState();
-	}
 	
-	if(m_pbutton->GetChangeState())
+	if(m_pbutton->GetChangeState() || EVMA::KeyPressed(SDL_SCANCODE_R))
 	{
 		STMA::PopState();
 	}
