@@ -18,11 +18,21 @@ void GameState::Enter()
 	//Remove when use
 	m_objects.emplace_back("Label", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 20, "UWU? What's dis", { 0,0,0,0 }));
 	m_objects.emplace_back("Label2", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 40, "I am your cute UI GF", { 0,0,0,0 }));
-	m_objects.emplace_back("Label3", new Label("Minecraft", 10, 40, "I luv u OWO", { 0,0,0,0 }));
-	m_objects.emplace_back("Label4", new Label("Minecraft", WIDTH / 2 - 20, 10, "I am not responsible for the lost of your sanity -Ken", { 0,0,0,0 }));
-	m_objects.emplace_back("Label5", new Label("Minecraft", WIDTH + 200, 10, "You can't run human kun", { 0,0,0,0 }));
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_RUNNING_AND_IDLE.png", "Knight");
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/sword.png", "IDK");
+	m_objects.emplace_back("Label3", new Label("Minecraft", 28, 645, "Q", { 0,0,0,0 }));
+	m_objects.emplace_back("Label4", new Label("Minecraft", 148, 645, "J", { 0,0,0,0 }));
+	m_objects.emplace_back("Label6", new Label("Minecraft", 10, 45, "Health: ", { 0,0,0,0 }));
+	//TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_RUNNING_AND_IDLE.png", "Knight");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_ALL_ANIMATION-Sheet.png", "Knight");
+
+	
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/sword.png", "IDK"); 
+	//TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_Attacking.png", "Knight-Attack");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordskill.png", "SwordSkill1");
+
+
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar1");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heartempty.png", "EmptyHeart");
 	
 	//SDL_Rect src{ 20,20,100,100 }, dir{0,0,100,100};
 
@@ -31,7 +41,7 @@ void GameState::Enter()
 	
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
 	//m_player = new PlatformPlayer({ 0, 0, width / 14,height }, { 0,0, float(width / 14),float(height) }, TEMA::GetTexture("Knight"));
-	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { WIDTH/2,0, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
+	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { WIDTH/2,0, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
 	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
 	m_pWeapon = new Sword({ 0,0,w,h }, { 0,0, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
@@ -41,10 +51,23 @@ void GameState::Enter()
 	m_pWeapon->SetEnable(false);
 	m_objects.emplace_back("sword", m_pWeapon);
 
-	
 	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
 	AnItem = new ItemObject({ 0,0,w,h }, { 32*5,650, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
 	m_objects.emplace_back("Weapon", AnItem);
+
+	SDL_QueryTexture(TEMA::GetTexture("HeartBar"), nullptr, nullptr, &w, &h);
+	m_pHeartbar = new Heart({ 0,0 , w,h }, { 10,70, float(w),float(h) }, TEMA::GetTexture("HeartBar"));
+	m_objects.emplace_back("HeartBar", m_pHeartbar);
+	m_pFullHeart = new Heart({ 0,0 , w,h }, { 40,70, float(w),float(h) }, TEMA::GetTexture("HeartBar1"));
+	m_objects.emplace_back("HeartBar1", m_pFullHeart);
+
+	SDL_QueryTexture(TEMA::GetTexture("EmptyHeart"), nullptr, nullptr, &w, &h);
+	m_pEmptyHeart = new Heart({ 0,0 , w,h }, { 70,70, float(w),float(h) }, TEMA::GetTexture("EmptyHeart"));
+	m_objects.emplace_back("EmptyHeart", m_pEmptyHeart);
+
+	SDL_QueryTexture(TEMA::GetTexture("SwordSkill1"), nullptr, nullptr, &w, &h);
+	m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 10,595, float(w),float(h) }, TEMA::GetTexture("SwordSkill1"));
+	m_objects.emplace_back("SwordSkill1", m_pSwordSkill1);
 	
 	std::cout << "Entering GameState..." << std::endl;
 }
@@ -135,8 +158,8 @@ void GameState::UpdateCam()
 
 	//for (auto& m_object : m_objects)
 	//	m_object.second->GetDst()->x += camspeed;
-	FindObject("Label4")->GetDst()->x += camspeed;
-	FindObject("Label5")->GetDst()->x += camspeed;
+	//FindObject("Label4")->GetDst()->x += camspeed;
+	//FindObject("Label5")->GetDst()->x += camspeed;
 	FindObject("Player")->GetDst()->x += camspeed;
 	FindObject("Weapon")->GetDst()->x += camspeed;
 

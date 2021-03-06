@@ -88,6 +88,12 @@
     <ClCompile Include="..\src\ItemObject.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Heart.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\SwordSkill.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -161,6 +167,12 @@
     </ClInclude>
     <ClInclude Include="..\src\ItemObject.h">
       <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Heart.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SwordSkill.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
