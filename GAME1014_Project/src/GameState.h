@@ -10,6 +10,9 @@
 #include <vector>
 #include "ItemObject.h"
 
+#include "Heart.h"
+#include "SwordSkill.h"
+
 class GameState : public State
 {
 public:
@@ -24,8 +27,13 @@ public:
 
 private:
 	Sword* m_pWeapon;
+	Label* m_pSwordSkill;
 	ItemObject* AnItem;
-	//std::vector<std::pair<std::string, GameObject*>> m_UIObject; //Almost the same as m_object but those wont move with the camera
+	SwordSkill* m_pSwordSkill1;
+	Heart* m_pHeartbar;
+	Heart* m_pFullHeart;
+	Heart* m_pEmptyHeart;
+	std::vector<std::pair<std::string, GameObject*>> m_UIObject; //Almost the same as m_objecst but those wont move with the camera
 };
 
 #endif

@@ -18,36 +18,51 @@ void GameState::Enter()
 	//Remove when use
 	m_objects.emplace_back("Label", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 20, "UWU? What's dis", { 0,0,0,0 }));
 	m_objects.emplace_back("Label2", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 40, "I am your cute UI GF", { 0,0,0,0 }));
-	m_objects.emplace_back("Label3", new Label("Minecraft", 10, 40, "I luv u OWO", { 0,0,0,0 }));
-	m_objects.emplace_back("Label4", new Label("Minecraft", WIDTH / 2 - 20, 10, "I am not responsible for the lost of your sanity -Ken", { 0,0,0,0 }));
-	m_objects.emplace_back("Label5", new Label("Minecraft", WIDTH + 200, 10, "You can't run human kun", { 0,0,0,0 }));
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_RUNNING_AND_IDLE.png", "Knight");
+	m_objects.emplace_back("Label3", new Label("Minecraft", 28, 645, "Q", { 0,0,0,0 }));
+	m_objects.emplace_back("Label4", new Label("Minecraft", 148, 645, "J", { 0,0,0,0 }));
+	m_objects.emplace_back("Label6", new Label("Minecraft", 10, 45, "Health: ", { 0,0,0,0 }));
+	//TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_RUNNING_AND_IDLE.png", "Knight");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_ALL_ANIMATION-Sheet.png", "Knight");
+
+	
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Sign_End.png", "IDK");
+	//TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_Attacking.png", "Knight-Attack");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordskill.png", "SwordSkill1");
+
+
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar1");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heartempty.png", "EmptyHeart");
 	
 	//SDL_Rect src{ 20,20,100,100 }, dir{0,0,100,100};
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tileset.png", "tiles");
-	m_objects.emplace_back("level", new TiledLevel(24, 120, 32, 32, "../GAME1017_Template_W01/Dat/TileData.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
+	m_objects.emplace_back("level", new TiledLevel(24, 120, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
 	
-	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
-	//m_player = new PlatformPlayer({ 0, 0, width / 14,height }, { 0,0, float(width / 14),float(height) }, TEMA::GetTexture("Knight"));
-
 	SDL_FRect* r = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile()->GetDst();
-	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { WIDTH/2,HEIGHT-64*2, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
+	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
+	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { WIDTH / 2, HEIGHT - 64*3, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
+
 	//m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { r->x,r->y, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
-	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
-	m_pWeapon = new Sword({ 0,0,w,h }, { 0,0, static_cast<float>(w)/6,static_cast<float>(h)/6 }, TEMA::GetTexture("IDK"));
 
-	//Use to test item class remove when done
-	//m_pWeapon->SetTarget(FindObject("Player")->GetDst());
-	//m_pWeapon->SetEnable(false);
-	//m_objects.emplace_back("sword", m_pWeapon);
-
-	
 	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
-	AnItem = new ItemObject({ 0,0,w,h }, { 32*5.5,HEIGHT - 32.0f*2.0f - h, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
+	AnItem = new ItemObject({ 0,0,w,h }, { 32 * 5.5,HEIGHT - 32.0f * 2.0f - h, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
 	m_objects.emplace_back("Trigger", AnItem);
+
+	SDL_QueryTexture(TEMA::GetTexture("HeartBar"), nullptr, nullptr, &w, &h);
+	m_pHeartbar = new Heart({ 0,0 , w,h }, { 10,70, float(w),float(h) }, TEMA::GetTexture("HeartBar"));
+	m_objects.emplace_back("HeartBar", m_pHeartbar);
+	m_pFullHeart = new Heart({ 0,0 , w,h }, { 40,70, float(w),float(h) }, TEMA::GetTexture("HeartBar1"));
+	m_objects.emplace_back("HeartBar1", m_pFullHeart);
+
+	SDL_QueryTexture(TEMA::GetTexture("EmptyHeart"), nullptr, nullptr, &w, &h);
+	m_pEmptyHeart = new Heart({ 0,0 , w,h }, { 70,70, float(w),float(h) }, TEMA::GetTexture("EmptyHeart"));
+	m_objects.emplace_back("EmptyHeart", m_pEmptyHeart);
+
+	SDL_QueryTexture(TEMA::GetTexture("SwordSkill1"), nullptr, nullptr, &w, &h);
+	m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 10,595, float(w),float(h) }, TEMA::GetTexture("SwordSkill1"));
+	m_objects.emplace_back("SwordSkill1", m_pSwordSkill1);
 	
 	std::cout << "Entering GameState..." << std::endl;
 }
@@ -79,18 +94,18 @@ void GameState::CollisionCheck()
 				pp->StopX();
 				pp->SetX(t->x - p->w);
 			}
-			else if (p->x  - pp->GetVelX() >= t->x + t->w)
+			else if (p->x - pp->GetVelX() >= t->x + t->w)
 			{ // Colliding with right side of tile.
 				pp->StopX();
 				pp->SetX(t->x + t->w);
 			}
 		}
 	}
-	
+
 	// Use to test 
 	if (COMA::AABBCheck(*p, *AnItem->GetDst()) && dynamic_cast<GameState*>(STMA::GetStates().back()))
 	{
-		if(EVMA::KeyPressed(SDL_SCANCODE_E))
+		if (EVMA::KeyPressed(SDL_SCANCODE_E))
 		{
 			STMA::ChangeState(new TitleState());
 			//AnItem->Activate();
@@ -103,7 +118,7 @@ void GameState::CollisionCheck()
 	{
 		STMA::ChangeState(new EndState());
 	}
-	
+
 }
 
 void GameState::UpdateCam()
@@ -130,8 +145,8 @@ void GameState::UpdateCam()
 
 	//for (auto& m_object : m_objects)
 	//	m_object.second->GetDst()->x += camspeed;
-	FindObject("Label4")->GetDst()->x += camspeed;
-	FindObject("Label5")->GetDst()->x += camspeed;
+	//FindObject("Label4")->GetDst()->x += camspeed;
+	//FindObject("Label5")->GetDst()->x += camspeed;
 	FindObject("Player")->GetDst()->x += camspeed;
 	FindObject("Trigger")->GetDst()->x += camspeed;
 
@@ -155,8 +170,8 @@ void GameState::Render()
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 255);
 	SDL_RenderClear(Engine::Instance().GetRenderer());
 
-	//for (auto& i : m_UIObject)
-	//	i.second->Render();
+	for (auto& i : m_UIObject)
+		i.second->Render();
 	
 	for (auto& m_object : m_objects)
 		m_object.second->Render();

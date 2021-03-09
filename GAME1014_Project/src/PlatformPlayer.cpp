@@ -8,10 +8,10 @@
 //For some reason m_maxVelY can't take JUMPFORCE
 //Will fix someday
 
-PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : AnimatedSpriteObject(s, d, t, 0, 0, 13, 10),
+PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : AnimatedSpriteObject(s, d, t, 0, 0, 22, 10),
 m_state(STATE_JUMPING), m_grounded(false), m_facingLeft(false), m_secondJump(false),m_maxVelX(10.0), m_maxVelY(40.0), m_grav(GRAV), m_drag(0.85)
 {
-	//cout << addressof(m_dst) << endl;
+	cout << addressof(m_dst) << endl;
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
 	//SetAnimation(1, 8, 9); // Initialize jump animation.
 }
@@ -31,7 +31,12 @@ void PlatformPlayer::Update()
 		if (EVMA::KeyPressed(SDL_SCANCODE_A) || EVMA::KeyPressed(SDL_SCANCODE_D))
 		{
 			m_state = STATE_RUNNING;
-			//SetAnimation(3, 0, 8, 256); // , 256
+			SetAnimation(6, 6, 12); // , 256
+		}
+		else if (EVMA::KeyPressed(SDL_SCANCODE_J))
+		{
+			m_state = STATE_ATTACKING;
+			SetAnimation(5, 0, 5);
 		}
 		// Transition to jump.
 		else if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
@@ -66,12 +71,12 @@ void PlatformPlayer::Update()
 			m_state = STATE_JUMPING;
 			//SetAnimation(1, 8, 9, 256);
 		}
+	
 		// Transition to idle.
 		if (!EVMA::KeyHeld(SDL_SCANCODE_A) && !EVMA::KeyHeld(SDL_SCANCODE_D))
 		{
 			m_state = STATE_IDLING;
-			//m_velX = 0;
-			//SetAnimation(1, 0, 1, 256); // , 256
+			SetAnimation(9, 13, 22);
 		}
 		break;
 	case STATE_JUMPING:
@@ -88,15 +93,6 @@ void PlatformPlayer::Update()
 			if (m_facingLeft)
 				m_facingLeft = false;
 		}
-
-		//if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_secondJump)
-		//{
-		//	m_accelY = -JUMPFORCE;
-		//	m_grounded = false;
-		//	m_secondJump = false;
-		//	//SetAnimation(1, 8, 9, 256);
-		//}
-		
 		// Hit the ground, transition to run.
 		if (m_grounded)
 		{
@@ -104,8 +100,24 @@ void PlatformPlayer::Update()
 			//SetAnimation(3, 0, 8, 256);
 		}
 		break;
+		
+	case STATE_ATTACKING:
+		if (!EVMA::KeyHeld(SDL_SCANCODE_A) && !EVMA::KeyHeld(SDL_SCANCODE_D) && !EVMA::KeyDown(SDL_SCANCODE_J))
+		{
+			m_state = STATE_IDLING;
+			SetAnimation(9, 13, 22);
+		}
+		
+		// Hit the ground, transition to run.
+		if (m_grounded)
+		{
+			m_state = STATE_IDLING;
+			//SetAnimation(3, 0, 8, 256);
+		}
+		break;
 	}
 
+	
 	// x axis
 	m_velX += m_accelX;
 	m_velX *= (m_grounded ? m_drag : 1.0f);
@@ -170,6 +182,7 @@ float PlatformPlayer::GetVelX() { return m_velX; }
 float PlatformPlayer::GetVelY() { return m_velY; }
 
 void PlatformPlayer::SetX(float x) { this->GetDst()->x = x; }
+
 
 void PlatformPlayer::SetY(float y) { this->GetDst()->y = y; }
 
