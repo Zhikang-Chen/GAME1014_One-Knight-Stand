@@ -94,7 +94,7 @@ void GameState::CollisionCheck()
 				pp->StopX();
 				pp->SetX(t->x - p->w);
 			}
-			else if (p->x - pp->GetVelX() >= t->x + t->w)
+			else if (p->x - pp->GetVelX() + 3 >= t->x + t->w)
 			{ // Colliding with right side of tile.
 				pp->StopX();
 				pp->SetX(t->x + t->w);
@@ -131,7 +131,7 @@ void GameState::UpdateCam()
 		//std::cout << "Right" << endl;
 		camspeed = pp->GetVelX() * -1;
 	}
-	else if (pp->GetBoundingBox()->x <= (WIDTH / 2) - 64)
+	else if (pp->GetBoundingBox()->x+3 <= (WIDTH / 2) - 64)
 	{
 		//std::cout << "Left" << endl;
 		camspeed = pp->GetVelX() * -1;

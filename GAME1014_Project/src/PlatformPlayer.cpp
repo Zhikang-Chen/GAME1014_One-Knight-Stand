@@ -12,7 +12,7 @@ PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : Animat
 m_state(STATE_IDLING), m_grounded(false), m_facingLeft(false), m_secondJump(false),m_maxVelX(10.0), m_maxVelY(40.0), m_grav(GRAV), m_drag(0.85)
 {
 	//cout << addressof(m_dst) << endl;
-	m_pBoundingBox = SDL_FRect({m_dst.x,m_dst.y,40,64});
+	m_pBoundingBox = SDL_FRect({m_dst.x,m_dst.y,40,60});
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
 	SetAnimation(9, 13, 22);
 	//SetAnimation(1, 8, 9); // Initialize jump animation.
@@ -131,13 +131,15 @@ void PlatformPlayer::Update()
 	//Reset acceleration
 	m_accelX = m_accelY = 0.0; //Similar to a keyup event
 
+	// For some reason when the player face left dst is 3 pixel off
+	// No idea what cause it but it does cause problem
 	if (m_facingLeft)
-		m_dst.x = m_pBoundingBox.x - m_pBoundingBox.w + 4;
-	else
-		m_dst.x = m_pBoundingBox.x ;
+		m_dst.x = m_pBoundingBox.x - m_pBoundingBox.w + 3;
+	else if(!m_facingLeft)
+		m_dst.x = m_pBoundingBox.x;
 
 	
-	m_dst.y = m_pBoundingBox.y - 4;
+	m_dst.y = m_pBoundingBox.y - 9;
 	
 	this->Animate();
 }
@@ -167,6 +169,8 @@ void PlatformPlayer::Stop()
 
 PlayerState PlatformPlayer::GetState() { return m_state; }
 
+SDL_FRect* PlatformPlayer::GetBoundingBox() { return &m_pBoundingBox; }
+
 void PlatformPlayer::StopX() { m_velX = 0.0; }
 
 void PlatformPlayer::StopY() { m_velY = 0.0; }
@@ -187,8 +191,7 @@ float PlatformPlayer::GetVelX() { return m_velX; }
 
 float PlatformPlayer::GetVelY() { return m_velY; }
 
-void PlatformPlayer::SetX(float x) { this->GetBoundingBox()->x = x; }
+void PlatformPlayer::SetX(float x) { m_pBoundingBox.x = x; }
 
-
-void PlatformPlayer::SetY(float y) { this->GetBoundingBox()->y = y; }
+void PlatformPlayer::SetY(float y) { m_pBoundingBox.y = y; }
 

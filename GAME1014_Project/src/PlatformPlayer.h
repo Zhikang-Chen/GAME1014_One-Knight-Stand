@@ -35,7 +35,7 @@ public:
 	float GetVelY();
 	void SetX(float x);
 	void SetY(float y);
-	SDL_FRect* GetBoundingBox() { return &m_pBoundingBox; }
+	SDL_FRect* GetBoundingBox();
 
 private:
 	// Private member
