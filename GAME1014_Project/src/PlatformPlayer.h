@@ -35,9 +35,11 @@ public:
 	float GetVelY();
 	void SetX(float x);
 	void SetY(float y);
+	SDL_FRect* GetBoundingBox() { return &m_pBoundingBox; }
 
 private:
 	// Private member
+	SDL_FRect m_pBoundingBox;
 	bool m_grounded; //In most platforming games, the player actually starts in the air
 	bool m_alive; //Game runs while player is alive, shows black screen when dead.
 	bool m_facingLeft;

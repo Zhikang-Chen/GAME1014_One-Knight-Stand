@@ -72,7 +72,7 @@ void GameState::Enter()
 void GameState::CollisionCheck()
 {
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
-	SDL_FRect* p = pp->GetDst();
+	SDL_FRect* p = pp->GetBoundingBox();
 	for (int i = 0; i < dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles().size(); i++)
 	{
 		SDL_FRect* t = dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles()[i]->GetDst();
@@ -126,12 +126,12 @@ void GameState::UpdateCam()
 	//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x - (m_player->GetDst()->w / 2));
 	float camspeed = 0.0;
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
-	if (pp->GetDst()->x >= (WIDTH / 2) + 64)
+	if (pp->GetBoundingBox()->x >= (WIDTH / 2) + 64)
 	{
 		//std::cout << "Right" << endl;
 		camspeed = pp->GetVelX() * -1;
 	}
-	else if (pp->GetDst()->x <= (WIDTH / 2) - 64)
+	else if (pp->GetBoundingBox()->x <= (WIDTH / 2) - 64)
 	{
 		//std::cout << "Left" << endl;
 		camspeed = pp->GetVelX() * -1;
@@ -147,7 +147,7 @@ void GameState::UpdateCam()
 	//	m_object.second->GetDst()->x += camspeed;
 	//FindObject("Label4")->GetDst()->x += camspeed;
 	//FindObject("Label5")->GetDst()->x += camspeed;
-	FindObject("Player")->GetDst()->x += camspeed;
+	pp->GetBoundingBox()->x += camspeed;
 	FindObject("Trigger")->GetDst()->x += camspeed;
 
 }
