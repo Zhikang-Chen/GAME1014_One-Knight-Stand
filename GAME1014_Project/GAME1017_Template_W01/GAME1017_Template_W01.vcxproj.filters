@@ -82,6 +82,9 @@
     <ClCompile Include="..\src\EndState.cpp">
       <Filter>States</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -149,6 +152,9 @@
     </ClInclude>
     <ClInclude Include="..\src\EndState.h">
       <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
