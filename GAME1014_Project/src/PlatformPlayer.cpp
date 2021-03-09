@@ -104,6 +104,8 @@ void PlatformPlayer::Update()
 		break;
 		
 	case STATE_ATTACKING:
+		// The best way to fix this is frame counter.
+		// I am too lazy to make it
 		if (!EVMA::KeyHeld(SDL_SCANCODE_A) && !EVMA::KeyHeld(SDL_SCANCODE_D) && !EVMA::KeyDown(SDL_SCANCODE_J))
 		{
 			m_state = STATE_IDLING;

@@ -126,17 +126,21 @@ void GameState::UpdateCam()
 	//m_camOffset = (WIDTH / 2) - (m_player->GetDst()->x - (m_player->GetDst()->w / 2));
 	float camspeed = 0.0;
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
-	if (pp->GetBoundingBox()->x >= (WIDTH / 2) + 64)
-	{
-		//std::cout << "Right" << endl;
-		camspeed = pp->GetVelX() * -1;
-	}
-	else if (pp->GetBoundingBox()->x+3 <= (WIDTH / 2) - 64)
-	{
-		//std::cout << "Left" << endl;
-		camspeed = pp->GetVelX() * -1;
-	}
 
+	//This part is buggy as fuck so I comment it out
+	//We might use this code so don't remove it
+	//if (pp->GetBoundingBox()->x >= (WIDTH / 2) + 64)
+	//{
+	//	//std::cout << "Right" << endl;
+	//	camspeed = pp->GetVelX() * -1;
+	//}
+	//else if (pp->GetBoundingBox()->x+3 <= (WIDTH / 2) - 64)
+	//{
+	//	//std::cout << "Left" << endl;
+	//	camspeed = pp->GetVelX() * -1;
+	//}
+	
+	camspeed = pp->GetVelX() * -1;
 	for (int i = 0; i < dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles().size(); i++)
 	{
 		SDL_FRect* t = dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles()[i]->GetDst();
