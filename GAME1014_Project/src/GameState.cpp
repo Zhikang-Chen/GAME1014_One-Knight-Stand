@@ -12,7 +12,7 @@ void GameState::Enter()
 	int w, h;
 
 	SDL_QueryTexture(TEMA::GetTexture("Background_1"), nullptr, nullptr, &w, &h);
-	m_objects.emplace_back("Background", new Background({ 0,0,(int)w,(int)h }, { 0,0, (float)w * 5, (float)h * 5 }, TEMA::GetTexture("Background_1")));
+	m_objects.emplace_back("Background", new Background({ 0,0,static_cast<int>(w),static_cast<int>(h) }, { 0,0, static_cast<float>(w) * 5, static_cast<float>(h) * 5 }, TEMA::GetTexture("Background_1")));
 
 	//Ui test and i am not sorry for typing those
 	//Remove when use
@@ -20,18 +20,15 @@ void GameState::Enter()
 	m_objects.emplace_back("Label2", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 40, "I am your cute UI GF", { 0,0,0,0 }));
 	m_objects.emplace_back("Label3", new Label("Minecraft", 28, 645, "Q", { 0,0,0,0 }));
 	m_objects.emplace_back("Label4", new Label("Minecraft", 148, 645, "J", { 0,0,0,0 }));
-	m_objects.emplace_back("Label6", new Label("Minecraft", 10, 45, "Health: ", { 0,0,0,0 }));
+	m_objects.emplace_back("Label6", new Label("Minecraft", 10, 45, "Health: 5/5", { 0,0,0,0 }));
 	//TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_RUNNING_AND_IDLE.png", "Knight");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_ALL_ANIMATION-Sheet.png", "Knight");
 
-	
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Sign_End.png", "IDK");
 	//TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_Attacking.png", "Knight-Attack");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordskill.png", "SwordSkill1");
 
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar");
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar1");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heartempty.png", "EmptyHeart");
 	
 	//SDL_Rect src{ 20,20,100,100 }, dir{0,0,100,100};
@@ -39,30 +36,31 @@ void GameState::Enter()
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tileset.png", "tiles");
 	m_objects.emplace_back("level", new TiledLevel(24, 120, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
 	
-	SDL_FRect* r = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile()->GetDst();
+	//SDL_FRect* r = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile()->GetDst();
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
 	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { WIDTH / 2, HEIGHT - 64*3, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
 	//m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { r->x,r->y, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
-
-	SDL_QueryTexture(TEMA::GetTexture("IDK"), nullptr, nullptr, &w, &h);
-	AnItem = new ItemObject({ 0,0,w,h }, { 32 * 5.5,HEIGHT - 32.0f * 2.0f - h, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("IDK"));
+	SDL_FRect* r = dynamic_cast<TiledLevel*>(FindObject("level"))->GetEndTile()->GetDst();
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Sign_End.png", "End");
+	SDL_QueryTexture(TEMA::GetTexture("End"), nullptr, nullptr, &w, &h);
+	
+	AnItem = new ItemObject({ 0,0,w,h }, { r->x,r->y, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("End"));
 	m_objects.emplace_back("Trigger", AnItem);
-
+	
 	SDL_QueryTexture(TEMA::GetTexture("HeartBar"), nullptr, nullptr, &w, &h);
-	m_pHeartbar = new Heart({ 0,0 , w,h }, { 10,70, float(w),float(h) }, TEMA::GetTexture("HeartBar"));
-	m_objects.emplace_back("HeartBar", m_pHeartbar);
-	m_pFullHeart = new Heart({ 0,0 , w,h }, { 40,70, float(w),float(h) }, TEMA::GetTexture("HeartBar1"));
-	m_objects.emplace_back("HeartBar1", m_pFullHeart);
-
-	SDL_QueryTexture(TEMA::GetTexture("EmptyHeart"), nullptr, nullptr, &w, &h);
-	m_pEmptyHeart = new Heart({ 0,0 , w,h }, { 70,70, float(w),float(h) }, TEMA::GetTexture("EmptyHeart"));
-	m_objects.emplace_back("EmptyHeart", m_pEmptyHeart);
+	
+	for(auto i = 0; i < dynamic_cast<PlatformPlayer*>(FindObject("Player"))->GetHeath(); i++)
+	{
+		auto* he = new Heart({ 0,0,w,h }, { static_cast<float>(10 + 30 * i), 70.0f, static_cast<float>(w),static_cast<float>(h) });
+		Hearts.push_back(he);
+		m_UIObject.emplace_back("HeartBar" + i, he);
+	}
 
 	SDL_QueryTexture(TEMA::GetTexture("SwordSkill1"), nullptr, nullptr, &w, &h);
-	m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 10,595, float(w),float(h) }, TEMA::GetTexture("SwordSkill1"));
-	m_objects.emplace_back("SwordSkill1", m_pSwordSkill1);
+	m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 10,595, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("SwordSkill1"));
+	m_UIObject.emplace_back("SwordSkill1", m_pSwordSkill1);
 	
 	std::cout << "Entering GameState..." << std::endl;
 }
@@ -114,9 +112,40 @@ void GameState::CollisionCheck()
 	}
 
 	//This has to be at the end
-	if (p->y >= HEIGHT + p->h && dynamic_cast<GameState*>(STMA::GetStates().back()))
+	if ((p->y >= HEIGHT + p->h && dynamic_cast<GameState*>(STMA::GetStates().back()) || EVMA::KeyPressed(SDL_SCANCODE_MINUS)))
 	{
-		STMA::ChangeState(new EndState());
+		//STMA::ChangeState(new EndState());
+		pp->SetHeath(pp->GetHeath() -1);
+		//auto ch = pp->GetMaxHealth() - pp->GetHeath();
+		
+		for(auto i = Hearts.size()-1; i > 0; --i )
+		{
+			if(!Hearts[i]->GetEmpty())
+			{
+				Hearts[i]->SetEmpty(true);
+				break;
+			}
+		}
+		pp->SetY(0);
+		if(pp->GetHeath() == 0)
+		{
+			STMA::ChangeState(new EndState());
+		}
+	}
+
+	// Heal the player
+	// Remove at beta
+	if(EVMA::KeyPressed(SDL_SCANCODE_EQUALS) && pp->GetHeath() != pp->GetMaxHealth())
+	{
+		pp->SetHeath(pp->GetHeath() + 1);
+		for (auto i = 0; i < Hearts.size() ; ++i)
+		{
+			if (Hearts[i]->GetEmpty())
+			{
+				Hearts[i]->SetEmpty(false);
+				break;
+			}
+		}
 	}
 
 }
@@ -127,8 +156,8 @@ void GameState::UpdateCam()
 	float camspeed = 0.0;
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
 
-	//This part is buggy as fuck so I comment it out
-	//We might use this code so don't remove it
+	// This part is buggy as fuck so I comment it out
+	// We might use this code so don't remove it
 	//if (pp->GetBoundingBox()->x >= (WIDTH / 2) + 64)
 	//{
 	//	//std::cout << "Right" << endl;
@@ -154,6 +183,7 @@ void GameState::UpdateCam()
 	pp->GetBoundingBox()->x += camspeed;
 	FindObject("Trigger")->GetDst()->x += camspeed;
 
+	dynamic_cast<Label*>(FindObject("Label6"))->SetText("Health: " + to_string(pp->GetHeath()) + "/" + to_string(pp->GetMaxHealth()));
 }
 
 void GameState::Update()
@@ -173,12 +203,12 @@ void GameState::Render()
 	//std::cout << "Rendering TitleState..." << std::endl;
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 255);
 	SDL_RenderClear(Engine::Instance().GetRenderer());
-
-	for (auto& i : m_UIObject)
-		i.second->Render();
 	
 	for (auto& m_object : m_objects)
 		m_object.second->Render();
+
+	for (auto& i : m_UIObject)
+		i.second->Render();
 	
 	if (dynamic_cast<GameState*>(STMA::GetStates().back())) // Check to see if current state is of type GameState
 		State::Render();
@@ -193,7 +223,14 @@ void GameState::Exit()
 		m_object.second = nullptr;
 	}
 	m_objects.clear();
-	
+
+	for (auto& UI : m_UIObject)
+	{
+		delete UI.second;
+		UI.second = nullptr;
+	}
+	m_UIObject.clear();
+	Hearts.clear();
 	std::cout << "Exiting GameState..." << std::endl;
 }
 

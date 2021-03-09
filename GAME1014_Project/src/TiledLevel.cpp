@@ -69,6 +69,9 @@ TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int
 
 				if (key == 'S')
 					m_pStartingTile = m_level[row][col];
+
+				if(key == 'E')
+					m_pEndTile = m_level[row][col];
 				
 			}
 		}

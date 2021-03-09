@@ -13,6 +13,7 @@ class SpriteObject : public GameObject // Inline class.
 public: // Inherited and public.
 	SpriteObject(SDL_Rect s, SDL_FRect d, SDL_Texture* t)
 		:m_src(s), GameObject(d), m_pText(t), m_angle(0.0) {}
+	
 	virtual void Update() {};
 	virtual void Render()
 	{
@@ -25,6 +26,7 @@ public: // Inherited and public.
 	double& GetAngle() { return m_angle; }
 	void SetAngle(double a) { m_angle = a; }
 protected: // Private BUT inherited.
+	void SetText(SDL_Texture* t) { m_pText = t; }
 	double m_angle;
 	SDL_Rect m_src;
 	SDL_Texture* m_pText;

@@ -42,12 +42,14 @@ public:
 	void Render();
 	vector<Tile*>& GetObstacles();
 	Tile* GetStartingTile() const { return m_pStartingTile; }
+	Tile* GetEndTile() const { return m_pEndTile; }
 	XMLDocument xmlDoc;
 
 private:
 	const char* m_tileKey;
 	int m_rows, m_cols;
 	Tile* m_pStartingTile;
+	Tile* m_pEndTile;
 	map<char, Tile*> m_tiles; // Our map of 16 prototype Tile objects.
 	vector<vector<Tile*>> m_level; // 2D vector.
 	vector<Tile*> m_obstacles;

@@ -6,7 +6,11 @@
 class Heart : public SpriteObject
 {
 public:
-	Heart(SDL_Rect s, SDL_FRect d, SDL_Texture* t);
+	Heart(SDL_Rect s, SDL_FRect d);
+	void SetEmpty(bool e);
+	bool GetEmpty();
+private:
+	bool m_empty;
 	void Update() {};
 	void Render();
 };

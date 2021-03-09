@@ -33,7 +33,7 @@ def main():
         arr.append(a)
         #print(a)
 
-    data = ET.Element('data')
+    data = ET.Element('Data')
     data.text = "\n"
     for a in arr:
         if len(a) == 5:

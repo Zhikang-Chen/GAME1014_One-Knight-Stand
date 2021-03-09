@@ -35,6 +35,11 @@ public:
 	float GetVelY();
 	void SetX(float x);
 	void SetY(float y);
+	int GetHeath();
+	int GetMaxHealth();
+	void SetHeath(int h);
+	void SetMaxHealth(int h);
+
 	SDL_FRect* GetBoundingBox();
 
 private:
@@ -54,6 +59,9 @@ private:
 		m_maxVelY,
 		m_drag,
 		m_grav;
+	int m_curHealth,
+		m_maxHealth;
+	
 	//vector<WeaponObject*> m_pWeapon;
 	//SDL_Rect m_rect;
 

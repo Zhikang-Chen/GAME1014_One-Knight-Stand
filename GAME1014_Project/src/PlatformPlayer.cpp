@@ -14,6 +14,7 @@ m_state(STATE_IDLING), m_grounded(false), m_facingLeft(false), m_secondJump(fals
 	//cout << addressof(m_dst) << endl;
 	m_pBoundingBox = SDL_FRect({m_dst.x,m_dst.y,40,60});
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
+	m_curHealth = m_maxHealth = 5;
 	SetAnimation(9, 13, 22);
 	//SetAnimation(1, 8, 9); // Initialize jump animation.
 }
@@ -196,4 +197,12 @@ float PlatformPlayer::GetVelY() { return m_velY; }
 void PlatformPlayer::SetX(float x) { m_pBoundingBox.x = x; }
 
 void PlatformPlayer::SetY(float y) { m_pBoundingBox.y = y; }
+
+int PlatformPlayer::GetHeath(){ return m_curHealth; }
+
+int PlatformPlayer::GetMaxHealth() { return m_maxHealth; }
+
+void PlatformPlayer::SetHeath(int h) { m_curHealth = h; }
+
+void PlatformPlayer::SetMaxHealth(int h) { m_maxHealth = h; }
 
