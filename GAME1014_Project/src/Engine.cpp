@@ -40,6 +40,8 @@ bool Engine::Init(const char* title, int xpos, int ypos, int width, int height, 
 	m_fps = (Uint32)round((1 / (double)FPS) * 1000); // Sets FPS in milliseconds and rounds.
 	m_running = true; // Everything is okay, start the engine.
 
+	//SDL_SetRenderDrawBlendMode(m_pRenderer, SDL_BLENDMODE_BLEND);
+	
 	FOMA::RegisterFont("../GAME1017_Template_W01/Font/minecraft_font.ttf", "Minecraft", 16);
 	FOMA::RegisterFont("../GAME1017_Template_W01/Font/zh-cn_0.ttf", "Genshi_font", 64);
 	
@@ -102,8 +104,8 @@ int Engine::Run()
 	{
 		Wake();
 		HandleEvents();
-		Update();
 		Render();
+		Update();
 		if (m_running)
 			Sleep();
 	}

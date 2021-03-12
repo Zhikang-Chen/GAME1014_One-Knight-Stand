@@ -8,8 +8,12 @@ void StateManager::Update()
 
 void StateManager::Render()
 {
-	if (!s_states.empty())
-		s_states.back()->Render();
+	//if (!s_states.empty())
+	//	s_states.back()->Render();
+	for (auto& s : s_states)
+	{
+		s->Render();
+	}
 }
 
 void StateManager::PushState(State * pState)

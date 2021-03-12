@@ -13,12 +13,20 @@ class SpriteObject : public GameObject // Inline class.
 public: // Inherited and public.
 	SpriteObject(SDL_Rect s, SDL_FRect d, SDL_Texture* t)
 		:m_src(s), GameObject(d), m_pText(t), m_angle(0.0) {}
+	
 	virtual void Update() {};
-	virtual void Render() {	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, GetSrc(), GetDst(), m_angle, 0, SDL_FLIP_NONE); }
+	virtual void Render()
+	{
+		if(m_enable)
+			SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, GetSrc(), GetDst(), m_angle, 0, SDL_FLIP_NONE);
+	}
+	
 	SDL_Rect* GetSrc() { return &m_src; }
+	SDL_Texture* GetTexture() { return m_pText; }
 	double& GetAngle() { return m_angle; }
 	void SetAngle(double a) { m_angle = a; }
 protected: // Private BUT inherited.
+	void SetText(SDL_Texture* t) { m_pText = t; }
 	double m_angle;
 	SDL_Rect m_src;
 	SDL_Texture* m_pText;
@@ -51,6 +59,7 @@ protected:
 		}
 		m_src.x = m_src.w * m_sprite;
 	}
+
 	int m_sprite,		// The current sprite index in row.
 		m_spriteMin,	// The sprite index to start animation on.
 		m_spriteMax,	// The sprite index to end animation on.
