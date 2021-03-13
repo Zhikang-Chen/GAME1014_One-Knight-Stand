@@ -33,6 +33,7 @@ protected: // Private BUT inherited.
 private: // Private NOT inherited.
 };
 
+
 class AnimatedSpriteObject : public SpriteObject// Also inline.
 {
 public:

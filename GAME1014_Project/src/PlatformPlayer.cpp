@@ -13,10 +13,10 @@ PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : Animat
 m_state(STATE_IDLING), m_grounded(false), m_facingLeft(false), m_secondJump(false),m_maxVelX(10.0), m_maxVelY(40.0), m_grav(GRAV), m_drag(0.85)
 {
 	//cout << addressof(m_dst) << endl;
-	m_pBoundingBox = SDL_FRect({m_dst.x,m_dst.y,40,60});
+	m_pBoundingBox = SDL_FRect({m_dst.x,m_dst.y,40,60 });
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
 	m_curHealth = m_maxHealth = 5;
-	SetAnimation(9, 13, 22);
+	SetAnimation(9, 13, 21);
 	//SetAnimation(1, 8, 9); // Initialize jump animation.
 }
 
@@ -42,6 +42,16 @@ void PlatformPlayer::Update()
 			m_state = STATE_ATTACKING;
 			SetAnimation(5, 0, 5);
 		}
+
+		//ADDED A BUTTON to use weapon ability
+		else if (EVMA::KeyPressed(SDL_SCANCODE_Q))
+		{
+			m_state = STATE_SPECIAL_ATTACK;
+			//SetAnimation()
+			SetAnimation(4, 23, 26);
+
+		}
+
 		// Transition to jump.
 		else if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
 		{
@@ -75,7 +85,7 @@ void PlatformPlayer::Update()
 			m_state = STATE_JUMPING;
 			//SetAnimation(1, 8, 9, 256);
 		}
-	
+
 		// Transition to idle.
 		if (!EVMA::KeyHeld(SDL_SCANCODE_A) && !EVMA::KeyHeld(SDL_SCANCODE_D))
 		{
@@ -104,7 +114,7 @@ void PlatformPlayer::Update()
 			//SetAnimation(3, 0, 8, 256);
 		}
 		break;
-		
+
 	case STATE_ATTACKING:
 		// The best way to fix this is frame counter.
 		// I am too lazy to make it
@@ -114,6 +124,15 @@ void PlatformPlayer::Update()
 			SetAnimation(9, 13, 22);
 		}
 		break;
+
+	case STATE_SPECIAL_ATTACK:
+		
+		if (!EVMA::KeyHeld(SDL_SCANCODE_Q))
+		{
+			m_state = STATE_IDLING;
+			SetAnimation(9, 13, 22);
+		}
+
 	}
 
 	

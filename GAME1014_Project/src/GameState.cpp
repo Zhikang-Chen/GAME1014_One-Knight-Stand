@@ -160,6 +160,7 @@ void GameState::MoveCamTo(GameObject* o)
 	FindObject("Trigger")->GetDst()->x += camOffset;
 }
 
+// This is kinda useless now
 void GameState::UpdateCam(GameObject* o)
 {
 	//auto camOffset = (WIDTH / 2) - (o->GetDst()->x - (o->GetDst()->w / 2));
