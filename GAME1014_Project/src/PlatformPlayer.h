@@ -40,6 +40,9 @@ public:
 	void SetHeath(int h);
 	void SetMaxHealth(int h);
 
+	// GetDst and GetBoundingBox now both return m_pBoundingBox
+	// Too much work to remove GetBoundingBox so it will stay
+	SDL_FRect* GetDst() { return &m_pBoundingBox; }
 	SDL_FRect* GetBoundingBox();
 
 private:
@@ -61,6 +64,8 @@ private:
 		m_grav;
 	int m_curHealth,
 		m_maxHealth;
+
+	
 	
 	//vector<WeaponObject*> m_pWeapon;
 	//SDL_Rect m_rect;
