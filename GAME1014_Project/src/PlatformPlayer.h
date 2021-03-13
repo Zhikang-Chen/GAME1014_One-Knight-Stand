@@ -6,7 +6,7 @@
 #include "SpriteObject.h"
 #include "WeaponObject.h"
 
-enum PlayerState {STATE_IDLING, STATE_RUNNING, STATE_JUMPING, STATE_ATTACKING};
+enum PlayerState {STATE_IDLING, STATE_RUNNING, STATE_JUMPING, STATE_ATTACKING, STATE_SPECIAL_ATTACK};
 
 class PlatformPlayer : public AnimatedSpriteObject
 {
