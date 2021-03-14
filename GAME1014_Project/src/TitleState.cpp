@@ -36,7 +36,7 @@ void TitleState::Enter()
 	//Load and Play the music on the title screen
 	SoundManager::Load("Aud/VisagerTreeLoop.mp3", "title", SOUND_MUSIC );
 	SoundManager::PlayMusic("title", -1);
-	SoundManager::SetMusicVolume(30);
+	SoundManager::SetMusicVolume(4);
 	
 	std::cout << "Entering TitleState..." << std::endl;
 }

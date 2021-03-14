@@ -48,7 +48,9 @@ void GameState::Enter()
 
 	//Slimes create
 	SDL_QueryTexture(TEMA::GetTexture("Slime"), nullptr, nullptr, &w, &h);
-	m_slimes.emplace_back(new Slime({ 0, 0, 35, 29 }, { WIDTH / 2, HEIGHT - 64 * 3, static_cast<float>(35), static_cast<float>(29) }, TEMA::GetTexture("Slime")));
+	m_objects.emplace_back("aaa", new Slime({ 0, 0, 35, 29 }, { s->x + 100, s->y - 100, static_cast<float>(35), static_cast<float>(29) }, TEMA::GetTexture("Slime")));
+	m_slimes.emplace_back(dynamic_cast<Slime*>(FindObject("aaa")));
+
 	
 	//m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { r->x,r->y, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
@@ -82,11 +84,7 @@ void GameState::Enter()
 	//Load and play the game music
 	SoundManager::Load("Aud/TownTheme.mp3", "gameLevel1", SOUND_MUSIC);
 	SoundManager::PlayMusic("gameLevel1", -1);
-	SoundManager::SetMusicVolume(30);
-
-	
-
-
+	//SoundManager::SetMusicVolume(16);
 }
 
 void GameState::CollisionCheck()
@@ -120,72 +118,44 @@ void GameState::CollisionCheck()
 				pp->SetX(t->x + t->w);
 			}
 		}
-	}
 
-	//Player and slime collision
-	for (int i = 0; i < m_slimes.size(); i++)
-	{
-		SDL_FRect* s = m_slimes[i]->GetDst();
-		if (COMA::AABBCheck(*s, *p))
-		{
-			pp->SetHeath(pp->GetHeath() - 1);
-			for (auto i = Hearts.size() - 1; i > 0; --i)
+		for(auto slime : m_slimes)
+		{			
+			auto e = slime->GetDst();
+			if (p->x < e->x)
 			{
-				if (!Hearts[i]->GetEmpty())
-				{
-					Hearts[i]->SetEmpty(true);
-					break;
+				slime->faceDir(false);
+			}
+			else
+			{
+				slime->faceDir(true);
+			}
+			
+			if (COMA::AABBCheck(*e, *t)) // Collision check between player rect and tile rect.
+			{
+				if ((e->y + e->h) - slime->GetVelY() <= t->y)
+				{ // Colliding with top side of tile.
+					slime->StopY();
+					slime->SetY(t->y - e->h);
+					slime->SetGrounded(true);
+				}
+				else if (e->y - slime->GetVelY() >= (t->y + t->h))
+				{ // Colliding with bottom side of tile.
+					slime->StopY();
+					slime->SetY(t->y + t->h);
+				}
+				else if (e->x - slime->GetVelX() <= t->x - t->w)
+				{ // Colliding with left side of tile.
+					slime->StopX();
+					slime->SetX(t->x - e->w);
+				}
+				else if (e->x - slime->GetVelX() >= t->x + t->w)
+				{ // Colliding with right side of tile.
+					slime->StopX();
+					slime->SetX(t->x + t->w);
 				}
 			}
-			if (pp->GetHeath() == 0)
-			{
-				STMA::ChangeState(new EndState());
-			}
-		}
-	}
 
-	// Use to test 
-	if (COMA::AABBCheck(*p, *FindObject("Trigger")->GetDst()) && dynamic_cast<GameState*>(STMA::GetStates().back()))
-	{
-		if (EVMA::KeyPressed(SDL_SCANCODE_E))
-		{
-			STMA::ChangeState(new TitleState());
-			//AnItem->Activate();
-			//m_pWeapon->SetEnable(true);
-		}
-	}
-
-	// This has to be at the end because of ChangeState
-	if ((p->y >= HEIGHT + p->h && dynamic_cast<GameState*>(STMA::GetStates().back()) || EVMA::KeyPressed(SDL_SCANCODE_MINUS)))
-	{
-		//STMA::ChangeState(new EndState());
-		pp->SetHeath(pp->GetHeath() -1);
-		//auto ch = pp->GetMaxHealth() - pp->GetHeath();
-		
-		for(auto i = Hearts.size()-1; i > 0; --i )
-		{
-			if(!Hearts[i]->GetEmpty())
-			{
-				Hearts[i]->SetEmpty(true);
-				
-				break;
-			}
-		}
-		
-		//pp->SetY(0);
-		auto s = FindObject("Spawn");
-		MoveCamTo(s);
-		pp->StopX();
-		pp->StopY();
-
-		pp->SetX(s->GetDst()->x);
-		pp->SetY(s->GetDst()->y);
-		//cout << s->x << endl;
-		
-		if(pp->GetHeath() == 0)
-		{
-			STMA::ChangeState(new EndState());
-			SoundManager::StopMusic(); //The music will stop playing when the player dies (No more hearts)
 		}
 	}
 
@@ -203,6 +173,85 @@ void GameState::CollisionCheck()
 			}
 		}
 	}
+	//Player and slime collision
+	for (auto i = 0; i < m_slimes.size(); i++)
+	{
+		SDL_FRect* s = m_slimes[i]->GetDst();
+		if (COMA::AABBCheck(*s, *p))
+		{
+			pp->SetHeath(pp->GetHeath() - 1);
+			for (auto i2 = Hearts.size() - 1; i2 > 0; --i2)
+			{
+				if (!Hearts[i2]->GetEmpty())
+				{
+					Hearts[i2]->SetEmpty(true);
+					break;
+				}
+			}
+			auto s = FindObject("Spawn");
+			MoveCamTo(s);
+			pp->StopX();
+			pp->StopY();
+
+			pp->SetX(s->GetDst()->x);
+			pp->SetY(s->GetDst()->y);
+			if (pp->GetHeath() == 0)
+			{
+				STMA::ChangeState(new EndState());
+				break;
+			}
+		}
+	}
+
+	// Use to test 
+	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr)
+	{
+		if (COMA::AABBCheck(*p, *FindObject("Trigger")->GetDst()))
+		{
+			if (EVMA::KeyPressed(SDL_SCANCODE_E))
+			{
+				STMA::ChangeState(new TitleState());
+				//AnItem->Activate();
+				//m_pWeapon->SetEnable(true);
+			}
+		}
+	}
+	
+	// This has to be at the end because of ChangeState
+	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr)
+	{
+		if (p->y >= HEIGHT + p->h || EVMA::KeyPressed(SDL_SCANCODE_MINUS))
+		{
+			//STMA::ChangeState(new EndState());
+			pp->SetHeath(pp->GetHeath() - 1);
+			//auto ch = pp->GetMaxHealth() - pp->GetHeath();
+
+			for (auto i = Hearts.size() - 1; i > 0; --i)
+			{
+				if (!Hearts[i]->GetEmpty())
+				{
+					Hearts[i]->SetEmpty(true);
+					break;
+				}
+			}
+
+			//pp->SetY(0);
+			auto s = FindObject("Spawn");
+			MoveCamTo(s);
+			pp->StopX();
+			pp->StopY();
+
+			pp->SetX(s->GetDst()->x);
+			pp->SetY(s->GetDst()->y);
+			//cout << s->x << endl;
+
+			if (pp->GetHeath() == 0)
+			{
+				STMA::ChangeState(new EndState());
+				SoundManager::StopMusic(); //The music will stop playing when the player dies (No more hearts)
+			}
+		}
+	}
 
 }
 
@@ -217,6 +266,7 @@ void GameState::MoveCamTo(GameObject* o)
 	FindObject("Spawn")->GetDst()->x += camOffset;
 	FindObject("Player")->GetDst()->x += camOffset;
 	FindObject("Trigger")->GetDst()->x += camOffset;
+	FindObject("aaa")->GetDst()->x += camOffset;
 }
 
 // This is kinda useless now
@@ -325,11 +375,11 @@ void GameState::Exit()
 	m_UIObject.clear();
 	Hearts.clear();
 
-	for (unsigned i = 0; i < m_slimes.size(); i++)
-	{
-		delete m_slimes[i];
-		m_slimes[i] = nullptr;
-	}
+	//for (auto& s : m_slimes)
+	//{
+	//	delete s;
+	//	s = nullptr;
+	//}
 	m_slimes.clear();
 	m_slimes.shrink_to_fit();
 	std::cout << "Exiting GameState..." << std::endl;

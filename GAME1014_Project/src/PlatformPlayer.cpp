@@ -1,7 +1,5 @@
 ﻿#include "PlatformPlayer.h"
 #include <algorithm>
-
-
 #include "Engine.h"
 #include "EventManager.h"
 #include "SoundManager.h"

@@ -2,8 +2,9 @@
 #ifndef _ENEMY_H_
 #define _ENEMY_H_
 #define GRAV 4.0
-
+#define JUMPFORCE 40.0; //Acceleration
 #include "SpriteObject.h"
+#include <algorithm>
 
 class Enemy : public AnimatedSpriteObject
 {
@@ -14,7 +15,7 @@ protected:
 	bool m_grounded;
 	bool m_facingLeft = false;
 	int m_health;
-	double m_accelX, //Acceleration on the X axis, horizontal force
+	float m_accelX, //Acceleration on the X axis, horizontal force
 		m_accelY,//Acceleration on the Y axis, vertical force
 		m_velX, //Velocity for X 
 		m_maxVelX, //Maximum velocity
@@ -32,8 +33,8 @@ public:
 	void SetAccelY(double a);
 	bool IsGrounded();
 	bool SetGrounded(bool g);
-	double GetVelX();
-	double GetVelY();
+	float GetVelX();
+	float GetVelY();
 	void SetX(float x);
 	void SetY(float y);
 	void Update();
