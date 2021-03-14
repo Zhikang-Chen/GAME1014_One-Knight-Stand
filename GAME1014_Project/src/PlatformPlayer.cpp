@@ -27,7 +27,7 @@ void PlatformPlayer::Update()
 	//Load Sound effects
 	SoundManager::Load("Aud/sword_swing.wav", "slash", SOUND_SFX);
 	SoundManager::Load("Aud/ice_slash.wav", "specSlash", SOUND_SFX);
-	SoundManager::Load("Aud/running.wav", "run", SOUND_SFX);
+	
 
 	//Set Sound Volume
 	SoundManager::SetSoundVolume(30);
