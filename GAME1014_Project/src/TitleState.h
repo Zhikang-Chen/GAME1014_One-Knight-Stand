@@ -30,6 +30,7 @@ private:
 	BoolButton* b;
 	
 	Background* m_pBackground;
+	Mix_Music* m_titleBgm;
 
 };
 
