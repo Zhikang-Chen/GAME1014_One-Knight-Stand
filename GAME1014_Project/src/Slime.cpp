@@ -14,8 +14,7 @@ Slime::~Slime()
 
 void Slime::Update()
 {
-	m_velY += m_accelY + m_grav;
-	m_velY = std::min(std::max(m_velY, -m_maxVelY), (m_grav * 4.0f)); //m_grav is how fast you're going to fall
+	
 	
 }
 
