@@ -24,6 +24,7 @@
 
 #include "Heart.h"
 #include "SwordSkill.h"
+#include "Slime.h"
 
 class GameState : public State
 {
@@ -47,6 +48,7 @@ private:
 	Heart* m_pFullHeart;
 	Heart* m_pEmptyHeart;
 	vector<Heart*> Hearts;
+	vector<Slime*> m_slimes;
 	std::vector<std::pair<std::string, GameObject*>> m_UIObject; //Almost the same as m_objecst but those wont move with the camera
 };
 
