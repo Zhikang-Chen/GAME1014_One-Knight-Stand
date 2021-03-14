@@ -41,17 +41,17 @@ void GameState::Enter()
 	
 	SDL_FRect* s = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile()->GetDst();
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
-<<<<<<< HEAD
+
 	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { s->x, s->y, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
-=======
-	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { WIDTH / 2, HEIGHT - 64*3, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
+
+	//m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { WIDTH / 2, HEIGHT - 64*3, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
 	//Slimes create
 	SDL_QueryTexture(TEMA::GetTexture("Slime"), nullptr, nullptr, &w, &h);
 	m_slimes.emplace_back(new Slime({ 0, 0, 35, 29 }, { WIDTH / 2, HEIGHT - 64 * 3, static_cast<float>(35), static_cast<float>(29) }, TEMA::GetTexture("Slime")));
 	
 	//m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { r->x,r->y, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
->>>>>>> Erics_Cool_Branch_For_Cool_Kids_Only
+
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "Spawn");
 	SDL_QueryTexture(TEMA::GetTexture("Spawn"), nullptr, nullptr, &w, &h);
@@ -293,15 +293,15 @@ void GameState::Render()
 	for (auto& i : m_UIObject)
 		i.second->Render();
 
-<<<<<<< HEAD
+
 	//SDL_Rect r { WIDTH / 2,HEIGHT/2,32,32 };
 	//SDL_RenderFillRect(Engine::Instance().GetRenderer(), &r);
-=======
+
 	for (unsigned i = 0; i < m_slimes.size(); i++)
 	{
 		m_slimes[i]->Render();
 	}
->>>>>>> Erics_Cool_Branch_For_Cool_Kids_Only
+
 	
 	if (dynamic_cast<GameState*>(STMA::GetStates().back())) // Check to see if current state is of type GameState
 		State::Render();
