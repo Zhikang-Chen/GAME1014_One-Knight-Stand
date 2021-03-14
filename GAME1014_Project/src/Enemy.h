@@ -13,7 +13,6 @@ protected:
 	* but I don't think it makes sense to make Enemy a child of PlatformPlayer so here we are*/
 	bool m_grounded;
 	bool m_facingLeft = false;
-	bool m_alive;
 	int m_health;
 	double m_accelX, //Acceleration on the X axis, horizontal force
 		m_accelY,//Acceleration on the Y axis, vertical force
@@ -33,8 +32,6 @@ public:
 	void SetAccelY(double a);
 	bool IsGrounded();
 	bool SetGrounded(bool g);
-	bool GetAlive();
-	void SetAlive(bool a);
 	double GetVelX();
 	double GetVelY();
 	void SetX(float x);

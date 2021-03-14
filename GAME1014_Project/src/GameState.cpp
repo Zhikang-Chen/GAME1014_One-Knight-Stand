@@ -4,6 +4,7 @@
 #include "EndState.h"
 #include "PauseState.h"
 #include "TiledLevel.h"
+#include "Slime.h"
 
 GameState::GameState() {}
 
@@ -27,6 +28,9 @@ void GameState::Enter()
 	//TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_Attacking.png", "Knight-Attack");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordskill.png", "SwordSkill1");
 
+	//Slime register texture
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Slime.png", "Slime");
+
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heartempty.png", "EmptyHeart");
@@ -40,6 +44,10 @@ void GameState::Enter()
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
 	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { WIDTH / 2, HEIGHT - 64*3, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
+	//Slimes create
+	SDL_QueryTexture(TEMA::GetTexture("Slime"), nullptr, nullptr, &w, &h);
+	m_slimes.emplace_back(new Slime({ 0, 0, 35, 29 }, { WIDTH / 2, HEIGHT - 64 * 3, static_cast<float>(35), static_cast<float>(29) }, TEMA::GetTexture("Slime")));
+	
 	//m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { r->x,r->y, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
 	SDL_FRect* r = dynamic_cast<TiledLevel*>(FindObject("level"))->GetEndTile()->GetDst();
@@ -96,6 +104,28 @@ void GameState::CollisionCheck()
 			{ // Colliding with right side of tile.
 				pp->StopX();
 				pp->SetX(t->x + t->w);
+			}
+		}
+	}
+
+	//Player and slime collision
+	for (int i = 0; i < m_slimes.size(); i++)
+	{
+		SDL_FRect* s = m_slimes[i]->GetDst();
+		if (COMA::AABBCheck(*s, *p))
+		{
+			pp->SetHeath(pp->GetHeath() - 1);
+			for (auto i = Hearts.size() - 1; i > 0; --i)
+			{
+				if (!Hearts[i]->GetEmpty())
+				{
+					Hearts[i]->SetEmpty(true);
+					break;
+				}
+			}
+			if (pp->GetHeath() == 0)
+			{
+				STMA::ChangeState(new EndState());
 			}
 		}
 	}
@@ -209,6 +239,11 @@ void GameState::Render()
 
 	for (auto& i : m_UIObject)
 		i.second->Render();
+
+	for (unsigned i = 0; i < m_slimes.size(); i++)
+	{
+		m_slimes[i]->Render();
+	}
 	
 	if (dynamic_cast<GameState*>(STMA::GetStates().back())) // Check to see if current state is of type GameState
 		State::Render();
@@ -231,6 +266,14 @@ void GameState::Exit()
 	}
 	m_UIObject.clear();
 	Hearts.clear();
+
+	for (unsigned i = 0; i < m_slimes.size(); i++)
+	{
+		delete m_slimes[i];
+		m_slimes[i] = nullptr;
+	}
+	m_slimes.clear();
+	m_slimes.shrink_to_fit();
 	std::cout << "Exiting GameState..." << std::endl;
 }
 

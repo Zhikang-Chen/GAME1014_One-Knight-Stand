@@ -3,7 +3,7 @@
 #include "Engine.h"
 
 Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Texture* t, int sstart, int smin, int smax, int nf) : AnimatedSpriteObject(s, d, t, sstart, smin, smax, nf),
-m_grounded(true), m_maxVelX(10.0), m_maxVelY(60.0), m_grav(GRAV), m_drag(0.8), m_alive(true)
+m_grounded(false), m_maxVelX(10.0), m_maxVelY(60.0), m_grav(GRAV), m_drag(0.8)
 {
 }
 

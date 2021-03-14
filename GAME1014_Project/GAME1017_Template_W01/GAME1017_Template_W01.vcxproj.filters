@@ -103,6 +103,12 @@
     <ClCompile Include="..\src\tinyxml2.cpp">
       <Filter>TinyXML2</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Enemy.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Slime.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -186,6 +192,12 @@
     <ClInclude Include="..\src\tinyxml2.h">
       <Filter>TinyXML2</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Enemy.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Slime.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Dat\Level1.txt">
@@ -202,5 +214,10 @@
     <Xml Include="Dat\TileData.xml">
       <Filter>Data</Filter>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Img\Slime.png">
+      <Filter>Game Objects</Filter>
+    </Image>
   </ItemGroup>
 </Project>

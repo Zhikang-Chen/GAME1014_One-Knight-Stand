@@ -7,10 +7,14 @@
 class Slime : public Enemy
 {
 private:
-	int m_maxHealth = 5;
+	int m_maxHealth = 1;
 
 public:
-	Slime(SDL_Point p);
+	Slime(SDL_Rect s, SDL_FRect d, SDL_Texture* t);
+	~Slime();
+	void Update();
+	void Render();
+	void AttackPattern();
 };
 
 #endif
