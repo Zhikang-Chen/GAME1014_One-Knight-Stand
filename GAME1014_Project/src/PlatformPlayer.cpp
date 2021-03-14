@@ -4,6 +4,7 @@
 
 #include "Engine.h"
 #include "EventManager.h"
+#include "SoundManager.h"
 
 //For some reason m_maxVelY can't take JUMPFORCE
 //Will fix someday

@@ -35,7 +35,8 @@ public:
 	virtual void Exit();
 	virtual void Resume();
 	void CollisionCheck();
-	void UpdateCam();
+	void MoveCamTo(GameObject* o);
+	void UpdateCam(GameObject* o);
 
 private:
 	Sword* m_pWeapon;
