@@ -5,6 +5,7 @@
 #include "PauseState.h"
 #include "TiledLevel.h"
 
+#include "SoundManager.h"
 GameState::GameState() {}
 
 void GameState::Enter()
@@ -38,7 +39,7 @@ void GameState::Enter()
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
 	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { s->x, s->y, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/spawn.png", "Spawn");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "Spawn");
 	SDL_QueryTexture(TEMA::GetTexture("Spawn"), nullptr, nullptr, &w, &h);
 	m_objects.emplace_back("Spawn", new ItemObject({ 0,0,w,h }, { s->x,s->y, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("Spawn")));
 	
@@ -62,6 +63,16 @@ void GameState::Enter()
 	m_UIObject.emplace_back("SwordSkill1", m_pSwordSkill1);
 
 	std::cout << "Entering GameState..." << std::endl;
+
+
+	//Load and play the game music
+	SoundManager::Load("Aud/TownTheme.mp3", "gameLevel1", SOUND_MUSIC);
+	SoundManager::PlayMusic("gameLevel1", -1);
+	SoundManager::SetMusicVolume(30);
+
+	
+
+
 }
 
 void GameState::CollisionCheck()
@@ -120,6 +131,7 @@ void GameState::CollisionCheck()
 			if(!Hearts[i]->GetEmpty())
 			{
 				Hearts[i]->SetEmpty(true);
+				
 				break;
 			}
 		}
@@ -137,6 +149,7 @@ void GameState::CollisionCheck()
 		if(pp->GetHeath() == 0)
 		{
 			STMA::ChangeState(new EndState());
+			SoundManager::StopMusic(); //The music will stop playing when the player dies (No more hearts)
 		}
 	}
 
@@ -218,6 +231,8 @@ void GameState::Update()
 	{
 		STMA::PushState(new PauseState());
 	}
+
+
 	//if (EVMA::KeyHeld(SDL_SCANCODE_S))
 	//{
 	//	MoveCamTo(FindObject("Trigger"));
@@ -226,6 +241,8 @@ void GameState::Update()
 	//{
 	//	MoveCamTo(FindObject("Player"));
 	//}
+
+
 }
 
 void GameState::Render()

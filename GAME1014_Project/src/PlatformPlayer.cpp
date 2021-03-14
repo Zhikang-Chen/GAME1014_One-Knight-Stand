@@ -24,6 +24,14 @@ m_state(STATE_IDLING), m_grounded(false), m_facingLeft(false), m_secondJump(fals
 void PlatformPlayer::Update()
 {
 
+	//Load Sound effects
+	SoundManager::Load("Aud/sword_swing.wav", "slash", SOUND_SFX);
+	SoundManager::Load("Aud/ice_slash.wav", "specSlash", SOUND_SFX);
+	SoundManager::Load("Aud/running.wav", "run", SOUND_SFX);
+
+	//Set Sound Volume
+	SoundManager::SetSoundVolume(30);
+
 	if (EVMA::KeyPressed(SDL_SCANCODE_H))
 		ShowHitbox();
 	
@@ -36,11 +44,16 @@ void PlatformPlayer::Update()
 		{
 			m_state = STATE_RUNNING;
 			SetAnimation(6, 6, 12); // , 256
+
+
 		}
 		else if (EVMA::KeyPressed(SDL_SCANCODE_J))
 		{
 			m_state = STATE_ATTACKING;
 			SetAnimation(5, 0, 5);
+			
+			SoundManager::PlaySound("slash", 0, 0);
+		
 		}
 
 		//ADDED A BUTTON to use weapon ability
@@ -49,6 +62,8 @@ void PlatformPlayer::Update()
 			m_state = STATE_SPECIAL_ATTACK;
 			//SetAnimation()
 			SetAnimation(4, 23, 26);
+
+			SoundManager::PlaySound("specSlash", 0, 0);
 
 		}
 
