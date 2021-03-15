@@ -48,14 +48,14 @@ void GameState::Enter()
 
 	//Slimes create
 	SDL_QueryTexture(TEMA::GetTexture("Slime"), nullptr, nullptr, &w, &h);
-	m_objects.emplace_back("aaa", new Slime({ 0, 0, 35, 29 }, { s->x + 100, s->y - 100, static_cast<float>(35), static_cast<float>(29) }, TEMA::GetTexture("Slime")));
+	m_objects.emplace_back("aaa", new Slime({ 0, 0, 35, 29 }, { s->x + 100, s->y + 32*6, static_cast<float>(35), static_cast<float>(29) }, TEMA::GetTexture("Slime")));
 	m_slimes.emplace_back(dynamic_cast<Slime*>(FindObject("aaa")));
 
 	
 	//m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { r->x,r->y, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
 
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "Spawn");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/spawn.png", "Spawn");
 	SDL_QueryTexture(TEMA::GetTexture("Spawn"), nullptr, nullptr, &w, &h);
 	m_objects.emplace_back("Spawn", new ItemObject({ 0,0,w,h }, { s->x,s->y, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("Spawn")));
 	

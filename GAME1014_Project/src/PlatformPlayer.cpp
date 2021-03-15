@@ -15,18 +15,15 @@ m_state(STATE_IDLING), m_grounded(false), m_facingLeft(false), m_secondJump(fals
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
 	m_curHealth = m_maxHealth = 5;
 	SetAnimation(9, 13, 21);
+	//Load Sound effects
+	SoundManager::Load("Aud/sword_swing.wav", "slash", SOUND_SFX);
+	SoundManager::Load("Aud/ice_slash.wav", "specSlash", SOUND_SFX);
 	//SetAnimation(1, 8, 9); // Initialize jump animation.
 }
 
 
 void PlatformPlayer::Update()
 {
-
-	//Load Sound effects
-	SoundManager::Load("Aud/sword_swing.wav", "slash", SOUND_SFX);
-	SoundManager::Load("Aud/ice_slash.wav", "specSlash", SOUND_SFX);
-	
-
 	//Set Sound Volume
 	SoundManager::SetSoundVolume(30);
 
