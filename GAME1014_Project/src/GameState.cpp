@@ -20,11 +20,9 @@ void GameState::Enter()
 	//Remove when beta
 	m_objects.emplace_back("Label", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 20, "UWU? What's dis", { 0,0,0,0 }));
 	m_objects.emplace_back("Label2", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 40, "I am your cute UI GF", { 0,0,0,0 }));
-	//m_objects.emplace_back("Label6", new Label("Minecraft", 10, 45, "Health: 5/5", { 0,0,0,0 }));
-	//TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_RUNNING_AND_IDLE.png", "Knight");
+	
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_ALL_ANIMATION-Sheet.png", "Knight");
-
-	//TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_Attacking.png", "Knight-Attack");
+	
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordskill.png", "SwordSkill1");
 
 	//Slime register texture
@@ -34,7 +32,6 @@ void GameState::Enter()
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heartempty.png", "EmptyHeart");
 	
-	//SDL_Rect src{ 20,20,100,100 }, dir{0,0,100,100};
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tileset.png", "tiles");
 	m_objects.emplace_back("level", new TiledLevel(24, 200, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
@@ -44,16 +41,11 @@ void GameState::Enter()
 
 	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { s->x, s->y, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
-	//m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { WIDTH / 2, HEIGHT - 64*3, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
 	//Slimes create
 	SDL_QueryTexture(TEMA::GetTexture("Slime"), nullptr, nullptr, &w, &h);
-	m_objects.emplace_back("aaa", new Slime({ 0, 0, 35, 29 }, { s->x + 100, s->y + 32*6, static_cast<float>(35), static_cast<float>(29) }, TEMA::GetTexture("Slime")));
+	m_objects.emplace_back("aaa", new Slime({ 0, 0, 35, 29 }, { s->x + 32*6, s->y + 32*6, static_cast<float>(35), static_cast<float>(29) }, TEMA::GetTexture("Slime")));
 	m_slimes.emplace_back(dynamic_cast<Slime*>(FindObject("aaa")));
-
-	
-	//m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, w / 14,h }, { r->x,r->y, static_cast<float>(w / 14),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
-
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/spawn.png", "Spawn");
 	SDL_QueryTexture(TEMA::GetTexture("Spawn"), nullptr, nullptr, &w, &h);
@@ -155,7 +147,6 @@ void GameState::CollisionCheck()
 					slime->SetX(t->x + t->w);
 				}
 			}
-
 		}
 	}
 
@@ -195,14 +186,34 @@ void GameState::CollisionCheck()
 
 			pp->SetX(s->GetDst()->x);
 			pp->SetY(s->GetDst()->y);
-			if (pp->GetHeath() == 0)
-			{
-				STMA::ChangeState(new EndState());
-				break;
-			}
 		}
 	}
 
+	// This has to be at the end because of ChangeState
+	if (p->y >= HEIGHT + p->h || EVMA::KeyPressed(SDL_SCANCODE_MINUS))
+	{
+		pp->SetHeath(pp->GetHeath() - 1);
+		for (auto i = Hearts.size() - 1; i > 0; --i)
+		{
+			if (!Hearts[i]->GetEmpty())
+			{
+				Hearts[i]->SetEmpty(true);
+				break;
+			}
+		}
+		auto s = FindObject("Spawn");
+		MoveCamTo(s);
+		pp->StopX();
+		pp->StopY();
+		pp->SetX(s->GetDst()->x);
+		pp->SetY(s->GetDst()->y);
+	}
+	
+	if (pp->GetHeath() == 0)
+	{
+		STMA::ChangeState(new EndState());
+	}
+	
 	// Use to test 
 	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr)
 	{
@@ -211,48 +222,9 @@ void GameState::CollisionCheck()
 			if (EVMA::KeyPressed(SDL_SCANCODE_E))
 			{
 				STMA::ChangeState(new TitleState());
-				//AnItem->Activate();
-				//m_pWeapon->SetEnable(true);
 			}
 		}
 	}
-	
-	// This has to be at the end because of ChangeState
-	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr)
-	{
-		if (p->y >= HEIGHT + p->h || EVMA::KeyPressed(SDL_SCANCODE_MINUS))
-		{
-			//STMA::ChangeState(new EndState());
-			pp->SetHeath(pp->GetHeath() - 1);
-			//auto ch = pp->GetMaxHealth() - pp->GetHeath();
-
-			for (auto i = Hearts.size() - 1; i > 0; --i)
-			{
-				if (!Hearts[i]->GetEmpty())
-				{
-					Hearts[i]->SetEmpty(true);
-					break;
-				}
-			}
-
-			//pp->SetY(0);
-			auto s = FindObject("Spawn");
-			MoveCamTo(s);
-			pp->StopX();
-			pp->StopY();
-
-			pp->SetX(s->GetDst()->x);
-			pp->SetY(s->GetDst()->y);
-			//cout << s->x << endl;
-
-			if (pp->GetHeath() == 0)
-			{
-				STMA::ChangeState(new EndState());
-				SoundManager::StopMusic(); //The music will stop playing when the player dies (No more hearts)
-			}
-		}
-	}
-
 }
 
 void GameState::MoveCamTo(GameObject* o)
@@ -270,6 +242,7 @@ void GameState::MoveCamTo(GameObject* o)
 }
 
 // This is kinda useless now
+// MoveCamTo is better
 void GameState::UpdateCam(GameObject* o)
 {
 	//auto camOffset = (WIDTH / 2) - (o->GetDst()->x - (o->GetDst()->w / 2));
@@ -313,22 +286,10 @@ void GameState::Update()
 	for (auto& m_object : m_objects)
 		m_object.second->Update();
 	CollisionCheck();
-	if(EVMA::KeyPressed(SDL_SCANCODE_P))
+	if (EVMA::KeyPressed(SDL_SCANCODE_P))
 	{
 		STMA::PushState(new PauseState());
 	}
-
-
-	//if (EVMA::KeyHeld(SDL_SCANCODE_S))
-	//{
-	//	MoveCamTo(FindObject("Trigger"));
-	//}
-	//if (EVMA::KeyHeld(SDL_SCANCODE_G))
-	//{
-	//	MoveCamTo(FindObject("Player"));
-	//}
-
-
 }
 
 void GameState::Render()
@@ -343,17 +304,7 @@ void GameState::Render()
 	for (auto& i : m_UIObject)
 		i.second->Render();
 
-
-	//SDL_Rect r { WIDTH / 2,HEIGHT/2,32,32 };
-	//SDL_RenderFillRect(Engine::Instance().GetRenderer(), &r);
-
-	for (unsigned i = 0; i < m_slimes.size(); i++)
-	{
-		m_slimes[i]->Render();
-	}
-
-	
-	if (dynamic_cast<GameState*>(STMA::GetStates().back())) // Check to see if current state is of type GameState
+	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr) // Check to see if current state is of type GameState
 		State::Render();
 	
 }
@@ -375,11 +326,6 @@ void GameState::Exit()
 	m_UIObject.clear();
 	Hearts.clear();
 
-	//for (auto& s : m_slimes)
-	//{
-	//	delete s;
-	//	s = nullptr;
-	//}
 	m_slimes.clear();
 	m_slimes.shrink_to_fit();
 	std::cout << "Exiting GameState..." << std::endl;

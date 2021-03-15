@@ -29,4 +29,5 @@
   <Tile haz="0" key="*" obs="0" x="-1" y="0" />
   <Tile haz="0" key="S" obs="0" x="-1" y="0" />
   <Tile haz="0" key="E" obs="0" x="-1" y="0" />
+  <Tile haz="0" key="C" obs="0" x="-1" y="0" />
 </Data>
