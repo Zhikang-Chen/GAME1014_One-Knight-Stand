@@ -40,7 +40,6 @@ void PlatformPlayer::Update()
 			m_state = STATE_RUNNING;
 			SetAnimation(6, 6, 12); // , 256
 
-
 		}
 		else if (EVMA::KeyPressed(SDL_SCANCODE_J))
 		{
@@ -58,7 +57,6 @@ void PlatformPlayer::Update()
 			//SetAnimation()
 			SetAnimation(4, 23, 26);
 			SoundManager::PlaySound("specSlash", 0, 0);
-
 		}
 
 		// Transition to jump.
@@ -141,25 +139,20 @@ void PlatformPlayer::Update()
 			m_state = STATE_IDLING;
 			SetAnimation(9, 13, 22);
 		}
-
 	}
 
-	
 	// x axis
 	m_velX += m_accelX;
 	m_velX *= (m_grounded ? m_drag : 1.0f);
 
-	
 	//Velocity clamping
 	m_velX = std::min(std::max(m_velX, -m_maxVelX), m_maxVelX); //std::max first check, std::min second	
 	m_pBoundingBox.x += m_velX;
 
-	
 	// y axis
 	m_velY += m_accelY + m_grav;
 	m_velY = std::min(std::max(m_velY, -m_maxVelY), (m_grav * 4.0f)); //m_grav is how fast you're going to fall
 	m_pBoundingBox.y += m_velY;
-
 
 	//Reset acceleration
 	m_accelX = m_accelY = 0.0; //Similar to a keyup event
@@ -171,9 +164,7 @@ void PlatformPlayer::Update()
 	else if(!m_facingLeft)
 		m_dst.x = m_pBoundingBox.x;
 
-	
 	m_dst.y = m_pBoundingBox.y - 9;
-	
 	this->Animate();
 }
 
