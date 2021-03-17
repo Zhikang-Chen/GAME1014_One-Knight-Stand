@@ -1,7 +1,5 @@
 ﻿#include "PlatformPlayer.h"
 #include <algorithm>
-
-
 #include "Engine.h"
 #include "EventManager.h"
 #include "SoundManager.h"
@@ -17,12 +15,17 @@ m_state(STATE_IDLING), m_grounded(false), m_facingLeft(false), m_secondJump(fals
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
 	m_curHealth = m_maxHealth = 5;
 	SetAnimation(9, 13, 21);
+	//Load Sound effects
+	SoundManager::Load("Aud/sword_swing.wav", "slash", SOUND_SFX);
+	SoundManager::Load("Aud/ice_slash.wav", "specSlash", SOUND_SFX);
 	//SetAnimation(1, 8, 9); // Initialize jump animation.
 }
 
 
 void PlatformPlayer::Update()
 {
+	//Set Sound Volume
+	SoundManager::SetSoundVolume(30);
 
 	if (EVMA::KeyPressed(SDL_SCANCODE_H))
 		ShowHitbox();
@@ -36,11 +39,16 @@ void PlatformPlayer::Update()
 		{
 			m_state = STATE_RUNNING;
 			SetAnimation(6, 6, 12); // , 256
+
+
 		}
 		else if (EVMA::KeyPressed(SDL_SCANCODE_J))
 		{
 			m_state = STATE_ATTACKING;
 			SetAnimation(5, 0, 5);
+			
+			SoundManager::PlaySound("slash", 0, 0);
+		
 		}
 
 		//ADDED A BUTTON to use weapon ability
@@ -49,6 +57,8 @@ void PlatformPlayer::Update()
 			m_state = STATE_SPECIAL_ATTACK;
 			//SetAnimation()
 			SetAnimation(4, 23, 26);
+
+			SoundManager::PlaySound("specSlash", 0, 0);
 
 		}
 

@@ -2,6 +2,7 @@
 #include "TitleState.h"
 
 #include "EndState.h"
+#include "SoundManager.h"
 
 TitleState::TitleState() {}
 
@@ -27,6 +28,15 @@ void TitleState::Enter()
 	b = new BoolButton({ 0,0,w/3,h }, { (float)WIDTH / 2 - w/3 / 2,(float)HEIGHT / 2 - h / 2 , (float)w/3, (float)h }, TEMA::GetTexture("Play"));
 	//m_objects.emplace("no", b);
 	m_objects.emplace_back("no", b);
+
+	//m_titleBgm = Mix_LoadMUS("../GAME1017_Template_W01/Aud/VisagerTreeLoop.mp3");
+	//Mix_PlayMusic(m_titleBgm, -1); // 0, 1-n, or -1 for infinite
+	//Mix_VolumeMusic(30);
+	
+	//Load and Play the music on the title screen
+	SoundManager::Load("Aud/VisagerTreeLoop.mp3", "title", SOUND_MUSIC );
+	SoundManager::PlayMusic("title", -1);
+	SoundManager::SetMusicVolume(4);
 	
 	std::cout << "Entering TitleState..." << std::endl;
 }
