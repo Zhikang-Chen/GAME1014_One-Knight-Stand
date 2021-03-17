@@ -3,11 +3,12 @@
 
 #include "EndState.h"
 #include "PauseState.h"
-#include "TiledLevel.h"
 #include "Slime.h"
 
 #include "SoundManager.h"
 GameState::GameState() {}
+
+// State function
 
 void GameState::Enter()
 {
@@ -34,7 +35,10 @@ void GameState::Enter()
 	
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tileset.png", "tiles");
-	m_objects.emplace_back("level", new TiledLevel(24, 200, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
+	m_levels.push_back(new TiledLevel(24, 200, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
+	m_levels.push_back(new TiledLevel(24, 48, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
+	m_currLevel = 0;
+	m_objects.emplace_back("level", m_levels[0]);
 	
 	SDL_FRect* s = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile()->GetDst();
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
@@ -79,6 +83,75 @@ void GameState::Enter()
 	//SoundManager::SetMusicVolume(16);
 }
 
+void GameState::Update()
+{
+	MoveCamTo(FindObject("Player"));
+	for (auto& m_object : m_objects)
+		m_object.second->Update();
+	CollisionCheck();
+	
+	if (EVMA::KeyPressed(SDL_SCANCODE_V))
+	{
+		//STMA::PushState(new PauseState());
+		m_currLevel++;
+		if (m_currLevel > m_levels.size() - 1)
+			STMA::ChangeState(new TitleState());
+		else
+			ChangeLevel(m_currLevel);
+	}
+	
+	if (EVMA::KeyPressed(SDL_SCANCODE_P))
+	{
+		STMA::PushState(new PauseState());
+	}
+}
+
+void GameState::Render()
+{
+	//std::cout << "Rendering TitleState..." << std::endl;
+	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 255);
+	SDL_RenderClear(Engine::Instance().GetRenderer());
+	
+	for (auto& m_object : m_objects)
+		m_object.second->Render();
+
+	for (auto& i : m_UIObject)
+		i.second->Render();
+
+	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr) // Check to see if current state is of type GameState
+		State::Render();
+	
+}
+
+void GameState::Exit()
+{
+	for (auto& m_object : m_objects)
+	{
+		delete m_object.second;
+		m_object.second = nullptr;
+	}
+	m_objects.clear();
+
+	for (auto& UI : m_UIObject)
+	{
+		delete UI.second;
+		UI.second = nullptr;
+	}
+	m_UIObject.clear();
+	Hearts.clear();
+
+	m_slimes.clear();
+	m_slimes.shrink_to_fit();
+	std::cout << "Exiting GameState..." << std::endl;
+}
+
+void GameState::Resume()
+{
+	SoundManager::PlayMusic("gameLevel1", -1);
+	cout << "Resuming GameState" << endl;
+}
+
+// GameState function
 void GameState::CollisionCheck()
 {
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
@@ -221,7 +294,12 @@ void GameState::CollisionCheck()
 		{
 			if (EVMA::KeyPressed(SDL_SCANCODE_E))
 			{
-				STMA::ChangeState(new TitleState());
+				//STMA::PushState(new PauseState());
+				m_currLevel++;
+				if (m_currLevel > m_levels.size() - 1)
+					STMA::ChangeState(new TitleState());
+				else
+					ChangeLevel(m_currLevel);
 			}
 		}
 	}
@@ -241,98 +319,37 @@ void GameState::MoveCamTo(GameObject* o)
 	FindObject("aaa")->GetDst()->x += camOffset;
 }
 
-// This is kinda useless now
-// MoveCamTo is better
-void GameState::UpdateCam(GameObject* o)
-{
-	//auto camOffset = (WIDTH / 2) - (o->GetDst()->x - (o->GetDst()->w / 2));
-	float camspeed = 0.0;
-	
-	if (dynamic_cast<PlatformPlayer*>(o) != nullptr)
-	{
-		camspeed = dynamic_cast<PlatformPlayer*>(o)->GetVelX() * -1;
-	}
-	else if (o->GetDst()->x >= (WIDTH / 2) + 32)
-	{
-		//std::cout << "Right" << endl;
-		camspeed = -32;
-	}
-	else if (o->GetDst()->x <= (WIDTH / 2) - 32)
-	{
-		//std::cout << "Left" << endl;
-		camspeed = 32;
-	}
-	
-	//cout << camOffset << endl;
-	for (int i = 0; i < dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles().size(); i++)
-	{
-		SDL_FRect* t = dynamic_cast<TiledLevel*>(FindObject("level"))->GetObstacles()[i]->GetDst();
-		t->x += camspeed;
-	}
-
-	//for (auto& m_object : m_objects)
-	//	m_object.second->GetDst()->x += camspeed;
-	//FindObject("Label4")->GetDst()->x += camspeed;
-	//FindObject("Label5")->GetDst()->x += camspeed;
-	FindObject("Player")->GetDst()->x += camspeed;
-	FindObject("Trigger")->GetDst()->x += camspeed;
-
-	//dynamic_cast<Label*>(FindObject("Label6"))->SetText("Health: " + to_string(pp->GetHeath()) + "/" + to_string(pp->GetMaxHealth()));
-}
-
-void GameState::Update()
-{
-	MoveCamTo(FindObject("Player"));
-	for (auto& m_object : m_objects)
-		m_object.second->Update();
-	CollisionCheck();
-	if (EVMA::KeyPressed(SDL_SCANCODE_P))
-	{
-		STMA::PushState(new PauseState());
-	}
-}
-
-void GameState::Render()
-{
-	//std::cout << "Rendering TitleState..." << std::endl;
-	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 255);
-	SDL_RenderClear(Engine::Instance().GetRenderer());
-	
-	for (auto& m_object : m_objects)
-		m_object.second->Render();
-
-	for (auto& i : m_UIObject)
-		i.second->Render();
-
-	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr) // Check to see if current state is of type GameState
-		State::Render();
-	
-}
-
-void GameState::Exit()
+void GameState::ChangeLevel(int level)
 {
 	for (auto& m_object : m_objects)
 	{
-		delete m_object.second;
-		m_object.second = nullptr;
+		if (m_object.first == "level")
+		{
+			if (m_object.second == m_levels[level])
+				return;
+			
+			//delete m_object.second;
+			m_object.second = m_levels[level];
+			//m_object.second = nullptr;
+		}
 	}
-	m_objects.clear();
+	SDL_FRect* s = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile()->GetDst();
+	auto sp = FindObject("Spawn");
+	sp->GetDst()->x = s->x;
+	sp->GetDst()->y = s->y;
 
-	for (auto& UI : m_UIObject)
-	{
-		delete UI.second;
-		UI.second = nullptr;
-	}
-	m_UIObject.clear();
-	Hearts.clear();
-
-	m_slimes.clear();
-	m_slimes.shrink_to_fit();
-	std::cout << "Exiting GameState..." << std::endl;
+	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
+	pp->StopX();
+	pp->StopY();
+	pp->SetX(sp->GetDst()->x);
+	pp->SetY(sp->GetDst()->y);
+	MoveCamTo(pp);
+	
+	SDL_FRect* r = dynamic_cast<TiledLevel*>(FindObject("level"))->GetEndTile()->GetDst();
+	auto t = FindObject("Trigger");
+	t->GetDst()->x = r->x;
+	t->GetDst()->y = r->y;
+	
+	//m_objects.emplace_back("level", m_levels[1]);
+	
 }
-
-void GameState::Resume()
-{
-	cout << "Resuming GameState" << endl;
-}
-// End GameState

@@ -22,6 +22,7 @@
 #include <vector>
 #include "ItemObject.h"
 
+#include "TiledLevel.h"
 #include "Heart.h"
 #include "SwordSkill.h"
 #include "Slime.h"
@@ -38,11 +39,17 @@ public:
 	void CollisionCheck();
 	void MoveCamTo(GameObject* o);
 	void UpdateCam(GameObject* o);
+	void ChangeLevel(int level);
 
 private:
 	SwordSkill* m_pSwordSkill1;
 	vector<Heart*> Hearts;
 	vector<Slime*> m_slimes;
+
+	
+	vector<TiledLevel*> m_levels;
+	int m_currLevel;
+	
 	std::vector<std::pair<std::string, GameObject*>> m_UIObject; //Almost the same as m_objecst but those wont move with the camera
 };
 
