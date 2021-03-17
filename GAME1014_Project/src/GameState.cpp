@@ -37,6 +37,19 @@ void GameState::Enter()
 	SDL_FRect* s = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile()->GetDst();
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
 	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { s->x, s->y, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
+<<<<<<< Updated upstream
+=======
+
+
+	//Slimes create
+	SDL_QueryTexture(TEMA::GetTexture("Slime"), nullptr, nullptr, &w, &h);
+	m_objects.emplace_back("aaa", new Slime({ 0, 0, 35, 29 }, { s->x + 32*6, s->y + 32*6, static_cast<float>(35), static_cast<float>(29) }, TEMA::GetTexture("Slime")));
+	//m_slimes.emplace_back(dynamic_cast<Slime*>(FindObject("aaa")));
+
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/spawn.png", "Spawn");
+	SDL_QueryTexture(TEMA::GetTexture("Spawn"), nullptr, nullptr, &w, &h);
+	m_objects.emplace_back("Spawn", new ItemObject({ 0,0,w,h }, { s->x,s->y, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("Spawn")));
+>>>>>>> Stashed changes
 	
 	SDL_FRect* r = dynamic_cast<TiledLevel*>(FindObject("level"))->GetEndTile()->GetDst();
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Sign_End.png", "End");
