@@ -57,7 +57,6 @@ void PlatformPlayer::Update()
 			m_state = STATE_SPECIAL_ATTACK;
 			//SetAnimation()
 			SetAnimation(4, 23, 26);
-
 			SoundManager::PlaySound("specSlash", 0, 0);
 
 		}
@@ -154,6 +153,7 @@ void PlatformPlayer::Update()
 	//Velocity clamping
 	m_velX = std::min(std::max(m_velX, -m_maxVelX), m_maxVelX); //std::max first check, std::min second	
 	m_pBoundingBox.x += m_velX;
+
 	
 	// y axis
 	m_velY += m_accelY + m_grav;
