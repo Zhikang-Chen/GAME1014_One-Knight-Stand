@@ -290,6 +290,7 @@ void GameState::Update()
 	{
 		STMA::PushState(new PauseState());
 	}
+	
 }
 
 void GameState::Render()
