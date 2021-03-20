@@ -10,7 +10,6 @@
 #include "SpriteObject.h"
 #include "TextureManager.h"
 #include "tinyxml2.h"
-
 using namespace tinyxml2;
 
 enum Tag { NONE = -1 ,SPAWN, END, AIR, OBSTACLE, HAZARD, CHECKPOINT };
@@ -20,11 +19,11 @@ class Tile : public SpriteObject
 public:
 	Tile(SDL_Rect s, SDL_FRect d, SDL_Texture* t, Tag ta = NONE)
 		:SpriteObject(s, d, t), m_activate(false), m_tag(ta) {}
-	Tile* Clone() const { return new Tile(m_src, m_dst, m_pText, m_tag); }
+	virtual Tile* Clone() const { return new Tile(m_src, m_dst, m_pText, m_tag); }
 
 	Tag GetTag() const { return m_tag; }
 
-	void Activate() { m_activate = !m_activate; }
+	virtual void Activate() { m_activate = true; }
 	bool GetActivate() { return m_activate; }
 	
 	void SetTag(Tag t) { m_tag = t; }
@@ -39,17 +38,26 @@ protected:
 class SpawnTile : public Tile
 {
 public:
-	SpawnTile(SDL_Rect s, SDL_FRect d, SDL_Texture* t = TEMA::GetTexture("Spawn"), Tag ta = SPAWN)
-		:Tile(s,d,t,ta) { }
+	SpawnTile(SDL_Rect s, SDL_FRect d, SDL_Texture* t = TEMA::GetTexture("Spawn"))
+		:Tile(s,d,t, SPAWN) { }
 	SpawnTile* Clone() const { return new SpawnTile(m_src, m_dst); }
 };
 
 class EndTile : public Tile
 {
 public:
-	EndTile(SDL_Rect s, SDL_FRect d, SDL_Texture* t = TEMA::GetTexture("End"), Tag ta = END)
-		:Tile(s, d, t, ta) { }
+	EndTile(SDL_Rect s, SDL_FRect d, SDL_Texture* t = TEMA::GetTexture("End"))
+		:Tile(s, d, t, END) { }
 	EndTile* Clone() const { return new EndTile(m_src, m_dst); }
+};
+
+class CheckPointTile : public Tile
+{
+public:
+	CheckPointTile(SDL_Rect s, SDL_FRect d, SDL_Texture* t = TEMA::GetTexture("On off"))
+		:Tile(s, d, t, CHECKPOINT) { }
+	CheckPointTile* Clone() const { return new CheckPointTile(m_src, m_dst); }
+	void Activate() override;
 };
 
 class TiledLevel : public GameObject

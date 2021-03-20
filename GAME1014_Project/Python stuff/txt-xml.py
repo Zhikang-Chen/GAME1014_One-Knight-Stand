@@ -41,8 +41,6 @@ def main():
             tile.set("key",a[0])
             tile.set("x",a[1])
             tile.set("y",a[2])
-            tile.set("obs",a[3])
-            tile.set("haz",a[4])
             tile.tail = "\n"
     tree = ET.ElementTree(data)
     tree.write(XMLFILE)

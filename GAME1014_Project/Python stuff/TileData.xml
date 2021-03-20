@@ -1,29 +1,29 @@
-<data>
-<Tile haz="0" key="," obs="1" x="0" y="0" />
-<Tile haz="0" key=";" obs="1" x="1" y="0" />
-<Tile haz="0" key="8" obs="1" x="2" y="0" />
-<Tile haz="0" key="3" obs="1" x="3" y="0" />
-<Tile haz="0" key="." obs="1" x="4" y="0" />
-<Tile haz="0" key="~" obs="1" x="5" y="0" />
-<Tile haz="0" key="[" obs="1" x="6" y="0" />
-<Tile haz="0" key="P" obs="1" x="7" y="0" />
-<Tile haz="0" key="]" obs="1" x="8" y="0" />
-<Tile haz="0" key="#" obs="1" x="0" y="1" />
-<Tile haz="0" key="O" obs="1" x="1" y="1" />
-<Tile haz="0" key="A" obs="1" x="2" y="1" />
-<Tile haz="0" key="H" obs="1" x="3" y="1" />
-<Tile haz="0" key="B" obs="1" x="4" y="1" />
-<Tile haz="0" key="_" obs="0" x="5" y="1" />
-<Tile haz="0" key="D" obs="0" x="6" y="1" />
-<Tile haz="0" key="L" obs="0" x="7" y="1" />
-<Tile haz="0" key=":" obs="0" x="8" y="1" />
-<Tile haz="0" key="Q" obs="1" x="0" y="2" />
-<Tile haz="0" key="W" obs="1" x="1" y="2" />
-<Tile haz="0" key="R" obs="1" x="2" y="2" />
-<Tile haz="0" key="T" obs="1" x="3" y="2" />
-<Tile haz="0" key="Y" obs="1" x="4" y="2" />
-<Tile haz="0" key="U" obs="1" x="5" y="2" />
-<Tile haz="0" key="*" obs="0" x="-1" y="0" />
-<Tile haz="0" key="S" obs="0" x="-1" y="0" />
-<Tile haz="0" key="E" obs="0" x="-1" y="0" />
-</data>
+<Data>
+<Tile key="," x="0" y="0" />
+<Tile key=";" x="1" y="0" />
+<Tile key="8" x="2" y="0" />
+<Tile key="3" x="3" y="0" />
+<Tile key="." x="4" y="0" />
+<Tile key="~" x="5" y="0" />
+<Tile key="[" x="6" y="0" />
+<Tile key="P" x="7" y="0" />
+<Tile key="]" x="8" y="0" />
+<Tile key="#" x="0" y="1" />
+<Tile key="O" x="1" y="1" />
+<Tile key="A" x="2" y="1" />
+<Tile key="H" x="3" y="1" />
+<Tile key="B" x="4" y="1" />
+<Tile key="_" x="5" y="1" />
+<Tile key="D" x="6" y="1" />
+<Tile key="L" x="7" y="1" />
+<Tile key=":" x="8" y="1" />
+<Tile key="Q" x="0" y="2" />
+<Tile key="W" x="1" y="2" />
+<Tile key="R" x="2" y="2" />
+<Tile key="T" x="3" y="2" />
+<Tile key="Y" x="4" y="2" />
+<Tile key="U" x="5" y="2" />
+<Tile key="*" x="-1" y="0" />
+<Tile key="S" x="-1" y="0" />
+<Tile key="E" x="-1" y="0" />
+</Data>

@@ -35,6 +35,7 @@ void GameState::Enter()
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/spawn.png", "Spawn");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Sign_End.png", "End");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/on off.png", "On off");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tileset.png", "tiles");
 	
 	m_levels.push_back(new TiledLevel(24, 200, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
@@ -42,8 +43,9 @@ void GameState::Enter()
 
 	m_currLevel = 0;
 	m_objects.emplace_back("level", m_levels[0]);
-	
-	SDL_FRect* s = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile()->GetDst();
+
+	m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile();
+	SDL_FRect* s = m_spawn->GetDst();
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
 
 	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { s->x, s->y, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
@@ -193,9 +195,14 @@ void GameState::CollisionCheck()
 				{
 					//STMA::PushState(new PauseState());
 					m_currLevel++;
-					if (m_currLevel < m_levels.size() - 1)
+					if (m_currLevel <= m_levels.size() - 1)
 						ChangeLevel(m_currLevel);
 				}
+			}
+			else if (i->GetTag() == CHECKPOINT)
+			{
+				i->Activate();
+				m_spawn = i;
 			}
 		}
 		for (auto slime : m_slimes)
@@ -266,7 +273,7 @@ void GameState::CollisionCheck()
 					break;
 				}
 			}
-			auto s = FindObject("Spawn");
+			auto s = m_spawn;
 			MoveCamTo(s);
 			pp->StopX();
 			pp->StopY();
@@ -288,7 +295,7 @@ void GameState::CollisionCheck()
 				break;
 			}
 		}
-		SDL_FRect* s = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile()->GetDst();
+		SDL_FRect* s = m_spawn->GetDst();
 		pp->StopX();
 		pp->StopY();
 		pp->SetX(s->x);
@@ -303,26 +310,9 @@ void GameState::CollisionCheck()
 
 	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr)
 	{
-		if (m_currLevel > m_levels.size() - 1)
+		if (m_currLevel > m_levels.size() -1)
 			STMA::ChangeState(new TitleState());
 	}
-	
-	// Use to test 
-	//if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr)
-	//{
-	//	if (COMA::AABBCheck(*p, *FindObject("Trigger")->GetDst()))
-	//	{
-	//		if (EVMA::KeyPressed(SDL_SCANCODE_E))
-	//		{
-	//			//STMA::PushState(new PauseState());
-	//			m_currLevel++;
-	//			if (m_currLevel > m_levels.size() - 1)
-	//				STMA::ChangeState(new TitleState());
-	//			else
-	//				ChangeLevel(m_currLevel);
-	//		}
-	//	}
-	//}
 }
 
 void GameState::MoveCamTo(GameObject* o)
@@ -337,12 +327,12 @@ void GameState::MoveCamTo(GameObject* o)
 			t->x += camOffset;
 		}
 	}
-	
-	FindObject("Player")->GetDst()->x += camOffset;
-	FindObject("aaa")->GetDst()->x += camOffset;
+	o->GetDst()->x += camOffset;
+	//FindObject("Player")->GetDst()->x += camOffset;
+	//FindObject("aaa")->GetDst()->x += camOffset;
 }
 
-void GameState::ChangeLevel(int level)
+void GameState::ChangeLevel(unsigned int level)
 {
 	for (auto& m_object : m_objects)
 	{
@@ -356,7 +346,8 @@ void GameState::ChangeLevel(int level)
 			//m_object.second = nullptr;
 		}
 	}
-	SDL_FRect* s = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile()->GetDst();
+	m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile();
+	SDL_FRect* s = m_spawn->GetDst();
 	//auto sp = FindObject("Spawn");
 	//sp->GetDst()->x = s->x;
 	//sp->GetDst()->y = s->y;
