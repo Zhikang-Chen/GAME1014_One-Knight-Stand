@@ -16,6 +16,7 @@ private:
 	virtual void Render();
 	virtual void Exit();
 
+	SDL_FRect* m_pBackground;
 	BoolButton* m_pbutton;
 	BoolButton* m_pbutton2;
 	//SpriteObject* m_pBackground;

@@ -27,7 +27,7 @@ void PauseState::Enter()
 	m_pbutton2 = new BoolButton({ 0,0,w / 3,h }, { WIDTH / 2 - (float)w / 6,HEIGHT / 1.65,(float)w / 3, (float)h }, TEMA::GetTexture("Exit"));
 	m_objects.emplace_back("button2", m_pbutton2);
 
-	
+	m_pBackground = new SDL_FRect({ 0, 0, (float)WIDTH, (float)HEIGHT });
 	std::cout << "Entering PauseState" << endl;
 }
 
@@ -52,7 +52,7 @@ void PauseState::Render()
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 0, 128);
 	//SDL_RenderClear(Engine::Instance().GetRenderer());
 	SDL_SetRenderDrawBlendMode(Engine::Instance().GetRenderer(), SDL_BLENDMODE_BLEND);
-	//SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &SDL_FRect({ 0, 0, (float)WIDTH, (float)HEIGHT }));
+	SDL_RenderFillRectF(Engine::Instance().GetRenderer(), m_pBackground);
 	
 
 	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
