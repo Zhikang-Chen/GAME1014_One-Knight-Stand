@@ -22,9 +22,13 @@ void PauseState::Enter()
 	m_pbutton = new BoolButton({ 0,0,w/3,h }, { WIDTH / 2 - (float)w / 6,HEIGHT / 2,(float)w/3, (float)h }, TEMA::GetTexture("Back"));
 	m_objects.emplace_back("button", m_pbutton);
 
-	m_pBackground = new SDL_FRect({ 0, 0, (float)WIDTH, (float)HEIGHT });
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/exit.png", "Exit");
+	SDL_QueryTexture(TEMA::GetTexture("Exit"), nullptr, nullptr, &w, &h);
+	m_pbutton2 = new BoolButton({ 0,0,w / 3,h }, { WIDTH / 2 - (float)w / 6,HEIGHT / 1.65,(float)w / 3, (float)h }, TEMA::GetTexture("Exit"));
+	m_objects.emplace_back("button2", m_pbutton2);
+
 	
-	cout << "Entering PauseState" << endl;
+	std::cout << "Entering PauseState" << endl;
 }
 
 void PauseState::Update()
@@ -36,6 +40,11 @@ void PauseState::Update()
 	{
 		STMA::PopState();
 	}
+	else if (m_pbutton2->GetChangeState() || EVMA::KeyPressed(SDL_SCANCODE_E))
+	{
+		STMA::PopState();
+		STMA::ChangeState(new TitleState());
+	}
 }
 
 void PauseState::Render()
@@ -43,7 +52,8 @@ void PauseState::Render()
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 0, 128);
 	//SDL_RenderClear(Engine::Instance().GetRenderer());
 	SDL_SetRenderDrawBlendMode(Engine::Instance().GetRenderer(), SDL_BLENDMODE_BLEND);
-	SDL_RenderFillRectF(Engine::Instance().GetRenderer(), m_pBackground);
+	//SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &SDL_FRect({ 0, 0, (float)WIDTH, (float)HEIGHT }));
+	
 
 	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
 		i->second->Render();
@@ -60,5 +70,5 @@ void PauseState::Exit()
 		i->second = nullptr;
 	}
 	m_objects.clear();
-	cout << "Exiting PauseState" << endl;
+	std::cout << "Exiting PauseState" << endl;
 }
