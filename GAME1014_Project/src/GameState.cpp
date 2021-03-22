@@ -53,8 +53,8 @@ void GameState::Enter()
 
 	//Slimes create
 	SDL_QueryTexture(TEMA::GetTexture("Slime"), nullptr, nullptr, &w, &h);
-	m_objects.emplace_back("aaa", new Slime({ 0, 0, 35, 29 }, { s->x + 32*6, s->y + 32*6, static_cast<float>(35), static_cast<float>(29) }, TEMA::GetTexture("Slime")));
-	//m_slimes.emplace_back(dynamic_cast<Slime*>(FindObject("aaa")));
+	m_objects.emplace_back("aaa", new Slime({ 0, 0, 35, 29 }, { s->x + 32*6, s->y - 32*3, static_cast<float>(35), static_cast<float>(29) }, TEMA::GetTexture("Slime")));
+	m_slimes.emplace_back(dynamic_cast<Slime*>(FindObject("aaa")));
 
 	//SDL_QueryTexture(TEMA::GetTexture("Spawn"), nullptr, nullptr, &w, &h);
 	//m_objects.emplace_back("Spawn", new ItemObject({ 0,0,w,h }, { s->x,s->y, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("Spawn")));
@@ -329,41 +329,34 @@ void GameState::MoveCamTo(GameObject* o)
 	}
 	o->GetDst()->x += camOffset;
 	//FindObject("Player")->GetDst()->x += camOffset;
-	//FindObject("aaa")->GetDst()->x += camOffset;
+	FindObject("aaa")->GetDst()->x += camOffset;
 }
 
 void GameState::ChangeLevel(unsigned int level)
 {
-	for (auto& m_object : m_objects)
+	// This is just findobject
+	// I added this code because you can't change the object findobject return
+	if (level >= m_levels.size() - 1)
 	{
-		if (m_object.first == "level")
+		for (auto& m_object : m_objects)
 		{
-			if (m_object.second == m_levels[level])
-				return;
-			
-			//delete m_object.second;
-			m_object.second = m_levels[level];
-			//m_object.second = nullptr;
-		}
-	}
-	m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile();
-	SDL_FRect* s = m_spawn->GetDst();
-	//auto sp = FindObject("Spawn");
-	//sp->GetDst()->x = s->x;
-	//sp->GetDst()->y = s->y;
+			if (m_object.first == "level")
+			{
+				if (m_object.second == m_levels[level])
+					return;
 
-	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
-	pp->StopX();
-	pp->StopY();
-	pp->SetX(s->x);
-	pp->SetY(s->y);
-	MoveCamTo(pp);
-	
-	//SDL_FRect* r = dynamic_cast<TiledLevel*>(FindObject("level"))->GetEndTile()->GetDst();
-	//auto t = FindObject("Trigger");
-	//t->GetDst()->x = r->x;
-	//t->GetDst()->y = r->y;
-	
-	//m_objects.emplace_back("level", m_levels[1]);
-	
+				//delete m_object.second;
+				m_object.second = m_levels[level];
+				//m_object.second = nullptr;
+			}
+		}
+		m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile();
+		SDL_FRect* s = m_spawn->GetDst();
+		PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
+		pp->StopX();
+		pp->StopY();
+		pp->SetX(s->x);
+		pp->SetY(s->y);
+		MoveCamTo(pp);
+	}
 }

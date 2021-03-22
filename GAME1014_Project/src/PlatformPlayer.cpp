@@ -170,7 +170,6 @@ void PlatformPlayer::Update()
 		m_dst.x = m_pBoundingBox.x - m_pBoundingBox.w + 3;
 	else if(!m_facingLeft)
 		m_dst.x = m_pBoundingBox.x;
-
 	
 	m_dst.y = m_pBoundingBox.y - 9;
 	
