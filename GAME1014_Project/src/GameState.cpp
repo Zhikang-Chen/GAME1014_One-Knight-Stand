@@ -273,13 +273,12 @@ void GameState::CollisionCheck()
 					break;
 				}
 			}
-			auto s = m_spawn;
-			MoveCamTo(s);
+			SDL_FRect* s = m_spawn->GetDst();
 			pp->StopX();
 			pp->StopY();
-
-			pp->SetX(s->GetDst()->x);
-			pp->SetY(s->GetDst()->y);
+			pp->SetX(s->x);
+			pp->SetY(s->y);
+			MoveCamTo(pp);
 		}
 	}
 

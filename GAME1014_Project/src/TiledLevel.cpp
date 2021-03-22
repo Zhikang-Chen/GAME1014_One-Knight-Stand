@@ -3,24 +3,6 @@
 TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int w, const int h, 
 	const char* tileData, const char* levelData, const char* tileKey) :m_rows(r), m_cols(c), m_tileKey(tileKey)
 {
-	//ifstream inFile(tileData);	
-	//if (inFile.is_open())
-	//{
-	//	char key;
-	//	int x, y;
-	//	bool obs, haz;
-	//	while (!inFile.eof())
-	//	{
-	//		inFile >> key >> x >> y >> obs >> haz;
-	//		if(key != '*')
-	//			m_tiles.emplace(key, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey) ,obs, haz));
-	//		else
-	//			m_tiles.emplace(key, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey), obs, haz, AIR));
-
-	//	}
-	//}
-	//inFile.close();
-
 	xmlDoc.LoadFile(tileData);
 	XMLNode* pRoot = xmlDoc.FirstChildElement("Data");
 	XMLElement* pElement = pRoot->FirstChildElement("Tile");
@@ -29,7 +11,7 @@ TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int
 	{
 		//It can only take one character as a key cause i don't want to deal with c string anymore
 		const char* key;
-		int x, y, obs, haz;
+		int x, y;
 		//pElement->QueryStringAttribute("key", &key);
 
 		key = pElement->Attribute("key");
@@ -38,11 +20,11 @@ TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int
 		
 		char k = key[0];
 		if(k == 'S')
-			m_tiles.emplace(k, new SpawnTile({0,0,32,32}, { 0.0f, 0.0f, (float)w, (float)h }));
+			m_tiles.emplace(k, new SpawnTile({x,y,32,32}, { 0.0f, 0.0f, (float)w, (float)h }));
 		else if(k == 'E')
-			m_tiles.emplace(k, new EndTile({ 0,0,32,32 }, { 0.0f, 0.0f, (float)w, (float)h }));
+			m_tiles.emplace(k, new EndTile({ x,y,32,32 }, { 0.0f, 0.0f, (float)w, (float)h }));
 		else if (k == 'C')
-			m_tiles.emplace(k, new CheckPointTile({32,0,32,32}, { 0.0f, 0.0f, (float)w, (float)h }));
+			m_tiles.emplace(k, new CheckPointTile({ x,y,32,32 }, { 0.0f, 0.0f, (float)w, (float)h }));
 		else if(k != '*')
 			m_tiles.emplace(k, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey), OBSTACLE));
 		else
