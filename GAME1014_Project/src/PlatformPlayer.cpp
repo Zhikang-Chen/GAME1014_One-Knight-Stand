@@ -11,7 +11,14 @@
 PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : AnimatedSpriteObject(s, d, t, 0, 0, 22, 10),
 m_state(STATE_JUMPING), m_grounded(false), m_facingLeft(false), m_secondJump(false),m_maxVelX(10.0), m_maxVelY(40.0), m_grav(GRAV), m_drag(0.85)
 {
+<<<<<<< Updated upstream
 	cout << addressof(m_dst) << endl;
+=======
+	//cout << addressof(m_dst) << endl;
+	m_pBoundingBox = SDL_FRect({m_dst.x,m_dst.y,40,60 });
+	m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x-150,m_pBoundingBox.y+5,35,50 });
+
+>>>>>>> Stashed changes
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
 	//SetAnimation(1, 8, 9); // Initialize jump animation.
 }
@@ -37,6 +44,33 @@ void PlatformPlayer::Update()
 		{
 			m_state = STATE_ATTACKING;
 			SetAnimation(5, 0, 5);
+<<<<<<< Updated upstream
+=======
+			
+			SoundManager::PlaySound("slash", 0, 0);
+		
+			//if (m_facingLeft)
+			//	m_dst.x = m_pBoundingBox.x -  3;
+			//else if (!m_facingLeft)
+			//	m_dst.x = m_pBoundingBox.x + m_pBoundingBox.w + 3;
+
+			if (m_facingLeft)
+				m_pAttackHitBox.x = m_pBoundingBox.x - m_pBoundingBox.w + 3;
+			else if (!m_facingLeft)
+				m_pAttackHitBox.x = m_pBoundingBox.x + m_pBoundingBox.w + 3;
+			m_pAttackHitBox.y = m_pBoundingBox.y;
+		}
+
+		//ADDED A BUTTON to use weapon ability
+		else if (EVMA::KeyPressed(SDL_SCANCODE_Q))
+		{
+			m_state = STATE_SPECIAL_ATTACK;
+			//SetAnimation()
+			SetAnimation(4, 23, 26);
+
+			SoundManager::PlaySound("specSlash", 0, 0);
+
+>>>>>>> Stashed changes
 		}
 		// Transition to jump.
 		else if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
@@ -126,8 +160,25 @@ void PlatformPlayer::Update()
 	m_dst.y += m_velY;
 
 
+
 	//Reset acceleration
 	m_accelX = m_accelY = 0.0; //Similar to a keyup event
+<<<<<<< Updated upstream
+=======
+
+	// For some reason when the player face left dst is 3 pixel off
+	// No idea what cause it but it does cause problem
+	if (m_facingLeft)
+		m_dst.x = m_pBoundingBox.x - m_pBoundingBox.w + 3;
+	else if(!m_facingLeft)
+		m_dst.x = m_pBoundingBox.x;
+
+	
+	m_dst.y = m_pBoundingBox.y - 9;
+
+	// ----
+	
+>>>>>>> Stashed changes
 	this->Animate();
 }
 
@@ -135,8 +186,18 @@ void PlatformPlayer::Render()
 {
 	if (m_showHitbox)
 	{
+<<<<<<< Updated upstream
 		SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 0, 0, 255);
 		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_dst);
+=======
+		//SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 0, 0, 255);
+		//SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_dst);
+		SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 255, 0, 255);
+		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_pBoundingBox);
+
+		SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 255, 255);
+		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_pAttackHitBox);
+>>>>>>> Stashed changes
 	}
 	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, &m_src, &m_dst, m_angle, 0, m_facingLeft?SDL_FLIP_HORIZONTAL:SDL_FLIP_NONE);
 }
@@ -152,6 +213,15 @@ void PlatformPlayer::Stop()
 	StopY();
 }
 
+<<<<<<< Updated upstream
+=======
+PlayerState PlatformPlayer::GetState() { return m_state; }
+
+SDL_FRect* PlatformPlayer::GetBoundingBox() { return &m_pBoundingBox; }
+
+SDL_FRect* PlatformPlayer::GetAttackHitBox() { return &m_pAttackHitBox; }
+
+>>>>>>> Stashed changes
 void PlatformPlayer::StopX() { m_velX = 0.0; }
 
 void PlatformPlayer::StopY() { m_velY = 0.0; }

@@ -11,6 +11,11 @@ PauseState::PauseState()
 
 void PauseState::Enter()
 {
+<<<<<<< Updated upstream
+=======
+	m_pBackground = new SDL_FRect({ 0, 0, (float)WIDTH, (float)HEIGHT });
+	SOMA::Load("../GAME1017_Template_W01/Aud/mendelssohn_songs_without_words_opus_38_5.mp3", "Pause", SOUND_MUSIC);
+>>>>>>> Stashed changes
 	//Testing music remove later
 	SOMA::SetMusicVolume(8);
 	SOMA::PlayMusic("Pause");
@@ -48,7 +53,11 @@ void PauseState::Render()
 	//SDL_RenderClear(Engine::Instance().GetRenderer());
 	SDL_SetRenderDrawBlendMode(Engine::Instance().GetRenderer(), SDL_BLENDMODE_BLEND);
 	//SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &SDL_FRect({ 0, 0, (float)WIDTH, (float)HEIGHT }));
+<<<<<<< Updated upstream
 	
+=======
+	SDL_RenderFillRectF(Engine::Instance().GetRenderer(), m_pBackground);
+>>>>>>> Stashed changes
 	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
 		i->second->Render();
 

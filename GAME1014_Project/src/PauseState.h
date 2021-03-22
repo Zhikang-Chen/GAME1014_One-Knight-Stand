@@ -18,7 +18,7 @@ private:
 
 	BoolButton* m_pbutton;
 	//SpriteObject* m_pBackground;
-	
+	SDL_FRect* m_pBackground;
 };
 
 #endif
