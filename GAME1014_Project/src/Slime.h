@@ -18,6 +18,7 @@ public:
 	void Render();
 	void AttackPattern();
 	void faceDir(bool f);
+	
 };
 
 #endif

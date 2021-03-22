@@ -44,10 +44,12 @@ public:
 	// Too much work to remove GetBoundingBox so it will stay
 	SDL_FRect* GetDst() { return &m_pBoundingBox; }
 	SDL_FRect* GetBoundingBox();
+	SDL_FRect* GetAttackHitBox();
 
 private:
 	// Private member
 	SDL_FRect m_pBoundingBox;
+	SDL_FRect m_pAttackHitBox;
 	bool m_grounded; //In most platforming games, the player actually starts in the air
 	bool m_alive; //Game runs while player is alive, shows black screen when dead.
 	bool m_facingLeft;

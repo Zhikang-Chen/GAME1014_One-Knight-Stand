@@ -5,6 +5,8 @@ Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Texture* t, int sstart, int smin, int 
 m_grounded(false), m_maxVelX(10.0), m_maxVelY(40.0), m_grav(GRAV), m_drag(0.85), m_health(1)
 {
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
+	m_maxHealth = m_health = 2;
+
 }
 
 void Enemy::Stop()
@@ -57,3 +59,12 @@ void Enemy::Update()
 void Enemy::Render() {}
 
 void Enemy::LoseHealth() { m_health -= 1; } //Send the player's weapon damage in as argument
+
+int Enemy::GetHeath() { return m_health; }
+
+int Enemy::GetMaxHealth() { return m_maxHealth; }
+
+void Enemy::SetHeath(int h) { m_health = h; }
+
+void Enemy::SetMaxHealth(int h) { m_maxHealth = h; }
+

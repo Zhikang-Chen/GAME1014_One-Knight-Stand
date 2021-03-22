@@ -14,7 +14,9 @@ protected:
 	* but I don't think it makes sense to make Enemy a child of PlatformPlayer so here we are*/
 	bool m_grounded;
 	bool m_facingLeft = false;
+	bool m_alive;
 	int m_health;
+	int m_maxHealth;
 	float m_accelX, //Acceleration on the X axis, horizontal force
 		m_accelY,//Acceleration on the Y axis, vertical force
 		m_velX, //Velocity for X 
@@ -40,7 +42,11 @@ public:
 	void Update();
 	void Render();
 	void LoseHealth();
-
+	int GetHeath();
+	int GetMaxHealth();
+	void SetHeath(int h);
+	void SetMaxHealth(int h);
+	
 };
 
 

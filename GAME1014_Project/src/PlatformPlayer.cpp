@@ -12,6 +12,7 @@ m_state(STATE_IDLING), m_grounded(false), m_facingLeft(false), m_secondJump(fals
 {
 	//cout << addressof(m_dst) << endl;
 	m_pBoundingBox = SDL_FRect({m_dst.x,m_dst.y,40,60 });
+
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
 	m_curHealth = m_maxHealth = 5;
 	SetAnimation(9, 13, 21);
@@ -46,11 +47,19 @@ void PlatformPlayer::Update()
 		{
 			m_state = STATE_ATTACKING;
 			SetAnimation(5, 0, 5);
-			
-			SoundManager::PlaySound("slash", 0, 0);
-		
-		}
+			if(m_spriteMax == 5)
+			{
+				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x - 150,m_pBoundingBox.y + 5,35,50 });
 
+			}
+			SoundManager::PlaySound("slash", 0, 0);
+
+			if (m_facingLeft)
+				m_pAttackHitBox.x = m_pBoundingBox.x - m_pBoundingBox.w + 3;
+			else if (!m_facingLeft)
+				m_pAttackHitBox.x = m_pBoundingBox.x + m_pBoundingBox.w + 3;
+			m_pAttackHitBox.y = m_pBoundingBox.y;
+		}
 		//ADDED A BUTTON to use weapon ability
 		else if (EVMA::KeyPressed(SDL_SCANCODE_Q))
 		{
@@ -132,6 +141,8 @@ void PlatformPlayer::Update()
 		{
 			m_state = STATE_IDLING;
 			SetAnimation(9, 13, 22);
+			m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x - 150,m_pBoundingBox.y + 5,0,0});
+
 		}
 		break;
 
@@ -170,6 +181,7 @@ void PlatformPlayer::Update()
 		m_dst.x = m_pBoundingBox.x - m_pBoundingBox.w + 3;
 	else if(!m_facingLeft)
 		m_dst.x = m_pBoundingBox.x;
+
 	
 	m_dst.y = m_pBoundingBox.y - 9;
 	
@@ -184,6 +196,8 @@ void PlatformPlayer::Render()
 		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_dst);
 		SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 255, 0, 255);
 		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_pBoundingBox);
+		SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 255, 255);
+		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_pAttackHitBox);
 	}
 	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, &m_src, &m_dst, m_angle, 0, m_facingLeft?SDL_FLIP_HORIZONTAL:SDL_FLIP_NONE);
 }
@@ -202,6 +216,8 @@ void PlatformPlayer::Stop()
 PlayerState PlatformPlayer::GetState() { return m_state; }
 
 SDL_FRect* PlatformPlayer::GetBoundingBox() { return &m_pBoundingBox; }
+
+SDL_FRect* PlatformPlayer::GetAttackHitBox() { return &m_pAttackHitBox; }
 
 void PlatformPlayer::StopX() { m_velX = 0.0; }
 

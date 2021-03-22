@@ -4,12 +4,22 @@
 
 Slime::Slime(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : Enemy(s, d, t, 0, 0, 1, 1)
 {
-	m_maxHealth = m_health = 1;
+	m_maxHealth = m_health = 5;
 	m_jumpTimer = 0;
 }
 
 void Slime::Update()
 {
+	//m_jumpTimer++;
+	//if(m_jumpTimer >= 120)
+	//{
+	//	m_jumpTimer = 0;
+	//	if(m_facingLeft)
+	//		m_accelX = 30.0f;
+	//	else
+	//		m_accelX = -30.0f;
+	//	m_accelY = -JUMPFORCE; // SetAccelY(-JUMPFORCE);
+	//}
 	
 	//m_accelY = -JUMPFORCE;
 	// x axis
@@ -27,7 +37,7 @@ void Slime::Update()
 
 	//Reset acceleration
 	m_accelX = m_accelY = 0.0; //Similar to a keyup event
-	AttackPattern();
+
 }
 
 void Slime::Render()
@@ -43,14 +53,4 @@ void Slime::faceDir(bool f)
 
 void Slime::AttackPattern()
 {
-	m_jumpTimer++;
-	if (m_jumpTimer >= 40)
-	{
-		m_jumpTimer = 0;
-		if (m_facingLeft)
-			m_accelX = 30.0f;
-		else
-			m_accelX = -30.0f;
-		m_accelY = -JUMPFORCE; // SetAccelY(-JUMPFORCE);
-	}
 }
