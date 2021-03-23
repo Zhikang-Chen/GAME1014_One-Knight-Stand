@@ -17,22 +17,12 @@ void GameState::Enter()
 	SDL_QueryTexture(TEMA::GetTexture("Background_1"), nullptr, nullptr, &w, &h);
 	m_objects.emplace_back("Background", new Background({ 0,0,static_cast<int>(w),static_cast<int>(h) }, { 0,0, static_cast<float>(w) * 5, static_cast<float>(h) * 5 }, TEMA::GetTexture("Background_1")));
 
-	//Ui test and i am not sorry for typing those
-	//Remove when beta
-	m_objects.emplace_back("Label", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 20, "UWU? What's dis", { 0,0,0,0 }));
-	m_objects.emplace_back("Label2", new Label("Minecraft", WIDTH / 2, HEIGHT / 2 + 40, "I am your cute UI GF", { 0,0,0,0 }));
-	
+	//Register Textures
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_ALL_ANIMATION-Sheet.png", "Knight");
-	
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordskill.png", "SwordSkill1");
-
-	//Slime register texture
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Slime.png", "Slime");
-
-
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heartempty.png", "EmptyHeart");
-
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/spawn.png", "Spawn");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Sign_End.png", "End");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/on off.png", "On off");
@@ -41,6 +31,25 @@ void GameState::Enter()
 	m_levels.push_back(new TiledLevel(24, 200, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
 	m_levels.push_back(new TiledLevel(24, 48, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
 
+	//UI INTERFACE
+	m_objects.emplace_back("Label3", new Label("Minecraft", 28, 645, "J", { 0,0,0,0 }));
+	m_objects.emplace_back("Label4", new Label("Minecraft", 148, 645, "K", { 0,0,0,0 }));
+	m_objects.emplace_back("HealthLabel", new Label("Minecraft", 20, 20, "Health", { 0,0,0,0 }));
+	m_objects.emplace_back("InstructionLabel1", new Label("Minecraft", 800, 20, "Press Esc to exit game", { 0,0,0,0 }));
+	m_objects.emplace_back("InstructionLabel2", new Label("Minecraft", 800, 40, "Press P to pause game", { 0,0,0,0 }));
+
+
+	//UI Icons
+	SDL_QueryTexture(TEMA::GetTexture("SwordAttack"), nullptr, nullptr, &w, &h);
+	m_pSwordAttack = new SwordSkill({ 0,0,w,h }, { 10,595, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("SwordAttack"));
+	m_UIObject.emplace_back("SwordSkill1", m_pSwordAttack);
+
+	SDL_QueryTexture(TEMA::GetTexture("SwordSkill1"), nullptr, nullptr, &w, &h);
+	m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 10,595, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("SwordSkill1"));
+	m_UIObject.emplace_back("SwordSkill1", m_pSwordSkill1);
+
+
+	//First Level
 	m_currLevel = 0;
 	m_objects.emplace_back("level", m_levels[0]);
 
@@ -72,12 +81,9 @@ void GameState::Enter()
 		Hearts.push_back(he);
 		m_UIObject.emplace_back("HeartBar" + i, he);
 	}
-	m_objects.emplace_back("Label3", new Label("Minecraft", 28, 645, "Q", { 0,0,0,0 }));
-	m_objects.emplace_back("Label4", new Label("Minecraft", 148, 645, "J", { 0,0,0,0 }));
 
-	SDL_QueryTexture(TEMA::GetTexture("SwordSkill1"), nullptr, nullptr, &w, &h);
-	m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 10,595, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("SwordSkill1"));
-	m_UIObject.emplace_back("SwordSkill1", m_pSwordSkill1);
+
+
 
 	std::cout << "Entering GameState..." << std::endl;
 
@@ -251,18 +257,18 @@ void GameState::CollisionCheck()
 
 	// Heal the player
 	// Remove at beta
-	if(EVMA::KeyPressed(SDL_SCANCODE_EQUALS) && pp->GetHeath() != pp->GetMaxHealth())
-	{
-		pp->SetHeath(pp->GetHeath() + 1);
-		for (auto i = 0; i < Hearts.size() ; ++i)
-		{
-			if (Hearts[i]->GetEmpty())
-			{
-				Hearts[i]->SetEmpty(false);
-				break;
-			}
-		}
-	}
+	//if(EVMA::KeyPressed(SDL_SCANCODE_EQUALS) && pp->GetHeath() != pp->GetMaxHealth())
+	//{
+	//	pp->SetHeath(pp->GetHeath() + 1);
+	//	for (auto i = 0; i < Hearts.size() ; ++i)
+	//	{
+	//		if (Hearts[i]->GetEmpty())
+	//		{
+	//			Hearts[i]->SetEmpty(false);
+	//			break;
+	//		}
+	//	}
+	//}
 	//Player and slime collision
 	for (auto i = 0; i < m_slimes.size(); i++)
 	{
@@ -287,6 +293,7 @@ void GameState::CollisionCheck()
 			pp->SetY(s->GetDst()->y);
 		}
 		//SDL_FRect* slimes = m_slimes[i]->GetDst();
+		//Attack Collision with Enemies
 		if (COMA::AABBCheck(*attackbox, *s))
 		{
 			m_slimes[i]->LoseHealth();

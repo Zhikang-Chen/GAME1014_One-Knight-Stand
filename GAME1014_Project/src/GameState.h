@@ -2,17 +2,6 @@
 #ifndef _GAMESTATE_H_
 #define _GAMESTATE_H_
 
-//┬──┬ ノ(゜ - ゜ノ) on Urban Dictionary
-//He is conflicted to flip the table.
-//He stares endlessly into the table's polished wood.
-//He gazes upon the earth in wonderment.
-//He throws caution to the wind and grabs it by its side. But then he stops.
-//He looks at the floor surrounding him.
-//"Someone stayed and worked on this table for hours on end, and my rage should be its undoing?"
-//His thoughts drown him as he continues to stare at the table
-//
-//is ┬──┬ ノ(゜ - ゜ノ) home ?
-
 #include "States.h"
 #include "CollisionManager.h"
 #include "Engine.h"
@@ -43,6 +32,7 @@ public:
 
 private:
 	SwordSkill* m_pSwordSkill1;
+	SwordSkill* m_pSwordAttack;
 	vector<Heart*> Hearts;
 	vector<Slime*> m_slimes;
 

@@ -61,7 +61,7 @@ void PlatformPlayer::Update()
 			m_pAttackHitBox.y = m_pBoundingBox.y;
 		}
 		//ADDED A BUTTON to use weapon ability
-		else if (EVMA::KeyPressed(SDL_SCANCODE_Q))
+		else if (EVMA::KeyPressed(SDL_SCANCODE_K))
 		{
 			m_state = STATE_SPECIAL_ATTACK;
 			//SetAnimation()
@@ -148,7 +148,7 @@ void PlatformPlayer::Update()
 
 	case STATE_SPECIAL_ATTACK:
 		
-		if (!EVMA::KeyHeld(SDL_SCANCODE_Q))
+		if (!EVMA::KeyHeld(SDL_SCANCODE_K))
 		{
 			m_state = STATE_IDLING;
 			SetAnimation(9, 13, 22);

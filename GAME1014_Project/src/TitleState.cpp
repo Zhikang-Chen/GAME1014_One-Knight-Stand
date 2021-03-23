@@ -14,14 +14,14 @@ void TitleState::Enter()
 	m_pBackground = new Background({ 0,0,(int)w,(int)h }, {0,0, (float)w*5, (float)h*5 }, TEMA::GetTexture("Background_1"));
 	m_objects.emplace_back("Background", m_pBackground);
 	
-	m_pSubTitle = new Label("Minecraft",WIDTH / 20, HEIGHT / 7, "Insert sub title here", { 0,0,0,0 });
+	m_pSubTitle = new Label("Minecraft",WIDTH / 20, HEIGHT / 7, "Developed by OPRON", { 0,0,0,0 });
 	m_objects.emplace_back("Subtitle", m_pSubTitle);
 	
 	m_pTitle = new Label("Genshi_font", WIDTH / 25, HEIGHT / 27, "One Knight Stand", { 0,0,0,0 });
 	m_objects.emplace_back("Title", m_pTitle);
 
-	something = new Label("Minecraft", WIDTH /25, HEIGHT - 50, "I made the button but you can still use 'n' because I am too lazy to remove it", { 0,0,0,0 });
-	m_objects.emplace_back("idk", something);
+	m_pInstruction = new Label("Minecraft", WIDTH /25, HEIGHT - 50, "You can also press N to start the game", { 0,0,0,0 });
+	m_objects.emplace_back("Instruction", m_pInstruction);
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/p.png", "Play");
 	SDL_QueryTexture(TEMA::GetTexture("Play"), nullptr, nullptr, &w, &h);

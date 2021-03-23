@@ -25,7 +25,7 @@ public:
 private:
 	Label* m_pTitle;
 	Label *m_pSubTitle;
-	Label* something;
+	Label* m_pInstruction;
 
 	BoolButton* b;
 	
