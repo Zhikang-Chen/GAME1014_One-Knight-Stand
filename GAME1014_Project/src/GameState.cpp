@@ -1,4 +1,7 @@
 ﻿// Begin GameState
+#include <ctime>
+#include <cstdlib>
+
 #include "GameState.h"
 
 #include "EndState.h"
@@ -28,6 +31,8 @@ void GameState::Enter()
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Sign_End.png", "End");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/on off.png", "On off");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tileset.png", "tiles");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Potion.png", "Potion");
+
 	
 	m_levels.push_back(new TiledLevel(24, 200, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
 	m_levels.push_back(new TiledLevel(24, 48, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
@@ -100,6 +105,9 @@ void GameState::Enter()
 
 void GameState::Update()
 {
+	//Random seed generation here
+	srand((unsigned) time(NULL));
+
 	MoveCamTo(FindObject("Player"));
 	for (auto& m_object : m_objects)
 		m_object.second->Update();
@@ -302,12 +310,36 @@ void GameState::CollisionCheck()
 			m_slimes[i]->LoseHealth();
 			if (m_slimes[i]->GetHeath() == 0)
 			{
+				if (m_slimes[i]->dropTable(rand() % 100) == true)
+				{
+					m_objects.emplace_back("Potion", new Potion({ 0, 0, 32, 32 }, { m_slimes[i]->GetDst()->x, m_slimes[i]->GetDst()->y, static_cast<float>(32), static_cast<float>(32) }, TEMA::GetTexture("Slime")));
+					m_potions.emplace_back(dynamic_cast<Potion*>(FindObject("Potion")));
+				}
 				m_slimes.erase(m_slimes.begin() + i);
 				m_slimes.shrink_to_fit();
-				
 			}
 			cout << "Sword hits slimes" << endl;
 		}
+	}
+
+	for (auto i = 0; i < m_potions.size(); i++)
+	{
+		SDL_FRect* ip = m_potions[i]->GetDst();
+		if (COMA::AABBCheck(*ip, *p))
+		{
+			pp->SetHeath(pp->GetHeath() + 1);
+			for (auto i2 = Hearts.size() - 1; i2 > 0; --i2)
+			{
+				if (Hearts[i2]->GetEmpty())
+				{
+					Hearts[i2]->SetEmpty(false);
+					break;
+				}
+			}
+			m_potions.erase(m_potions.begin() + i);
+			m_potions.shrink_to_fit();
+		}
+		cout << "Collect potion" << endl;
 	}
 	
 	// This has to be at the end because of ChangeState
@@ -358,6 +390,13 @@ void GameState::MoveCamTo(GameObject* o)
 	//FindObject("Player")->GetDst()->x += camOffset;
 	FindObject("aaa")->GetDst()->x += camOffset;
 	FindObject("penIsland")->GetDst()->x += camOffset;
+	if (m_potions.size() > 0)
+	{
+		for (int i = 0; i < m_potions.size(); i++)
+		{
+			FindObject("Potion")->GetDst()->x += camOffset;
+		}
+	}
 }
 
 void GameState::ChangeLevel(unsigned int level)

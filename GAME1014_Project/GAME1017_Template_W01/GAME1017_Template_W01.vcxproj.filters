@@ -109,6 +109,9 @@
     <ClCompile Include="..\src\Slime.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Potion.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -198,6 +201,9 @@
     <ClInclude Include="..\src\Slime.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Potion.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Dat\Level1.txt">
@@ -217,6 +223,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Img\Slime.png">
+      <Filter>Game Objects</Filter>
+    </Image>
+    <Image Include="Img\Potion.png">
       <Filter>Game Objects</Filter>
     </Image>
   </ItemGroup>

@@ -50,7 +50,13 @@ void Slime::faceDir(bool f)
 	m_facingLeft = f;
 }
 
-
-void Slime::AttackPattern()
+//If we have more items, we'd change this to an int and it'd return different numbers based on the drops
+bool Slime::dropTable(int r)
 {
+	//Drops a potion
+	/*if (r > 39)*/
+		return true;
+	//Doesn't drop a potion
+	/*else
+		return false;*/
 }

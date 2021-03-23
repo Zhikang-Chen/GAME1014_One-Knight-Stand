@@ -79,6 +79,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\Users\gnief\Desktop\GitHub\GAME1014_One-Knight-Stand\GAME1014_Project\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -135,6 +136,7 @@
     <ClCompile Include="..\src\MathManager.cpp" />
     <ClCompile Include="..\src\PauseState.cpp" />
     <ClCompile Include="..\src\PlatformPlayer.cpp" />
+    <ClCompile Include="..\src\Potion.cpp" />
     <ClCompile Include="..\src\Slime.cpp" />
     <ClCompile Include="..\src\SoundManager.cpp" />
     <ClCompile Include="..\src\StateManager.cpp" />
@@ -164,6 +166,7 @@
     <ClInclude Include="..\src\MathManager.h" />
     <ClInclude Include="..\src\PauseState.h" />
     <ClInclude Include="..\src\PlatformPlayer.h" />
+    <ClInclude Include="..\src\Potion.h" />
     <ClInclude Include="..\src\Slime.h" />
     <ClInclude Include="..\src\SoundManager.h" />
     <ClInclude Include="..\src\SpriteObject.h" />
@@ -186,6 +189,7 @@
     <Xml Include="Dat\TileData.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Img\Potion.png" />
     <Image Include="Img\Slime.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
