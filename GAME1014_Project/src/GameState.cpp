@@ -27,7 +27,7 @@ void GameState::Enter()
 
 	//Slime register texture
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Slime.png", "Slime");
-
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Circle.png", "Project");
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heartempty.png", "EmptyHeart");
@@ -70,6 +70,13 @@ void GameState::Enter()
 	m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 10,595, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("SwordSkill1"));
 	m_UIObject.emplace_back("SwordSkill1", m_pSwordSkill1);
 
+	SDL_QueryTexture(TEMA::GetTexture("Project"), nullptr, nullptr, &w, &h);
+	for (auto i = 0; i < dynamic_cast<PlatformPlayer*>(FindObject("Player"))->GetHeath(); i++)
+	{
+	    auto* he = new Projectile({ 0,0,w,h }, { 10,595, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("Project"));
+		m_Project.push_back(he);
+		m_UIObject.emplace_back("Project" + i, he);
+	}
 	std::cout << "Entering GameState..." << std::endl;
 
 

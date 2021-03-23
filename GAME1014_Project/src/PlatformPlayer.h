@@ -5,7 +5,9 @@
 #define JUMPFORCE 40.0; //Acceleration
 #include "SpriteObject.h"
 #include "WeaponObject.h"
-
+#include "SwordSkill.h"
+#include <vector>
+#include "ItemObject.h"
 enum PlayerState {STATE_IDLING, STATE_RUNNING, STATE_JUMPING, STATE_ATTACKING, STATE_SPECIAL_ATTACK};
 
 class PlatformPlayer : public AnimatedSpriteObject

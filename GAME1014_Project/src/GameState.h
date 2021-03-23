@@ -41,6 +41,7 @@ public:
 
 private:
 	SwordSkill* m_pSwordSkill1;
+	vector<Projectile*> m_Project;
 	vector<Heart*> Hearts;
 	vector<Slime*> m_slimes;
 	std::vector<std::pair<std::string, GameObject*>> m_UIObject; //Almost the same as m_objecst but those wont move with the camera

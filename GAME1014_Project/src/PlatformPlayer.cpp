@@ -3,7 +3,7 @@
 #include "Engine.h"
 #include "EventManager.h"
 #include "SoundManager.h"
-
+#include "SwordSkill.h"
 //For some reason m_maxVelY can't take JUMPFORCE
 //Will fix someday
 
@@ -178,6 +178,7 @@ void PlatformPlayer::Render()
 		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_pBoundingBox);
 	}
 	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, &m_src, &m_dst, m_angle, 0, m_facingLeft?SDL_FLIP_HORIZONTAL:SDL_FLIP_NONE);
+	
 }
 
 void PlatformPlayer::ShowHitbox()
