@@ -123,7 +123,7 @@ void CheckPointTile::Activate()
 	{
 		cout << "check" << endl;
 		m_activate = true;
-		m_src.x = 0;
+		m_src.x = 32;
 	}
 }
 
