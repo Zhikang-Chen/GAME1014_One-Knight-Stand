@@ -20,6 +20,7 @@ void GameState::Enter()
 	//Register Textures
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_ALL_ANIMATION-Sheet.png", "Knight");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordskill.png", "SwordSkill1");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordAttack.png", "SwordAttack");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Slime.png", "Slime");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heartempty.png", "EmptyHeart");
@@ -33,19 +34,22 @@ void GameState::Enter()
 
 	//UI INTERFACE
 	m_objects.emplace_back("Label3", new Label("Minecraft", 28, 645, "J", { 0,0,0,0 }));
-	m_objects.emplace_back("Label4", new Label("Minecraft", 148, 645, "K", { 0,0,0,0 }));
+	m_objects.emplace_back("Label4", new Label("Minecraft", 90, 645, "K", { 0,0,0,0 }));
 	m_objects.emplace_back("HealthLabel", new Label("Minecraft", 20, 20, "Health", { 0,0,0,0 }));
 	m_objects.emplace_back("InstructionLabel1", new Label("Minecraft", 800, 20, "Press Esc to exit game", { 0,0,0,0 }));
 	m_objects.emplace_back("InstructionLabel2", new Label("Minecraft", 800, 40, "Press P to pause game", { 0,0,0,0 }));
+	m_objects.emplace_back("InstructionLabel3", new Label("Minecraft", 800, 60, "Press Space to Jump", { 0,0,0,0 }));
+	m_objects.emplace_back("InstructionLabel4", new Label("Minecraft", 800, 80, "Press J to Attack", { 0,0,0,0 }));
+	m_objects.emplace_back("InstructionLabel5", new Label("Minecraft", 800, 100, "Press K to use Special", { 0,0,0,0 }));
 
 
 	//UI Icons
 	SDL_QueryTexture(TEMA::GetTexture("SwordAttack"), nullptr, nullptr, &w, &h);
 	m_pSwordAttack = new SwordSkill({ 0,0,w,h }, { 10,595, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("SwordAttack"));
-	m_UIObject.emplace_back("SwordSkill1", m_pSwordAttack);
+	m_UIObject.emplace_back("SwordAttack", m_pSwordAttack);
 
 	SDL_QueryTexture(TEMA::GetTexture("SwordSkill1"), nullptr, nullptr, &w, &h);
-	m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 10,595, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("SwordSkill1"));
+	m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 70,595, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("SwordSkill1"));
 	m_UIObject.emplace_back("SwordSkill1", m_pSwordSkill1);
 
 
