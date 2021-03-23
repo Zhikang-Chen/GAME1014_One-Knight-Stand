@@ -72,7 +72,7 @@ void GameState::Enter()
 
 	SDL_QueryTexture(TEMA::GetTexture("Project"), nullptr, nullptr, &w, &h);
 	m_objects.emplace_back("pj",new Projectile({ 0,0,w,h }, { 10,595, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("Project")));	
-	m_slimes.emplace_back(dynamic_cast<Slime*>(FindObject("pj")));
+	m_Project.emplace_back(dynamic_cast<Projectile*>(FindObject("pj")));
 	
 	std::cout << "Entering GameState..." << std::endl;
 

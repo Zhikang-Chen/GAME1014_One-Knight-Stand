@@ -37,12 +37,8 @@ void Projectile::Render()
 	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), TEMA::GetTexture("Project"), GetSrc(), GetDst(), m_angle, 0, m_facing ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 void Projectile::SetAccelX(double a) { m_accelX = a; }
-
 void Projectile::SetAccelY(double a) { m_accelY = a; }
 float Projectile::GetVelX() { return m_velX; }
-
 float Projectile::GetVelY() { return m_velY; }
-
 void Projectile::SetX(float x) { this->GetDst()->x = x; }
-
 void Projectile::SetY(float y) { this->GetDst()->y = y; }
