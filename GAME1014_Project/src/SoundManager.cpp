@@ -98,7 +98,7 @@ void SoundManager::ResumeMusic()
 
 void SoundManager::PlaySound(const std::string& id, const int loop/* = 0 */, const int channel/* = -1 */)
 {
-	if (channel != -1 && !Mix_Playing(channel))
+	if (!Mix_Playing(channel))
 	{
 		if (Mix_PlayChannel(channel, s_sfxs[id], loop) == -1)
 		{

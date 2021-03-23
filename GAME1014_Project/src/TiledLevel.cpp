@@ -118,8 +118,12 @@ TiledLevel::~TiledLevel()
 
 void TiledLevel::Render()
 {
+	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 255, 255, 255);
 	for (auto& enemy : m_enemy)
+	{
+		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), enemy->GetDst());
 		enemy->Render();
+	}
 	for (auto tile : m_visibleTile)
 		tile->Render();
 	

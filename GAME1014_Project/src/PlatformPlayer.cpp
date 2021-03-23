@@ -40,25 +40,12 @@ void PlatformPlayer::Update()
 		{
 			m_state = STATE_RUNNING;
 			SetAnimation(6, 6, 12); // , 256
-
-
 		}
-		else if (EVMA::KeyPressed(SDL_SCANCODE_J))
+		else if (EVMA::KeyPressed(SDL_SCANCODE_J) || EVMA::MousePressed(1))
 		{
 			m_state = STATE_ATTACKING;
 			SetAnimation(5, 0, 5);
-			if(m_spriteMax == 5)
-			{
-				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x - 150,m_pBoundingBox.y + 5,35,50 });
-
-			}
 			SoundManager::PlaySound("slash", 0, 0);
-
-			if (m_facingLeft)
-				m_pAttackHitBox.x = m_pBoundingBox.x - m_pBoundingBox.w + 3;
-			else if (!m_facingLeft)
-				m_pAttackHitBox.x = m_pBoundingBox.x + m_pBoundingBox.w + 3;
-			m_pAttackHitBox.y = m_pBoundingBox.y;
 		}
 		//ADDED A BUTTON to use weapon ability
 		else if (EVMA::KeyPressed(SDL_SCANCODE_K))
@@ -95,6 +82,13 @@ void PlatformPlayer::Update()
 			if (m_facingLeft)
 				m_facingLeft = false;
 		}
+		
+		if (EVMA::KeyPressed(SDL_SCANCODE_J) || EVMA::MousePressed(1))
+		{
+			m_state = STATE_ATTACKING;
+			SetAnimation(5, 0, 5);
+			SoundManager::PlaySound("slash", 0, 0);
+		}
 		// Transition to jump.
 		if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
 		{
@@ -126,24 +120,58 @@ void PlatformPlayer::Update()
 			if (m_facingLeft)
 				m_facingLeft = false;
 		}
+		
+		if (EVMA::KeyPressed(SDL_SCANCODE_J) || EVMA::MousePressed(1))
+		{
+			m_state = STATE_ATTACKING;
+			SetAnimation(5, 0, 5);
+			SoundManager::PlaySound("slash", 0, 0);
+		}
+		
 		// Hit the ground, transition to run.
 		if (m_grounded)
 		{
 			m_state = STATE_RUNNING;
+			SetAnimation(6, 6, 12); // , 256
 			//SetAnimation(3, 0, 8, 256);
 		}
 		break;
 
 	case STATE_ATTACKING:
-		// The best way to fix this is frame counter.
-		// I am too lazy to make it
-		if (!EVMA::KeyHeld(SDL_SCANCODE_A) && !EVMA::KeyHeld(SDL_SCANCODE_D) && !EVMA::KeyDown(SDL_SCANCODE_J))
+
+
+		m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x - 150,m_pBoundingBox.y + 5,35,50 });
+		
+		if (m_facingLeft)
+			m_pAttackHitBox.x = m_pBoundingBox.x - m_pBoundingBox.w + 3;
+		else if (!m_facingLeft)
+			m_pAttackHitBox.x = m_pBoundingBox.x + m_pBoundingBox.w + 3;
+		m_pAttackHitBox.y = m_pBoundingBox.y;
+		
+		if (m_sprite == m_frameMax/2)
+		{
+			if (EVMA::KeyHeld(SDL_SCANCODE_A) || EVMA::KeyHeld(SDL_SCANCODE_D))
+			{
+				m_state = STATE_RUNNING;
+				SetAnimation(9, 13, 22);
+				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
+
+			}
+
+			if (EVMA::KeyPressed(SDL_SCANCODE_SPACE))
+			{
+				m_state = STATE_JUMPING;
+				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
+			}
+		}
+		
+		if(m_sprite == m_frameMax)
 		{
 			m_state = STATE_IDLING;
+			m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
 			SetAnimation(9, 13, 22);
-			m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x - 150,m_pBoundingBox.y + 5,0,0});
-
 		}
+		
 		break;
 
 	case STATE_SPECIAL_ATTACK:
@@ -153,7 +181,6 @@ void PlatformPlayer::Update()
 			m_state = STATE_IDLING;
 			SetAnimation(9, 13, 22);
 		}
-
 	}
 
 	
