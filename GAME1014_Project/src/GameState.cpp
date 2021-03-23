@@ -80,6 +80,7 @@ void GameState::Enter()
 	//Load and play the game music
 	SoundManager::Load("Aud/TownTheme.mp3", "gameLevel1", SOUND_MUSIC);
 	SoundManager::PlayMusic("gameLevel1", -1);
+	//SoundManager::Load("Aud/slime_movement.wav", "bounce", SOUND_SFX);
 	//SoundManager::SetMusicVolume(16);
 	std::cout << "Entering GameState..." << std::endl;
 }
@@ -289,6 +290,8 @@ void GameState::CollisionCheck()
 				delete enemies[i];
 				enemies.erase(enemies.begin() + i);
 				enemies.shrink_to_fit();
+				//SoundManager::PlaySound("bounce", 0, 0);
+				//SoundManager::SetSoundVolume(15);
 				
 			}
 			cout << "Sword hits slimes" << endl;
