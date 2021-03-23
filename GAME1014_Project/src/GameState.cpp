@@ -5,7 +5,7 @@
 #include "PauseState.h"
 #include "TiledLevel.h"
 #include "Slime.h"
-
+#include "SwordSkill.h"
 #include "SoundManager.h"
 GameState::GameState() {}
 
@@ -71,12 +71,9 @@ void GameState::Enter()
 	m_UIObject.emplace_back("SwordSkill1", m_pSwordSkill1);
 
 	SDL_QueryTexture(TEMA::GetTexture("Project"), nullptr, nullptr, &w, &h);
-	for (auto i = 0; i < dynamic_cast<PlatformPlayer*>(FindObject("Player"))->GetHeath(); i++)
-	{
-	    auto* he = new Projectile({ 0,0,w,h }, { 10,595, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("Project"));
-		m_Project.push_back(he);
-		m_UIObject.emplace_back("Project" + i, he);
-	}
+	m_objects.emplace_back("pj",new Projectile({ 0,0,w,h }, { 10,595, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("Project")));	
+	m_slimes.emplace_back(dynamic_cast<Slime*>(FindObject("pj")));
+	
 	std::cout << "Entering GameState..." << std::endl;
 
 
