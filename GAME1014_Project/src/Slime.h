@@ -16,6 +16,7 @@ public:
 	Slime(SDL_Rect s, SDL_FRect d);
 	void Update();
 	void Render();
+	virtual void AttackPattern();
 	
 };
 

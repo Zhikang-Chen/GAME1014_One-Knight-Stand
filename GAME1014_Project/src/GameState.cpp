@@ -72,11 +72,6 @@ void GameState::Enter()
 		m_UIObject.emplace_back("HeartBar" + i, he);
 	}
 
-
-
-
-
-
 	//Load and play the game music
 	SoundManager::Load("Aud/TownTheme.mp3", "gameLevel1", SOUND_MUSIC);
 	SoundManager::PlayMusic("gameLevel1", -1);
@@ -154,7 +149,7 @@ void GameState::Resume()
 void GameState::CollisionCheck()
 {
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
-	SDL_FRect* p = pp->GetBoundingBox();
+	SDL_FRect* p = pp->GetDst();
 	SDL_FRect* attackbox = pp->GetAttackHitBox();
 	
 	for (auto i : dynamic_cast<TiledLevel*>(FindObject("level"))->GetVisibleTile())
@@ -164,7 +159,7 @@ void GameState::CollisionCheck()
 		{
 			if (i->GetTag() == OBSTACLE)
 			{
-				if ((p->y + p->h) - pp->GetVelY() <= t->y)
+				if (p->y + p->h - pp->GetVelY() <= t->y)
 				{ // Colliding with top side of tile.
 					pp->StopY();
 					pp->SetY(t->y - p->h);
@@ -180,7 +175,7 @@ void GameState::CollisionCheck()
 					pp->StopX();
 					pp->SetX(t->x - p->w);
 				}
-				else if (p->x - pp->GetVelX() + 3 >= t->x + t->w)
+				else if (p->x - pp->GetVelX()  >= t->x + t->w)
 				{ // Colliding with right side of tile.
 					pp->StopX();
 					pp->SetX(t->x + t->w);

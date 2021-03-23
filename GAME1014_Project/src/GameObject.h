@@ -6,7 +6,9 @@
 
 class GameObject
 {
-public: // Methods.
+public:
+	virtual ~GameObject() = default;
+	// Methods.
 	virtual void Update() = 0;
 	virtual void Render() = 0;
 	virtual SDL_FRect* GetDst() { return &m_dst; }

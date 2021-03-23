@@ -7,19 +7,23 @@
 //For some reason m_maxVelY can't take JUMPFORCE
 //Will fix someday
 
-PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : AnimatedSpriteObject(s, d, t, 0, 0, 22, 10),
-m_state(STATE_IDLING), m_grounded(false), m_facingLeft(false), m_secondJump(false),m_maxVelX(10.0), m_maxVelY(40.0), m_grav(GRAV), m_drag(0.85)
+PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : EntityObject(s, d, t),
+ m_grounded(false), m_state(STATE_IDLING)
 {
 	//cout << addressof(m_dst) << endl;
 	m_pBoundingBox = SDL_FRect({m_dst.x,m_dst.y,40,60 });
-
+	m_facingLeft = false;
+	m_maxVelX = 10;
+	m_maxVelY = 40;
+	m_grav = GRAV;
+	m_drag = 0.85;
+	
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
 	m_curHealth = m_maxHealth = 5;
-	SetAnimation(9, 13, 21);
+	SetAnimation(9, 13, 22);
 	//Load Sound effects
 	SoundManager::Load("Aud/sword_swing.wav", "slash", SOUND_SFX);
 	SoundManager::Load("Aud/ice_slash.wav", "specSlash", SOUND_SFX);
-	//SetAnimation(1, 8, 9); // Initialize jump animation.
 }
 
 
@@ -41,14 +45,15 @@ void PlatformPlayer::Update()
 			m_state = STATE_RUNNING;
 			SetAnimation(6, 6, 12); // , 256
 		}
-		else if (EVMA::KeyPressed(SDL_SCANCODE_J) || EVMA::MousePressed(1))
+		
+		if (EVMA::KeyPressed(SDL_SCANCODE_J) || EVMA::MousePressed(1))
 		{
 			m_state = STATE_ATTACKING;
 			SetAnimation(5, 0, 5);
 			SoundManager::PlaySound("slash", 0, 0);
 		}
 		//ADDED A BUTTON to use weapon ability
-		else if (EVMA::KeyPressed(SDL_SCANCODE_K))
+		if (EVMA::KeyPressed(SDL_SCANCODE_K))
 		{
 			m_state = STATE_SPECIAL_ATTACK;
 			//SetAnimation()
@@ -59,11 +64,10 @@ void PlatformPlayer::Update()
 		}
 
 		// Transition to jump.
-		else if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
+		if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
 		{
 			m_accelY = -JUMPFORCE; // SetAccelY(-JUMPFORCE);
 			m_grounded = false; // SetGrounded(false);
-			m_secondJump = true;
 			m_state = STATE_JUMPING;
 			//SetAnimation(1, 8, 9, 256);
 		}
@@ -94,7 +98,6 @@ void PlatformPlayer::Update()
 		{
 			m_accelY = -JUMPFORCE;
 			m_grounded = false;
-			m_secondJump = true;
 			m_state = STATE_JUMPING;
 			//SetAnimation(1, 8, 9, 256);
 		}
@@ -126,6 +129,7 @@ void PlatformPlayer::Update()
 			m_state = STATE_ATTACKING;
 			SetAnimation(5, 0, 5);
 			SoundManager::PlaySound("slash", 0, 0);
+
 		}
 		
 		// Hit the ground, transition to run.
@@ -138,31 +142,27 @@ void PlatformPlayer::Update()
 		break;
 
 	case STATE_ATTACKING:
-
-
-		m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x - 150,m_pBoundingBox.y + 5,35,50 });
 		
 		if (m_facingLeft)
-			m_pAttackHitBox.x = m_pBoundingBox.x - m_pBoundingBox.w + 3;
+			m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x - m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
 		else if (!m_facingLeft)
-			m_pAttackHitBox.x = m_pBoundingBox.x + m_pBoundingBox.w + 3;
+			m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x + m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
 		m_pAttackHitBox.y = m_pBoundingBox.y;
-		
-		if (m_sprite == m_frameMax/2)
+
+		if ((m_sprite >= m_frameMax / 2) && (EVMA::KeyHeld(SDL_SCANCODE_A) || EVMA::KeyHeld(SDL_SCANCODE_D)))
 		{
-			if (EVMA::KeyHeld(SDL_SCANCODE_A) || EVMA::KeyHeld(SDL_SCANCODE_D))
-			{
-				m_state = STATE_RUNNING;
-				SetAnimation(9, 13, 22);
-				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
-
-			}
-
-			if (EVMA::KeyPressed(SDL_SCANCODE_SPACE))
-			{
-				m_state = STATE_JUMPING;
-				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
-			}
+			m_state = STATE_RUNNING;
+			//SetAnimation(9, 13, 22);
+			SetAnimation(9, 13, 22);
+			m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
+		}
+		
+		if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
+		{
+			m_state = STATE_JUMPING;
+			m_accelY = -JUMPFORCE;
+			m_grounded = false;
+			m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
 		}
 		
 		if(m_sprite == m_frameMax)
@@ -234,47 +234,14 @@ void PlatformPlayer::ShowHitbox()
 	m_showHitbox = !m_showHitbox;
 }
 
-void PlatformPlayer::Stop()
-{
-	StopX();
-	StopY();
-}
-
-PlayerState PlatformPlayer::GetState() { return m_state; }
-
-SDL_FRect* PlatformPlayer::GetBoundingBox() { return &m_pBoundingBox; }
-
-SDL_FRect* PlatformPlayer::GetAttackHitBox() { return &m_pAttackHitBox; }
-
-void PlatformPlayer::StopX() { m_velX = 0.0; }
-
-void PlatformPlayer::StopY() { m_velY = 0.0; }
-
-void PlatformPlayer::SetAccelX(double a) { m_accelX = a; }
-
-void PlatformPlayer::SetAccelY(double a) { m_accelY = a; }
-
-bool PlatformPlayer::IsGrounded() { return m_grounded; }
-
-bool PlatformPlayer::SetGrounded(bool g) { return m_grounded = g; }
-
-bool PlatformPlayer::GetAlive() { return m_alive; }
-
-void PlatformPlayer::SetAlive(bool a) { m_alive = a; }
-
-float PlatformPlayer::GetVelX() { return m_velX; }
-
-float PlatformPlayer::GetVelY() { return m_velY; }
-
 void PlatformPlayer::SetX(float x) { m_pBoundingBox.x = x; }
 
 void PlatformPlayer::SetY(float y) { m_pBoundingBox.y = y; }
 
-int PlatformPlayer::GetHeath(){ return m_curHealth; }
+PlayerState PlatformPlayer::GetState() { return m_state; }
 
-int PlatformPlayer::GetMaxHealth() { return m_maxHealth; }
+SDL_FRect* PlatformPlayer::GetAttackHitBox() { return &m_pAttackHitBox; }
 
-void PlatformPlayer::SetHeath(int h) { m_curHealth = h; }
+bool PlatformPlayer::IsGrounded() { return m_grounded; }
 
-void PlatformPlayer::SetMaxHealth(int h) { m_maxHealth = h; }
-
+bool PlatformPlayer::SetGrounded(bool g) { return m_grounded = g; }
