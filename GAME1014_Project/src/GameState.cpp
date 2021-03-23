@@ -63,20 +63,6 @@ void GameState::Enter()
 
 	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { s->x, s->y, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
 
-
-	//Slimes create
-	SDL_QueryTexture(TEMA::GetTexture("Slime"), nullptr, nullptr, &w, &h);
-	m_objects.emplace_back("aaa", new Slime({ 0, 0, 35, 29 }, { s->x + 32*6, s->y - 32*6, static_cast<float>(35), static_cast<float>(29) }, TEMA::GetTexture("Slime")));
-	m_slimes.emplace_back(dynamic_cast<Slime*>(FindObject("aaa")));
-	m_objects.emplace_back("penIsland", new Slime({ 0, 0, 35, 29 }, { s->x + 32 * 7, s->y - 32 * 6, static_cast<float>(35), static_cast<float>(29) }, TEMA::GetTexture("Slime")));
-	m_slimes.emplace_back(dynamic_cast<Slime*>(FindObject("penIsland")));
-	//SDL_QueryTexture(TEMA::GetTexture("Spawn"), nullptr, nullptr, &w, &h);
-	//m_objects.emplace_back("Spawn", new ItemObject({ 0,0,w,h }, { s->x,s->y, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("Spawn")));
-	
-	SDL_FRect* r = dynamic_cast<TiledLevel*>(FindObject("level"))->GetEndTile()->GetDst();
-	
-	//SDL_QueryTexture(TEMA::GetTexture("End"), nullptr, nullptr, &w, &h);
-	//m_objects.emplace_back("Trigger", new ItemObject({ 0,0,w,h }, { r->x,r->y, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("End")));
 	
 	SDL_QueryTexture(TEMA::GetTexture("HeartBar"), nullptr, nullptr, &w, &h);
 	for(auto i = 0; i < dynamic_cast<PlatformPlayer*>(FindObject("Player"))->GetHeath(); i++)
@@ -89,13 +75,13 @@ void GameState::Enter()
 
 
 
-	std::cout << "Entering GameState..." << std::endl;
 
 
 	//Load and play the game music
 	SoundManager::Load("Aud/TownTheme.mp3", "gameLevel1", SOUND_MUSIC);
 	SoundManager::PlayMusic("gameLevel1", -1);
 	//SoundManager::SetMusicVolume(16);
+	std::cout << "Entering GameState..." << std::endl;
 }
 
 void GameState::Update()
@@ -154,9 +140,6 @@ void GameState::Exit()
 	}
 	m_UIObject.clear();
 	Hearts.clear();
-
-	m_slimes.clear();
-	m_slimes.shrink_to_fit();
 	std::cout << "Exiting GameState..." << std::endl;
 }
 
@@ -218,7 +201,7 @@ void GameState::CollisionCheck()
 				m_spawn = i;
 			}
 		}
-		for (auto slime : m_slimes)
+		for (auto slime : dynamic_cast<TiledLevel*>(FindObject("level"))->GetEnemy())
 		{
 			auto e = slime->GetDst();
 			if (p->x < e->x)
@@ -274,9 +257,10 @@ void GameState::CollisionCheck()
 	//	}
 	//}
 	//Player and slime collision
-	for (auto i = 0; i < m_slimes.size(); i++)
+	auto &enemies = dynamic_cast<TiledLevel*>(FindObject("level"))->GetEnemy();
+	for (auto i = 0; i < enemies.size(); i++)
 	{
-		SDL_FRect* s = m_slimes[i]->GetDst();
+		SDL_FRect* s = enemies[i]->GetDst();
 		if (COMA::AABBCheck(*s, *p))
 		{
 			pp->SetHeath(pp->GetHeath() - 1);
@@ -299,11 +283,12 @@ void GameState::CollisionCheck()
 		//Attack Collision with Enemies
 		if (COMA::AABBCheck(*attackbox, *s))
 		{
-			m_slimes[i]->LoseHealth();
-			if (m_slimes[i]->GetHeath() == 0)
+			enemies[i]->LoseHealth();
+			if (enemies[i]->GetHeath() == 0)
 			{
-				m_slimes.erase(m_slimes.begin() + i);
-				m_slimes.shrink_to_fit();
+				delete enemies[i];
+				enemies.erase(enemies.begin() + i);
+				enemies.shrink_to_fit();
 				
 			}
 			cout << "Sword hits slimes" << endl;
@@ -354,10 +339,11 @@ void GameState::MoveCamTo(GameObject* o)
 			t->x += camOffset;
 		}
 	}
+	for(auto &i : dynamic_cast<TiledLevel*>(FindObject("level"))->GetEnemy())
+	{
+		i->GetDst()->x += camOffset;
+	}
 	o->GetDst()->x += camOffset;
-	//FindObject("Player")->GetDst()->x += camOffset;
-	FindObject("aaa")->GetDst()->x += camOffset;
-	FindObject("penIsland")->GetDst()->x += camOffset;
 }
 
 void GameState::ChangeLevel(unsigned int level)
@@ -376,9 +362,6 @@ void GameState::ChangeLevel(unsigned int level)
 	}
 	m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile();
 	SDL_FRect* s = m_spawn->GetDst();
-	//auto sp = FindObject("Spawn");
-	//sp->GetDst()->x = s->x;
-	//sp->GetDst()->y = s->y;
 
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
 	pp->StopX();
@@ -386,12 +369,4 @@ void GameState::ChangeLevel(unsigned int level)
 	pp->SetX(s->x);
 	pp->SetY(s->y);
 	MoveCamTo(pp);
-	
-	//SDL_FRect* r = dynamic_cast<TiledLevel*>(FindObject("level"))->GetEndTile()->GetDst();
-	//auto t = FindObject("Trigger");
-	//t->GetDst()->x = r->x;
-	//t->GetDst()->y = r->y;
-	
-	//m_objects.emplace_back("level", m_levels[1]);
-	
 }

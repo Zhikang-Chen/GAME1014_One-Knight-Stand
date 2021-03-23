@@ -34,7 +34,6 @@ private:
 	SwordSkill* m_pSwordSkill1;
 	SwordSkill* m_pSwordAttack;
 	vector<Heart*> Hearts;
-	vector<Slime*> m_slimes;
 
 	Tile* m_spawn;
 	vector<TiledLevel*> m_levels;

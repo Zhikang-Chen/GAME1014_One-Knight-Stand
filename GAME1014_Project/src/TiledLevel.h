@@ -5,6 +5,8 @@
 #include <fstream>
 #include <map>
 #include <vector>
+
+#include "Enemy.h"
 #include "Engine.h"
 #include "GameObject.h"
 #include "SpriteObject.h"
@@ -66,10 +68,11 @@ public:
 	TiledLevel(const unsigned short r, const unsigned short c, const int w, const int h,
 		const char* tileData, const char* levelData, const char* tileKey);
 	~TiledLevel();
-	void Update() {} // Empty.
+	void Update(); // Empty.
 	void Render();
+	vector<Enemy*>& GetEnemy();
 	vector<Tile*>& GetObstacles();
-	vector<Tile*>& GetCheckPoint() { return m_checkPoint; }
+	//vector<Tile*>& GetCheckPoint() { return m_checkPoint; }
 	vector<Tile*>& GetVisibleTile() { return m_visibleTile; }
 	vector<vector<Tile*>>& GetAllTile() { return m_level; }
 	Tile* GetStartingTile() const { return m_pStartingTile; }
@@ -83,8 +86,9 @@ private:
 	Tile* m_pEndTile;
 	map<char, Tile*> m_tiles; // Our map of 16 prototype Tile objects.
 	vector<vector<Tile*>> m_level; // 2D vector.
-	vector<Tile*> m_checkPoint; 
-	vector<Tile*> m_obstacles;
+	//vector<Tile*> m_checkPoint; 
+	//vector<Tile*> m_obstacles;
+	vector<Enemy*> m_enemy;
 	vector<Tile*> m_visibleTile;
 };
 

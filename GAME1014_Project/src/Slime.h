@@ -13,11 +13,9 @@ private:
 	
 
 public:
-	Slime(SDL_Rect s, SDL_FRect d, SDL_Texture* t);
+	Slime(SDL_Rect s, SDL_FRect d);
 	void Update();
 	void Render();
-	void AttackPattern();
-	void faceDir(bool f);
 	
 };
 

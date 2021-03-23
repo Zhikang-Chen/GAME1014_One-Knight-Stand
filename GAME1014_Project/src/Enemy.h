@@ -13,7 +13,7 @@ protected:
 	/*A lot of this stuff is copied over from the PlatformPlayer class,
 	* but I don't think it makes sense to make Enemy a child of PlatformPlayer so here we are*/
 	bool m_grounded;
-	bool m_facingLeft = false;
+	bool m_facingLeft;
 	bool m_alive;
 	int m_health;
 	int m_maxHealth;
@@ -39,13 +39,16 @@ public:
 	float GetVelY();
 	void SetX(float x);
 	void SetY(float y);
-	void Update();
-	void Render();
+	virtual void Update();
+	virtual void Render();
 	void LoseHealth();
 	int GetHeath();
 	int GetMaxHealth();
 	void SetHeath(int h);
 	void SetMaxHealth(int h);
+	
+	void AttackPattern();
+	void faceDir(bool f);
 	
 };
 

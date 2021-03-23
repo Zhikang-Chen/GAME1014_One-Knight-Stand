@@ -2,7 +2,7 @@
 #include "Enemy.h"
 #include "TextureManager.h"
 
-Slime::Slime(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : Enemy(s, d, t, 0, 0, 1, 1)
+Slime::Slime(SDL_Rect s, SDL_FRect d) : Enemy(s, d, TEMA::GetTexture("Slime"), 0, 0, 1, 1)
 {
 	m_maxHealth = m_health = 5;
 	m_jumpTimer = 0;
@@ -42,15 +42,5 @@ void Slime::Update()
 
 void Slime::Render()
 {
-	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), TEMA::GetTexture("Slime"), GetSrc(), GetDst(), m_angle, 0, m_facingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-}
-
-void Slime::faceDir(bool f)
-{
-	m_facingLeft = f;
-}
-
-
-void Slime::AttackPattern()
-{
+	SDL_RenderCopyExF(Engine::Instance().GetRenderer(),m_pText ,GetSrc(), GetDst(), m_angle, 0, m_facingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }

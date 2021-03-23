@@ -2,7 +2,7 @@
 #include "Engine.h"
 
 Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Texture* t, int sstart, int smin, int smax, int nf) : AnimatedSpriteObject(s, d, t, sstart, smin, smax, nf),
-m_grounded(false), m_maxVelX(10.0), m_maxVelY(40.0), m_grav(GRAV), m_drag(0.85), m_health(1)
+m_grounded(false), m_maxVelX(10.0), m_maxVelY(40.0), m_grav(GRAV), m_drag(0.85), m_health(1), m_facingLeft(false)
 {
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
 	m_maxHealth = m_health = 2;
@@ -67,4 +67,14 @@ int Enemy::GetMaxHealth() { return m_maxHealth; }
 void Enemy::SetHeath(int h) { m_health = h; }
 
 void Enemy::SetMaxHealth(int h) { m_maxHealth = h; }
+
+void Enemy::faceDir(bool f)
+{
+	m_facingLeft = f;
+}
+
+
+void Enemy::AttackPattern()
+{
+}
 
