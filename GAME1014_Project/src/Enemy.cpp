@@ -43,3 +43,11 @@ bool Enemy::IsGrounded() { return m_grounded; }
 
 bool Enemy::SetGrounded(bool g) { return m_grounded = g; }
 
+//The number passed determines if the enemy drops an item.
+bool Enemy::dropTable(int r)
+{
+	//if (r > 39)
+	return true;
+
+	//else return false;
+}

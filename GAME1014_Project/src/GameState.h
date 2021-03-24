@@ -10,11 +10,14 @@
 #include "TextureManager.h"
 #include <vector>
 #include "ItemObject.h"
+#include <ctime>
+#include <cstdlib>
 
 #include "TiledLevel.h"
 #include "Heart.h"
 #include "SwordSkill.h"
 #include "Slime.h"
+#include "Potion.h"
 
 class GameState : public State
 {
@@ -34,6 +37,7 @@ private:
 	SwordSkill* m_pSwordSkill1;
 	SwordSkill* m_pSwordAttack;
 	vector<Heart*> Hearts;
+	vector<Potion*> m_potions;
 
 	Tile* m_spawn;
 	vector<TiledLevel*> m_levels;

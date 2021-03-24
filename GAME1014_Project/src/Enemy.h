@@ -19,6 +19,9 @@ public:
 	bool IsGrounded();
 	bool SetGrounded(bool g);
 
+	//If we get more items, change this to an int and return different numbers instead of true/false
+	bool dropTable(int r);
+
 protected:
 	/*A lot of this stuff is copied over from the PlatformPlayer class,
 	* but I don't think it makes sense to make Enemy a child of PlatformPlayer so here we are*/

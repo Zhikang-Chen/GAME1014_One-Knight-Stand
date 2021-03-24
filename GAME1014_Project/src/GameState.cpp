@@ -22,6 +22,7 @@ void GameState::Enter()
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordskill.png", "SwordSkill1");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordAttack.png", "SwordAttack");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Slime.png", "Slime");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Potion.png", "Potion");
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/dagger.png", "Project");
 
@@ -288,6 +289,11 @@ void GameState::CollisionCheck()
 			enemies[i]->LoseHealth();
 			if (enemies[i]->GetHeath() == 0)
 			{
+				if (enemies[i]->dropTable(rand() % 100) == true)
+				{
+					m_objects.emplace_back("Potion", new Potion({ 0, 0, 32, 32 }, { enemies[i]->GetDst()->x, enemies[i]->GetDst()->y, static_cast<float>(32), static_cast<float>(32) }, TEMA::GetTexture("Slime")));
+					m_potions.emplace_back(dynamic_cast<Potion*>(FindObject("Potion")));
+				}
 				delete enemies[i];
 				enemies.erase(enemies.begin() + i);
 				enemies.shrink_to_fit();
@@ -298,6 +304,27 @@ void GameState::CollisionCheck()
 			cout << "Sword hits slimes" << endl;
 		}
 
+	}
+
+	for (auto i = 0; i < m_potions.size(); i++)
+	{
+		SDL_FRect* ip = m_potions[i]->GetDst();
+		if (COMA::AABBCheck(*ip, *p))
+		{
+			pp->SetHeath(pp->GetHeath() + 1);
+			for (auto i2 = Hearts.size() - 1; i2 > 0; --i2)
+			{
+				if (Hearts[i2]->GetEmpty())
+				{
+					Hearts[i2]->SetEmpty(false);
+					break;
+				}
+			}
+			cout << "Collect potion" << endl;
+			delete m_potions[i];
+			m_potions.erase(m_potions.begin() + i);
+			m_potions.shrink_to_fit();
+		}
 	}
 
 	// This has to be at the end because of ChangeState
@@ -347,6 +374,10 @@ void GameState::MoveCamTo(GameObject* o)
 	for(auto &i : dynamic_cast<TiledLevel*>(FindObject("level"))->GetEnemy())
 	{
 		i->GetDst()->x += camOffset;
+	}
+	for (int i = 0; i < m_potions.size(); i++)
+	{
+		FindObject("Potion")->GetDst()->x += camOffset;
 	}
 	o->GetDst()->x += camOffset;
 }
