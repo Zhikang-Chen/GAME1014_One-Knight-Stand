@@ -176,16 +176,13 @@ void PlatformPlayer::Update()
 
 	case STATE_SPECIAL_ATTACK:
 		
-		if (!EVMA::KeyHeld(SDL_SCANCODE_K))
+		if (!EVMA::KeyPressed(SDL_SCANCODE_K))
 		{
 			m_state = STATE_IDLING;
 			SetAnimation(9, 13, 22);
-<<<<<<< Updated upstream
-=======
 
-
->>>>>>> Stashed changes
 		}
+		break;
 	}
 
 	

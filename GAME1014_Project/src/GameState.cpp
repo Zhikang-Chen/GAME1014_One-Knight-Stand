@@ -22,11 +22,10 @@ void GameState::Enter()
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordskill.png", "SwordSkill1");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordAttack.png", "SwordAttack");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Slime.png", "Slime");
-<<<<<<< Updated upstream
-=======
+
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/dagger.png", "Project");
 
->>>>>>> Stashed changes
+
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heartempty.png", "EmptyHeart");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/spawn.png", "Spawn");
@@ -90,6 +89,8 @@ void GameState::Update()
 	MoveCamTo(FindObject("Player"));
 	for (auto& m_object : m_objects)
 		m_object.second->Update();
+
+	
 	CollisionCheck();
 	
 	if (EVMA::KeyPressed(SDL_SCANCODE_V))
@@ -296,14 +297,9 @@ void GameState::CollisionCheck()
 			}
 			cout << "Sword hits slimes" << endl;
 		}
+
 	}
-<<<<<<< Updated upstream
-	
-=======
 
-
-
->>>>>>> Stashed changes
 	// This has to be at the end because of ChangeState
 	if (p->y >= HEIGHT + p->h || EVMA::KeyPressed(SDL_SCANCODE_MINUS))
 	{
@@ -357,35 +353,29 @@ void GameState::MoveCamTo(GameObject* o)
 
 void GameState::ChangeLevel(unsigned int level)
 {
-<<<<<<< Updated upstream
 	for (auto& m_object : m_objects)
 	{
 		if (m_object.first == "level")
 		{
 			if (m_object.second == m_levels[level])
 				return;
-			
+
 			//delete m_object.second;
 			m_object.second = m_levels[level];
 			//m_object.second = nullptr;
 		}
-=======
+	}
+
 	int w, h;
 	MoveCamTo(FindObject("Player"));
 	for (auto& m_object : m_objects)
 		m_object.second->Update();
-	if (EVMA::KeyPressed(SDL_SCANCODE_Q))
-	{
-		cout << "shoot" << endl;
-		m_objects.emplace_back("pj", new Projectile({ 0,0,w,h }, { 10,595, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("Project")));
-		m_Project.emplace_back(dynamic_cast<Projectile*>(FindObject("pj")));
-	}
+	
 	CollisionCheck();
 	if (EVMA::KeyPressed(SDL_SCANCODE_P))
 	{
 		STMA::PushState(new PauseState());
 	}
-	
 	
 }
 
@@ -419,7 +409,6 @@ void GameState::Exit()
 	{
 		delete UI.second;
 		UI.second = nullptr;
->>>>>>> Stashed changes
 	}
 	m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile();
 	SDL_FRect* s = m_spawn->GetDst();
