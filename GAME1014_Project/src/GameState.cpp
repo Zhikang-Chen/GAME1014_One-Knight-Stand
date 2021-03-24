@@ -90,7 +90,6 @@ void GameState::Update()
 	for (auto& m_object : m_objects)
 		m_object.second->Update();
 
-	
 	CollisionCheck();
 	
 	if (EVMA::KeyPressed(SDL_SCANCODE_V))
@@ -157,7 +156,8 @@ void GameState::CollisionCheck()
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
 	SDL_FRect* p = pp->GetDst();
 	SDL_FRect* attackbox = pp->GetAttackHitBox();
-	
+	SDL_FRect* Sattackbox = pp->GetSAttackHitBox();
+
 	for (auto i : dynamic_cast<TiledLevel*>(FindObject("level"))->GetVisibleTile())
 	{
 		auto t = i->GetDst();
@@ -296,6 +296,20 @@ void GameState::CollisionCheck()
 				
 			}
 			cout << "Sword hits slimes" << endl;
+		}
+		if (COMA::AABBCheck(*Sattackbox, *s))
+		{
+			enemies[i]->LoseHealth();
+			if (enemies[i]->GetHeath() == 0)
+			{
+				delete enemies[i];
+				enemies.erase(enemies.begin() + i);
+				enemies.shrink_to_fit();
+				//SoundManager::PlaySound("bounce", 0, 0);
+				//SoundManager::SetSoundVolume(15);
+
+			}
+			cout << "Special hits slimes" << endl;
 		}
 
 	}
