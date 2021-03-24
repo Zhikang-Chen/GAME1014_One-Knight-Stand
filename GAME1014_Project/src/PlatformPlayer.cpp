@@ -180,6 +180,11 @@ void PlatformPlayer::Update()
 		{
 			m_state = STATE_IDLING;
 			SetAnimation(9, 13, 22);
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
 		}
 	}
 
