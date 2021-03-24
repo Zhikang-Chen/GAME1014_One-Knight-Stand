@@ -28,4 +28,8 @@
 <Tile key="S" x="0" y="0" />
 <Tile key="E" x="0" y="0" />
 <Tile key="C" x="0" y="0" />
+
+
+<Tile key="s" x="-1" y="-1" />
+
 </Data>

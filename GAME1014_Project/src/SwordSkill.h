@@ -7,7 +7,7 @@ class SwordSkill : public SpriteObject
 {
 public:
 	SwordSkill(SDL_Rect s, SDL_FRect d, SDL_Texture* t);
-	void Update() {};
+	void Update() ;
 	void Render();
 };
 

@@ -13,11 +13,10 @@ private:
 	
 
 public:
-	Slime(SDL_Rect s, SDL_FRect d, SDL_Texture* t);
+	Slime(SDL_Rect s, SDL_FRect d);
 	void Update();
 	void Render();
-	void faceDir(bool f);
-	bool dropTable(int r);
+	virtual void AttackPattern();
 	
 };
 

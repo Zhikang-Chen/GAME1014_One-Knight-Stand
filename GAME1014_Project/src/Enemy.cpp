@@ -1,39 +1,18 @@
 #include "Enemy.h"
-#include "Engine.h"
 
-Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Texture* t, int sstart, int smin, int smax, int nf) : AnimatedSpriteObject(s, d, t, sstart, smin, smax, nf),
-m_grounded(false), m_maxVelX(10.0), m_maxVelY(40.0), m_grav(GRAV), m_drag(0.85), m_health(1)
+Enemy::Enemy(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : EntityObject(s, d, t),
+m_grounded(false)
 {
+	m_maxVelX = 10.0;
+	m_maxVelY = 40.0;
+	m_grav = GRAV;
+	m_drag = 0.85;
+	m_facingLeft = false;
+	
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
-	m_maxHealth = m_health = 2;
+	m_maxHealth = m_curHealth = INFINITY;
 
 }
-
-void Enemy::Stop()
-{
-	StopX();
-	StopY();
-}
-
-void Enemy::StopX() { m_velX = 0.0; }
-	 
-void Enemy::StopY() { m_velY = 0.0; }
-	 
-void Enemy::SetAccelX(double a) { m_accelX = a; }
-	 
-void Enemy::SetAccelY(double a) { m_accelY = a; }
-
-bool Enemy::IsGrounded() { return m_grounded; }
-
-bool Enemy::SetGrounded(bool g) { return m_grounded = g; }
-	 
-float Enemy::GetVelX() { return m_velX; }
-	 
-float Enemy::GetVelY() { return m_velY; }
-	 
-void Enemy::SetX(float x) { this->GetDst()->x = x; }
-
-void Enemy::SetY(float y) { this->GetDst()->y = y; }
 
 void Enemy::Update()
 {
@@ -58,13 +37,9 @@ void Enemy::Update()
 
 void Enemy::Render() {}
 
-void Enemy::LoseHealth() { m_health -= 1; } //Send the player's weapon damage in as argument
+void Enemy::LoseHealth() { m_curHealth -= 1; } //Send the player's weapon damage in as argument
 
-int Enemy::GetHeath() { return m_health; }
+bool Enemy::IsGrounded() { return m_grounded; }
 
-int Enemy::GetMaxHealth() { return m_maxHealth; }
-
-void Enemy::SetHeath(int h) { m_health = h; }
-
-void Enemy::SetMaxHealth(int h) { m_maxHealth = h; }
+bool Enemy::SetGrounded(bool g) { return m_grounded = g; }
 

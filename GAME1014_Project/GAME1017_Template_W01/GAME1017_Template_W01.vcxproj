@@ -126,6 +126,7 @@
     <ClCompile Include="..\src\EndState.cpp" />
     <ClCompile Include="..\src\Enemy.cpp" />
     <ClCompile Include="..\src\Engine.cpp" />
+    <ClCompile Include="..\src\EntityObject.cpp" />
     <ClCompile Include="..\src\EventManager.cpp" />
     <ClCompile Include="..\src\FontManager.cpp" />
     <ClCompile Include="..\src\GameState.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="..\src\EndState.h" />
     <ClInclude Include="..\src\Enemy.h" />
     <ClInclude Include="..\src\Engine.h" />
+    <ClInclude Include="..\src\EntityObject.h" />
     <ClInclude Include="..\src\EventManager.h" />
     <ClInclude Include="..\src\FontManager.h" />
     <ClInclude Include="..\src\GameObject.h" />

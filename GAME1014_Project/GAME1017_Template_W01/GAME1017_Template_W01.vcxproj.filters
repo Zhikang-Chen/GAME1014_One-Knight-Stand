@@ -109,7 +109,7 @@
     <ClCompile Include="..\src\Slime.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Potion.cpp">
+    <ClCompile Include="..\src\EntityObject.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -201,7 +201,7 @@
     <ClInclude Include="..\src\Slime.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Potion.h">
+    <ClInclude Include="..\src\EntityObject.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>
@@ -223,9 +223,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Img\Slime.png">
-      <Filter>Game Objects</Filter>
-    </Image>
-    <Image Include="Img\Potion.png">
       <Filter>Game Objects</Filter>
     </Image>
   </ItemGroup>

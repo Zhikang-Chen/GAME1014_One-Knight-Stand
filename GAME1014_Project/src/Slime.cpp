@@ -2,26 +2,15 @@
 #include "Enemy.h"
 #include "TextureManager.h"
 
-Slime::Slime(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : Enemy(s, d, t, 0, 0, 1, 1)
+Slime::Slime(SDL_Rect s, SDL_FRect d) : Enemy(s, d, TEMA::GetTexture("Slime"))
 {
-	m_maxHealth = m_health = 5;
+	m_maxHealth = m_curHealth = 5;
 	m_jumpTimer = 0;
 }
 
 void Slime::Update()
 {
-	//m_jumpTimer++;
-	//if(m_jumpTimer >= 120)
-	//{
-	//	m_jumpTimer = 0;
-	//	if(m_facingLeft)
-	//		m_accelX = 30.0f;
-	//	else
-	//		m_accelX = -30.0f;
-	//	m_accelY = -JUMPFORCE; // SetAccelY(-JUMPFORCE);
-	//}
-	
-	//m_accelY = -JUMPFORCE;
+	//AttackPattern();
 	// x axis
 	m_velX += m_accelX;
 	m_velX *= (m_grounded ? m_drag : 1.0f);
@@ -42,21 +31,21 @@ void Slime::Update()
 
 void Slime::Render()
 {
-	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), TEMA::GetTexture("Slime"), GetSrc(), GetDst(), m_angle, 0, m_facingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+	SDL_RenderCopyExF(Engine::Instance().GetRenderer(),m_pText ,GetSrc(), GetDst(), m_angle, 0, m_facingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 
-void Slime::faceDir(bool f)
+void Slime::AttackPattern()
 {
-	m_facingLeft = f;
-}
+	m_jumpTimer++;
+	if(m_jumpTimer >= 120)
+	{
+		m_jumpTimer = 0;
+		if(m_facingLeft)
+			m_accelX = 30.0f;
+		else
+			m_accelX = -30.0f;
+		m_accelY = -JUMPFORCE; // SetAccelY(-JUMPFORCE);
+	}
 
-//If we have more items, we'd change this to an int and it'd return different numbers based on the drops
-bool Slime::dropTable(int r)
-{
-	//Drops a potion
-	/*if (r > 39)*/
-		return true;
-	//Doesn't drop a potion
-	/*else
-		return false;*/
+	//m_accelY = JUMPFORCE;
 }

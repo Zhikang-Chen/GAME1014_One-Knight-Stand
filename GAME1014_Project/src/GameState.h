@@ -2,9 +2,6 @@
 #ifndef _GAMESTATE_H_
 #define _GAMESTATE_H_
 
-#include <ctime>
-#include <cstdlib>
-
 #include "States.h"
 #include "CollisionManager.h"
 #include "Engine.h"
@@ -18,7 +15,6 @@
 #include "Heart.h"
 #include "SwordSkill.h"
 #include "Slime.h"
-#include "Potion.h"
 
 class GameState : public State
 {
@@ -38,8 +34,6 @@ private:
 	SwordSkill* m_pSwordSkill1;
 	SwordSkill* m_pSwordAttack;
 	vector<Heart*> Hearts;
-	vector<Slime*> m_slimes;
-	vector<Potion*> m_potions;
 
 	Tile* m_spawn;
 	vector<TiledLevel*> m_levels;
