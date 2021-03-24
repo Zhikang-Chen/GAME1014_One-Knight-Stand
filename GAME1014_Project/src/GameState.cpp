@@ -336,10 +336,10 @@ void GameState::CollisionCheck()
 					break;
 				}
 			}
+			cout << "Collect potion" << endl;
 			m_potions.erase(m_potions.begin() + i);
 			m_potions.shrink_to_fit();
 		}
-		cout << "Collect potion" << endl;
 	}
 	
 	// This has to be at the end because of ChangeState
