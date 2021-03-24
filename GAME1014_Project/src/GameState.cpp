@@ -291,7 +291,7 @@ void GameState::CollisionCheck()
 			{
 				if (enemies[i]->dropTable(rand() % 100) == true)
 				{
-					m_objects.emplace_back("Potion", new Potion({ 0, 0, 32, 32 }, { enemies[i]->GetDst()->x, enemies[i]->GetDst()->y, static_cast<float>(32), static_cast<float>(32) }, TEMA::GetTexture("Slime")));
+					m_objects.emplace_back("Potion", new Potion({ 0, 0, 32, 32 }, { enemies[i]->GetDst()->x, enemies[i]->GetDst()->y, static_cast<float>(32), static_cast<float>(32) }, TEMA::GetTexture("Potion")));
 					m_potions.emplace_back(dynamic_cast<Potion*>(FindObject("Potion")));
 				}
 				delete enemies[i];
@@ -408,46 +408,4 @@ void GameState::ChangeLevel(unsigned int level)
 		STMA::PushState(new PauseState());
 	}
 	
-}
-
-void GameState::Render()
-{
-	//std::cout << "Rendering TitleState..." << std::endl;
-	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 255);
-	SDL_RenderClear(Engine::Instance().GetRenderer());
-	
-	for (auto& m_object : m_objects)
-		m_object.second->Render();
-
-	for (auto& i : m_UIObject)
-		i.second->Render();
-
-	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr) // Check to see if current state is of type GameState
-		State::Render();
-	
-}
-
-void GameState::Exit()
-{
-	for (auto& m_object : m_objects)
-	{
-		delete m_object.second;
-		m_object.second = nullptr;
-	}
-	m_objects.clear();
-
-	for (auto& UI : m_UIObject)
-	{
-		delete UI.second;
-		UI.second = nullptr;
-	}
-	m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile();
-	SDL_FRect* s = m_spawn->GetDst();
-
-	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
-	pp->StopX();
-	pp->StopY();
-	pp->SetX(s->x);
-	pp->SetY(s->y);
-	MoveCamTo(pp);
 }
