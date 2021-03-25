@@ -11,6 +11,8 @@
 #include <iostream>
 #include <SDL.h>
 
+#include "SaveManager.h"
+
 Engine::Engine():m_running(false){ cout << "Engine class constructed!" << endl; }
 
 bool Engine::Init(const char* title, int xpos, int ypos, int width, int height, int flags)
@@ -30,6 +32,7 @@ bool Engine::Init(const char* title, int xpos, int ypos, int width, int height, 
 				SOMA::Init();
 				TEMA::Init();
 				FOMA::Init();
+				SAMA::Init();
 			}
 			else return false; // Renderer init fail.
 		}
@@ -94,6 +97,7 @@ void Engine::Clean()
 	SOMA::Quit();
 	STMA::Quit();
 	TEMA::Quit();
+	SAMA::Quit();
 	IMG_Quit();
 	SDL_Quit();
 }

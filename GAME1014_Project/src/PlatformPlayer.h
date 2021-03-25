@@ -31,7 +31,7 @@ public:
 	SDL_FRect* GetDst() { return &m_pBoundingBox; }
 	//SDL_FRect* GetBoundingBox();
 	SDL_FRect* GetAttackHitBox();
-
+	SDL_FRect* GetSAttackHitBox();
 	void SetX(float x);
 	void SetY(float y);
 
@@ -39,6 +39,7 @@ private:
 	// Private member
 	SDL_FRect m_pBoundingBox;
 	SDL_FRect m_pAttackHitBox;
+	SDL_FRect m_pSAttackHitBox;
 	bool m_grounded; //In most platforming games, the player actually starts in the air
 	bool m_showHitbox;
 	PlayerState m_state;

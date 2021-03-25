@@ -176,11 +176,19 @@ void PlatformPlayer::Update()
 
 	case STATE_SPECIAL_ATTACK:
 		
+		if (m_facingLeft)
+			m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x - m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
+		else if (!m_facingLeft)
+			m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x + m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
+		m_pSAttackHitBox.y = m_pBoundingBox.y;
+
 		if (!EVMA::KeyHeld(SDL_SCANCODE_K))
 		{
 			m_state = STATE_IDLING;
+			m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
 			SetAnimation(9, 13, 22);
 		}
+		break;
 	}
 
 	
@@ -225,6 +233,8 @@ void PlatformPlayer::Render()
 		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_pBoundingBox);
 		SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 255, 255);
 		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_pAttackHitBox);
+		SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 255, 255);
+		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_pSAttackHitBox);
 	}
 	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, &m_src, &m_dst, m_angle, 0, m_facingLeft?SDL_FLIP_HORIZONTAL:SDL_FLIP_NONE);
 }
@@ -241,6 +251,8 @@ void PlatformPlayer::SetY(float y) { m_pBoundingBox.y = y; }
 PlayerState PlatformPlayer::GetState() { return m_state; }
 
 SDL_FRect* PlatformPlayer::GetAttackHitBox() { return &m_pAttackHitBox; }
+
+SDL_FRect* PlatformPlayer::GetSAttackHitBox() { return &m_pSAttackHitBox; }
 
 bool PlatformPlayer::IsGrounded() { return m_grounded; }
 

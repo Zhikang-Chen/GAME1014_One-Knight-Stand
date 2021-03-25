@@ -112,6 +112,9 @@
     <ClCompile Include="..\src\EntityObject.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\SaveManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -204,6 +207,9 @@
     <ClInclude Include="..\src\EntityObject.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\SaveManager.h">
+      <Filter>Managers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Dat\Level1.txt">
@@ -218,6 +224,9 @@
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Dat\TileData.xml">
+      <Filter>Data</Filter>
+    </Xml>
+    <Xml Include="XMLFile.xml">
       <Filter>Data</Filter>
     </Xml>
   </ItemGroup>

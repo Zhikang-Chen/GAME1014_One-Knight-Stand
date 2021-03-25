@@ -13,7 +13,7 @@ public:
 	virtual void Update();
 	virtual void Render();
 	
-	void LoseHealth();
+	virtual void LoseHealth();
 	virtual void AttackPattern(){};
 
 	bool IsGrounded();

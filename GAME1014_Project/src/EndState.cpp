@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Engine.h"
 #include "StateManager.h"
+#include "SoundManager.h"
 
 void EndState::Enter()
 {
@@ -23,6 +24,10 @@ void EndState::Enter()
 	int width, height;
 	SDL_QueryTexture(TEMA::GetTexture("NoIdea"), nullptr, nullptr, &width, &height);
 	m_objects.emplace_back("image", new SpriteObject({0,0,width, height }, {( WIDTH/2 ) - (float)width/4 ,HEIGHT / 2, (float)width/2,(float)height/2 }, TEMA::GetTexture("NoIdea")));
+
+	SOMA::Load("../GAME1017_Template_W01/Aud/game_over.mp3", "gameOver", SOUND_MUSIC);
+	SOMA::SetMusicVolume(15);
+	SOMA::PlayMusic("gameOver");
 
  }
 

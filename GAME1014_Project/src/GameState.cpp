@@ -3,8 +3,6 @@
 
 #include "EndState.h"
 #include "PauseState.h"
-#include "Slime.h"
-
 #include "SoundManager.h"
 GameState::GameState() {}
 
@@ -22,6 +20,10 @@ void GameState::Enter()
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordskill.png", "SwordSkill1");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordAttack.png", "SwordAttack");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Slime.png", "Slime");
+
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/dagger.png", "Project");
+
+
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heartempty.png", "EmptyHeart");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/spawn.png", "Spawn");
@@ -75,7 +77,8 @@ void GameState::Enter()
 	//Load and play the game music
 	SoundManager::Load("Aud/TownTheme.mp3", "gameLevel1", SOUND_MUSIC);
 	SoundManager::PlayMusic("gameLevel1", -1);
-	//SoundManager::Load("Aud/slime_movement.wav", "bounce", SOUND_SFX);
+	SoundManager::Load("Aud/slime_movement.wav", "bounce", SOUND_SFX);
+	SoundManager::Load("Aud/ouch.wav", "hit", SOUND_SFX);
 	//SoundManager::SetMusicVolume(16);
 	std::cout << "Entering GameState..." << std::endl;
 }
@@ -85,6 +88,7 @@ void GameState::Update()
 	MoveCamTo(FindObject("Player"));
 	for (auto& m_object : m_objects)
 		m_object.second->Update();
+
 	CollisionCheck();
 	
 	if (EVMA::KeyPressed(SDL_SCANCODE_V))
@@ -103,41 +107,8 @@ void GameState::Update()
 	}
 }
 
-void GameState::Render()
-{
-	//std::cout << "Rendering TitleState..." << std::endl;
-	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 255);
-	SDL_RenderClear(Engine::Instance().GetRenderer());
-	
-	for (auto& m_object : m_objects)
-		m_object.second->Render();
 
-	for (auto& i : m_UIObject)
-		i.second->Render();
 
-	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr) // Check to see if current state is of type GameState
-		State::Render();
-	
-}
-
-void GameState::Exit()
-{
-	for (auto& m_object : m_objects)
-	{
-		delete m_object.second;
-		m_object.second = nullptr;
-	}
-	m_objects.clear();
-
-	for (auto& UI : m_UIObject)
-	{
-		delete UI.second;
-		UI.second = nullptr;
-	}
-	m_UIObject.clear();
-	Hearts.clear();
-	std::cout << "Exiting GameState..." << std::endl;
-}
 
 void GameState::Resume()
 {
@@ -151,7 +122,8 @@ void GameState::CollisionCheck()
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
 	SDL_FRect* p = pp->GetDst();
 	SDL_FRect* attackbox = pp->GetAttackHitBox();
-	
+	SDL_FRect* Sattackbox = pp->GetSAttackHitBox();
+
 	for (auto i : dynamic_cast<TiledLevel*>(FindObject("level"))->GetVisibleTile())
 	{
 		auto t = i->GetDst();
@@ -259,7 +231,9 @@ void GameState::CollisionCheck()
 		SDL_FRect* s = enemies[i]->GetDst();
 		if (COMA::AABBCheck(*s, *p))
 		{
+			SoundManager::PlaySound("hit", 0, 1);
 			pp->SetHeath(pp->GetHeath() - 1);
+
 			for (auto i2 = Hearts.size() - 1; i2 > 0; --i2)
 			{
 				if (!Hearts[i2]->GetEmpty())
@@ -285,14 +259,29 @@ void GameState::CollisionCheck()
 				delete enemies[i];
 				enemies.erase(enemies.begin() + i);
 				enemies.shrink_to_fit();
-				//SoundManager::PlaySound("bounce", 0, 0);
+				SoundManager::PlaySound("bounce", 0, 3);
 				//SoundManager::SetSoundVolume(15);
 				
 			}
 			cout << "Sword hits slimes" << endl;
 		}
+		if (COMA::AABBCheck(*Sattackbox, *s))
+		{
+			enemies[i]->LoseHealth();
+			if (enemies[i]->GetHeath() == 0)
+			{
+				delete enemies[i];
+				enemies.erase(enemies.begin() + i);
+				enemies.shrink_to_fit();
+				//SoundManager::PlaySound("bounce", 0, 0);
+				//SoundManager::SetSoundVolume(15);
+
+			}
+			cout << "Special hits slimes" << endl;
+		}
+
 	}
-	
+
 	// This has to be at the end because of ChangeState
 	if (p->y >= HEIGHT + p->h || EVMA::KeyPressed(SDL_SCANCODE_MINUS))
 	{
@@ -352,19 +341,83 @@ void GameState::ChangeLevel(unsigned int level)
 		{
 			if (m_object.second == m_levels[level])
 				return;
-			
+
 			//delete m_object.second;
 			m_object.second = m_levels[level];
 			//m_object.second = nullptr;
 		}
 	}
-	m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile();
-	SDL_FRect* s = m_spawn->GetDst();
 
-	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
-	pp->StopX();
-	pp->StopY();
-	pp->SetX(s->x);
-	pp->SetY(s->y);
-	MoveCamTo(pp);
+	int w, h;
+	MoveCamTo(FindObject("Player"));
+	for (auto& m_object : m_objects)
+		m_object.second->Update();
+	
+	CollisionCheck();
+	if (EVMA::KeyPressed(SDL_SCANCODE_P))
+	{
+		STMA::PushState(new PauseState());
+	}
+	
+}
+
+void GameState::Render()
+{
+	//std::cout << "Rendering TitleState..." << std::endl;
+	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 255);
+	SDL_RenderClear(Engine::Instance().GetRenderer());
+	
+	for (auto& m_object : m_objects)
+		m_object.second->Render();
+
+	for (auto& i : m_UIObject)
+		i.second->Render();
+
+	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr) // Check to see if current state is of type GameState
+		State::Render();
+	
+}
+
+//void GameState::Exit()
+//{
+//	for (auto& m_object : m_objects)
+//	{
+//		delete m_object.second;
+//		m_object.second = nullptr;
+//	}
+//	m_objects.clear();
+//
+//	for (auto& UI : m_UIObject)
+//	{
+//		delete UI.second;
+//		UI.second = nullptr;
+//	}
+//	m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile();
+//	SDL_FRect* s = m_spawn->GetDst();
+//
+//	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
+//	pp->StopX();
+//	pp->StopY();
+//	pp->SetX(s->x);
+//	pp->SetY(s->y);
+//	MoveCamTo(pp);
+//}
+
+void GameState::Exit()
+{
+	for (auto& m_object : m_objects)
+	{
+		delete m_object.second;
+		m_object.second = nullptr;
+	}
+	m_objects.clear();
+
+	for (auto& UI : m_UIObject)
+	{
+		delete UI.second;
+		UI.second = nullptr;
+	}
+	m_UIObject.clear();
+	Hearts.clear();
+	std::cout << "Exiting GameState..." << std::endl;
 }
