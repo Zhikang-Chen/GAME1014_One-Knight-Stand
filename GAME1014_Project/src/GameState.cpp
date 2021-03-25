@@ -107,8 +107,41 @@ void GameState::Update()
 	}
 }
 
+void GameState::Render()
+{
+	//std::cout << "Rendering TitleState..." << std::endl;
+	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 255);
+	SDL_RenderClear(Engine::Instance().GetRenderer());
+	
+	for (auto& m_object : m_objects)
+		m_object.second->Render();
 
+	for (auto& i : m_UIObject)
+		i.second->Render();
 
+	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr) // Check to see if current state is of type GameState
+		State::Render();
+	
+}
+
+void GameState::Exit()
+{
+	for (auto& m_object : m_objects)
+	{
+		delete m_object.second;
+		m_object.second = nullptr;
+	}
+	m_objects.clear();
+
+	for (auto& UI : m_UIObject)
+	{
+		delete UI.second;
+		UI.second = nullptr;
+	}
+	m_UIObject.clear();
+	Hearts.clear();
+	std::cout << "Exiting GameState..." << std::endl;
+}
 
 void GameState::Resume()
 {
@@ -347,77 +380,13 @@ void GameState::ChangeLevel(unsigned int level)
 			//m_object.second = nullptr;
 		}
 	}
-
-	int w, h;
-	MoveCamTo(FindObject("Player"));
-	for (auto& m_object : m_objects)
-		m_object.second->Update();
+	m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile();
+	SDL_FRect* s = m_spawn->GetDst();
 	
-	CollisionCheck();
-	if (EVMA::KeyPressed(SDL_SCANCODE_P))
-	{
-		STMA::PushState(new PauseState());
-	}
-	
-}
-
-void GameState::Render()
-{
-	//std::cout << "Rendering TitleState..." << std::endl;
-	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 255);
-	SDL_RenderClear(Engine::Instance().GetRenderer());
-	
-	for (auto& m_object : m_objects)
-		m_object.second->Render();
-
-	for (auto& i : m_UIObject)
-		i.second->Render();
-
-	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr) // Check to see if current state is of type GameState
-		State::Render();
-	
-}
-
-//void GameState::Exit()
-//{
-//	for (auto& m_object : m_objects)
-//	{
-//		delete m_object.second;
-//		m_object.second = nullptr;
-//	}
-//	m_objects.clear();
-//
-//	for (auto& UI : m_UIObject)
-//	{
-//		delete UI.second;
-//		UI.second = nullptr;
-//	}
-//	m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile();
-//	SDL_FRect* s = m_spawn->GetDst();
-//
-//	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
-//	pp->StopX();
-//	pp->StopY();
-//	pp->SetX(s->x);
-//	pp->SetY(s->y);
-//	MoveCamTo(pp);
-//}
-
-void GameState::Exit()
-{
-	for (auto& m_object : m_objects)
-	{
-		delete m_object.second;
-		m_object.second = nullptr;
-	}
-	m_objects.clear();
-
-	for (auto& UI : m_UIObject)
-	{
-		delete UI.second;
-		UI.second = nullptr;
-	}
-	m_UIObject.clear();
-	Hearts.clear();
-	std::cout << "Exiting GameState..." << std::endl;
+	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
+	pp->StopX();
+	pp->StopY();
+	pp->SetX(s->x);
+	pp->SetY(s->y);
+	MoveCamTo(pp);
 }
