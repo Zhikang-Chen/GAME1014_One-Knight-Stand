@@ -80,6 +80,7 @@ void GameState::Enter()
 	SoundManager::Load("Aud/TownTheme.mp3", "gameLevel1", SOUND_MUSIC);
 	SoundManager::PlayMusic("gameLevel1", -1);
 	SoundManager::Load("Aud/slime_movement.wav", "bounce", SOUND_SFX);
+	SoundManager::Load("Aud/ouch.wav", "hit", SOUND_SFX);
 	//SoundManager::SetMusicVolume(16);
 	std::cout << "Entering GameState..." << std::endl;
 }
@@ -232,7 +233,9 @@ void GameState::CollisionCheck()
 		SDL_FRect* s = enemies[i]->GetDst();
 		if (COMA::AABBCheck(*s, *p))
 		{
+			SoundManager::PlaySound("hit", 0, 1);
 			pp->SetHeath(pp->GetHeath() - 1);
+
 			for (auto i2 = Hearts.size() - 1; i2 > 0; --i2)
 			{
 				if (!Hearts[i2]->GetEmpty())
@@ -258,7 +261,7 @@ void GameState::CollisionCheck()
 				delete enemies[i];
 				enemies.erase(enemies.begin() + i);
 				enemies.shrink_to_fit();
-				SoundManager::PlaySound("bounce", 0, 2);
+				SoundManager::PlaySound("bounce", 0, 3);
 				//SoundManager::SetSoundVolume(15);
 				
 			}
