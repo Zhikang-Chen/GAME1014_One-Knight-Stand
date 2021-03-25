@@ -182,7 +182,7 @@ void PlatformPlayer::Update()
 			m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x + m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
 		m_pSAttackHitBox.y = m_pBoundingBox.y;
 
-		if (!EVMA::KeyPressed(SDL_SCANCODE_K))
+		if (!EVMA::KeyHeld(SDL_SCANCODE_K))
 		{
 			m_state = STATE_IDLING;
 			m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
