@@ -10,9 +10,6 @@
 
 class StateManager
 {
-public: // Public properties.
-	static std::vector<State*> s_states;
-
 public:// Public methods.
 	static void Update();
 	static void Render();
@@ -22,6 +19,8 @@ public:// Public methods.
 	static void Quit();
 	static std::vector<State*>& GetStates();
 private: // Private methods.
+	static std::vector<State*> s_states;
+	static State* m_pNextState;
 	StateManager() {}
 	
 };

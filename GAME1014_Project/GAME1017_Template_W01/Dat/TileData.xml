@@ -8,6 +8,7 @@
 <Tile key="[" x="6" y="0" />
 <Tile key="P" x="7" y="0" />
 <Tile key="]" x="8" y="0" />
+
 <Tile key="#" x="0" y="1" />
 <Tile key="O" x="1" y="1" />
 <Tile key="A" x="2" y="1" />
@@ -17,6 +18,7 @@
 <Tile key="D" x="6" y="1" />
 <Tile key="L" x="7" y="1" />
 <Tile key=":" x="8" y="1" />
+
 <Tile key="Q" x="0" y="2" />
 <Tile key="W" x="1" y="2" />
 <Tile key="R" x="2" y="2" />
@@ -24,12 +26,13 @@
 <Tile key="Y" x="4" y="2" />
 <Tile key="U" x="5" y="2" />
 
+<!--Special Tiles-->
 <Tile key="*" x="0" y="0" />
 <Tile key="S" x="0" y="0" />
 <Tile key="E" x="0" y="0" />
 <Tile key="C" x="0" y="0" />
 
-
+<!--Enemy Spawn Tiles-->
 <Tile key="s" x="-1" y="-1" />
 
 </Data>

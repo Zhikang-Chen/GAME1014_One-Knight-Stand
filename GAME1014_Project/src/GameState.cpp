@@ -30,6 +30,7 @@ void GameState::Enter()
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Sign_End.png", "End");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/on off.png", "On off");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tileset.png", "tiles");
+	//TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tiles.png", "tiles2");
 	
 	m_levels.push_back(new TiledLevel(24, 200, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
 	m_levels.push_back(new TiledLevel(24, 48, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
@@ -84,11 +85,10 @@ void GameState::Enter()
 }
 
 void GameState::Update()
-{
+{	
 	MoveCamTo(FindObject("Player"));
 	for (auto& m_object : m_objects)
 		m_object.second->Update();
-
 	CollisionCheck();
 	
 	if (EVMA::KeyPressed(SDL_SCANCODE_V))
@@ -104,7 +104,7 @@ void GameState::Update()
 	if (EVMA::KeyPressed(SDL_SCANCODE_P))
 	{
 		STMA::PushState(new PauseState());
-	}
+	}	
 }
 
 void GameState::Render()
@@ -194,6 +194,8 @@ void GameState::CollisionCheck()
 					m_currLevel++;
 					if (m_currLevel <= m_levels.size() - 1)
 						ChangeLevel(m_currLevel);
+					else
+						STMA::ChangeState(new TitleState());
 				}
 			}
 			else if (i->GetTag() == CHECKPOINT)
@@ -316,7 +318,7 @@ void GameState::CollisionCheck()
 	}
 
 	// This has to be at the end because of ChangeState
-	if (p->y >= HEIGHT + p->h || EVMA::KeyPressed(SDL_SCANCODE_MINUS))
+	if (p->y >= HEIGHT + p->h)
 	{
 		pp->SetHeath(pp->GetHeath() - 1);
 		for (auto i = Hearts.size() - 1; i > 0; --i)
@@ -339,12 +341,6 @@ void GameState::CollisionCheck()
 	{
 		STMA::ChangeState(new EndState());
 	}
-
-	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr)
-	{
-		if (m_currLevel > m_levels.size() -1)
-			STMA::ChangeState(new TitleState());
-	}
 }
 
 void GameState::MoveCamTo(GameObject* o)
@@ -359,7 +355,7 @@ void GameState::MoveCamTo(GameObject* o)
 			t->x += camOffset;
 		}
 	}
-	for(auto &i : dynamic_cast<TiledLevel*>(FindObject("level"))->GetEnemy())
+	for(auto i : dynamic_cast<TiledLevel*>(FindObject("level"))->GetEnemy())
 	{
 		i->GetDst()->x += camOffset;
 	}

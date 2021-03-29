@@ -4,6 +4,20 @@ void StateManager::Update()
 {
 	if (!s_states.empty()) // empty() and back() are methods of the vector type.
 		s_states.back()->Update();
+	
+	if (m_pNextState != nullptr)
+	{
+		if (!s_states.empty())
+		{
+			s_states.back()->Exit();
+			delete s_states.back(); // De-allocating the state in the heap.
+			s_states.back() = nullptr; // Nullifying pointer to the de-allocated state.
+			s_states.pop_back(); // Removes the now-null pointer from the vector.
+		}
+		m_pNextState->Enter();
+		s_states.push_back(m_pNextState);
+		m_pNextState = nullptr;
+	}
 }
 
 void StateManager::Render()
@@ -24,16 +38,18 @@ void StateManager::PushState(State * pState)
 
 void StateManager::ChangeState(State* pState)
 {
-	if (!s_states.empty())
-	{
-		s_states.back()->Exit();
-		delete s_states.back(); // De-allocating the state in the heap.
-		s_states.back() = nullptr; // Nullifying pointer to the de-allocated state.
-		s_states.pop_back(); // Removes the now-null pointer from the vector.
-	}
-	pState->Enter();
-	s_states.push_back(pState);
+	m_pNextState = pState;
+	//if (!s_states.empty())
+	//{
+	//	s_states.back()->Exit();
+	//	delete s_states.back(); // De-allocating the state in the heap.
+	//	s_states.back() = nullptr; // Nullifying pointer to the de-allocated state.
+	//	s_states.pop_back(); // Removes the now-null pointer from the vector.
+	//}
+	//pState->Enter();
+	//s_states.push_back(pState);
 }
+
 
 void StateManager::PopState()
 {
@@ -61,3 +77,5 @@ void StateManager::Quit()
 std::vector<State*>& StateManager::GetStates(){	return s_states; }
 
 std::vector<State*> StateManager::s_states;
+
+State* StateManager::m_pNextState;
