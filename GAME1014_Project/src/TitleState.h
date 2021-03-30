@@ -27,8 +27,9 @@ private:
 	Label *m_pSubTitle;
 	Label* m_pInstruction;
 
+	Background* bleh;
 	BoolButton* b;
-	
+	BoolButton* e;
 	Background* m_pBackground;
 	Mix_Music* m_titleBgm;
 

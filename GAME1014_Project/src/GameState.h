@@ -31,7 +31,12 @@ public:
 	void ChangeLevel(unsigned int level);
 
 private:
+	SwordSkill* m_pSkillsUI;
+	SwordSkill* m_pHealthUI;
 	SwordSkill* m_pSwordSkill1;
+	SwordSkill* m_pSwordSkill2;
+	SwordSkill* m_pSwordSkill1CD;
+	SwordSkill* m_pSwordSkill2CD;
 	SwordSkill* m_pSwordAttack;
 	vector<Heart*> Hearts;
 

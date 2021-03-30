@@ -32,6 +32,8 @@ public:
 	//SDL_FRect* GetBoundingBox();
 	SDL_FRect* GetAttackHitBox();
 	SDL_FRect* GetSAttackHitBox();
+	bool getSkill1CD() { return m_isSkill1Up; }
+
 	void SetX(float x);
 	void SetY(float y);
 
@@ -43,6 +45,10 @@ private:
 	bool m_grounded; //In most platforming games, the player actually starts in the air
 	bool m_showHitbox;
 	PlayerState m_state;
+	bool m_isSkill1Up;
+	bool m_isSkill2Up;
+	int skill1Timer = 0;
+	int skill2Timer = 0;
 };
 
 #endif

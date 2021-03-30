@@ -17,7 +17,11 @@ void GameState::Enter()
 
 	//Register Textures
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_ALL_ANIMATION-Sheet.png", "Knight");
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordskill.png", "SwordSkill1");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/skills-ui.png", "SkillsUI");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordSkill1.png", "SwordSkill1");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordSkill2.png", "SwordSkill2");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordSkill1CD.png", "SwordSkill1CD");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordSkill2CD.png", "SwordSkill2CD");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordAttack.png", "SwordAttack");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Slime.png", "Slime");
 
@@ -36,25 +40,37 @@ void GameState::Enter()
 	m_levels.push_back(new TiledLevel(24, 48, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
 
 	//UI INTERFACE
-	m_objects.emplace_back("Label3", new Label("Minecraft", 28, 645, "J", { 0,0,0,0 }));
-	m_objects.emplace_back("Label4", new Label("Minecraft", 90, 645, "K", { 0,0,0,0 }));
-	m_objects.emplace_back("HealthLabel", new Label("Minecraft", 20, 20, "Health", { 0,0,0,0 }));
-	m_objects.emplace_back("InstructionLabel1", new Label("Minecraft", 800, 20, "Press Esc to exit game", { 0,0,0,0 }));
-	m_objects.emplace_back("InstructionLabel2", new Label("Minecraft", 800, 40, "Press P to pause game", { 0,0,0,0 }));
-	m_objects.emplace_back("InstructionLabel3", new Label("Minecraft", 800, 60, "Press Space to Jump", { 0,0,0,0 }));
-	m_objects.emplace_back("InstructionLabel4", new Label("Minecraft", 800, 80, "Press J to Attack", { 0,0,0,0 }));
-	m_objects.emplace_back("InstructionLabel5", new Label("Minecraft", 800, 100, "Press K to use Special", { 0,0,0,0 }));
-
+	m_objects.emplace_back("Label3", new Label("Minecraft", 56, 150, "J", { 0,0,0,0 }));
+	m_objects.emplace_back("Label4", new Label("Minecraft", 110, 150, "K", { 0,0,0,0 }));
+	m_objects.emplace_back("Label5", new Label("Minecraft", 160, 150, "L", { 0,0,0,0 }));
+	m_objects.emplace_back("HealthLabel", new Label("Minecraft", 400, 20, "Sponsored by: NornVPN", { 0,0,0,0 }));
+	m_objects.emplace_back("InstructionLabel1", new Label("Minecraft", 790, 20, "Press Esc to exit game", { 0,0,0,0 }));
+	m_objects.emplace_back("InstructionLabel2", new Label("Minecraft", 790, 40, "Press P to pause game", { 0,0,0,0 }));
+	m_objects.emplace_back("InstructionLabel3", new Label("Minecraft", 790, 60, "Press Space to Jump", { 0,0,0,0 }));
+	m_objects.emplace_back("InstructionLabel4", new Label("Minecraft", 790, 80, "Press J to Attack", { 0,0,0,0 }));
+	m_objects.emplace_back("InstructionLabel5", new Label("Minecraft", 790, 100, "Press K to use Special 1", { 0,0,0,0 }));
+	m_objects.emplace_back("InstructionLabel6", new Label("Minecraft", 790, 120, "Press L to use Special 2", { 0,0,0,0 }));
 
 	//UI Icons
+	SDL_QueryTexture(TEMA::GetTexture("SkillsUI"), nullptr, nullptr, &w, &h);
+	m_pSkillsUI = new SwordSkill({ 0,0,w,h }, { 10,5, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("SkillsUI"));
+	m_UIObject.emplace_back("SkillsUI", m_pSkillsUI);
+
+	SDL_QueryTexture(TEMA::GetTexture("HealthUI"), nullptr, nullptr, &w, &h);
+	m_pHealthUI = new SwordSkill({ 0,0,w,h }, { 10,200, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("HealthUI"));
+	m_UIObject.emplace_back("HealthUI", m_pHealthUI);
+
 	SDL_QueryTexture(TEMA::GetTexture("SwordAttack"), nullptr, nullptr, &w, &h);
-	m_pSwordAttack = new SwordSkill({ 0,0,w,h }, { 10,595, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("SwordAttack"));
+	m_pSwordAttack = new SwordSkill({ 0,0,w,h }, { 50,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordAttack"));
 	m_UIObject.emplace_back("SwordAttack", m_pSwordAttack);
 
 	SDL_QueryTexture(TEMA::GetTexture("SwordSkill1"), nullptr, nullptr, &w, &h);
-	m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 70,595, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("SwordSkill1"));
+	m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 100,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordSkill1"));
 	m_UIObject.emplace_back("SwordSkill1", m_pSwordSkill1);
 
+	SDL_QueryTexture(TEMA::GetTexture("SwordSkill2"), nullptr, nullptr, &w, &h);
+	m_pSwordSkill2 = new SwordSkill({ 0,0,w,h }, { 150,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordSkill2"));
+	m_UIObject.emplace_back("SwordSkill2", m_pSwordSkill2);
 
 	//First Level
 	m_currLevel = 0;
@@ -70,7 +86,7 @@ void GameState::Enter()
 	SDL_QueryTexture(TEMA::GetTexture("HeartBar"), nullptr, nullptr, &w, &h);
 	for(auto i = 0; i < dynamic_cast<PlatformPlayer*>(FindObject("Player"))->GetHeath(); i++)
 	{
-		auto* he = new Heart({ 0,0,w,h }, { static_cast<float>(10 + 30 * i), 50.0f, static_cast<float>(w),static_cast<float>(h) });
+		auto* he = new Heart({ 0,0,w,h }, { static_cast<float>(100 + 25 * i), 40.0f, static_cast<float>(w),static_cast<float>(h) });
 		Hearts.push_back(he);
 		m_UIObject.emplace_back("HeartBar" + i, he);
 	}
@@ -180,13 +196,13 @@ void GameState::CollisionCheck()
 					pp->StopX();
 					pp->SetX(t->x - p->w);
 				}
-				else if (p->x - pp->GetVelX()  >= t->x + t->w)
+				else if (p->x - pp->GetVelX() >= t->x + t->w)
 				{ // Colliding with right side of tile.
 					pp->StopX();
 					pp->SetX(t->x + t->w);
 				}
 			}
-			else if(i->GetTag() == END)
+			else if (i->GetTag() == END)
 			{
 				if (EVMA::KeyPressed(SDL_SCANCODE_E))
 				{
@@ -241,7 +257,7 @@ void GameState::CollisionCheck()
 				}
 			}
 
-			
+
 		}
 	}
 

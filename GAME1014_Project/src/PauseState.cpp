@@ -22,9 +22,8 @@ void PauseState::Enter()
 	m_pbutton = new BoolButton({ 0,0,w/3,h }, { WIDTH / 2 - (float)w / 6,HEIGHT / 2,(float)w/3, (float)h }, TEMA::GetTexture("Back"));
 	m_objects.emplace_back("button", m_pbutton);
 
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/exit.png", "Exit");
 	SDL_QueryTexture(TEMA::GetTexture("Exit"), nullptr, nullptr, &w, &h);
-	m_pbutton2 = new BoolButton({ 0,0,w / 3,h }, { WIDTH / 2 - (float)w / 6,HEIGHT / 1.65,(float)w / 3, (float)h }, TEMA::GetTexture("Exit"));
+	m_pbutton2 = new BoolButton({ 0,0,w / 2,h }, { WIDTH / 2 - (float)w / 6, HEIGHT / 1.65,(float)w / 2, (float)h }, TEMA::GetTexture("Exit"));
 	m_objects.emplace_back("button2", m_pbutton2);
 
 	m_pBackground = new SDL_FRect({ 0, 0, (float)WIDTH, (float)HEIGHT });

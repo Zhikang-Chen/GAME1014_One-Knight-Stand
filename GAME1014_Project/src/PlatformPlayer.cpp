@@ -149,7 +149,7 @@ void PlatformPlayer::Update()
 			m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x + m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
 		m_pAttackHitBox.y = m_pBoundingBox.y;
 
-		if ((m_sprite >= m_frameMax / 2) && (EVMA::KeyHeld(SDL_SCANCODE_A) || EVMA::KeyHeld(SDL_SCANCODE_D)))
+		if ((m_sprite >= m_spriteMax / 2) && (EVMA::KeyHeld(SDL_SCANCODE_A) || EVMA::KeyHeld(SDL_SCANCODE_D)))
 		{
 			m_state = STATE_RUNNING;
 			//SetAnimation(9, 13, 22);
@@ -165,7 +165,7 @@ void PlatformPlayer::Update()
 			m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
 		}
 		
-		if(m_sprite == m_frameMax)
+		if(m_sprite == m_spriteMax)
 		{
 			m_state = STATE_IDLING;
 			m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
@@ -182,7 +182,22 @@ void PlatformPlayer::Update()
 			m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x + m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
 		m_pSAttackHitBox.y = m_pBoundingBox.y;
 
-		if (!EVMA::KeyHeld(SDL_SCANCODE_K))
+		if ((m_sprite >= m_spriteMax / 2) && (EVMA::KeyHeld(SDL_SCANCODE_A) || EVMA::KeyHeld(SDL_SCANCODE_D)))
+		{
+			m_state = STATE_RUNNING;
+			//SetAnimation(9, 13, 22);
+			SetAnimation(9, 13, 22);
+			m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
+		}
+		if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
+		{
+			m_state = STATE_JUMPING;
+			m_accelY = -JUMPFORCE;
+			m_grounded = false;
+			m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
+		}
+
+		if (m_sprite == m_spriteMax)
 		{
 			m_state = STATE_IDLING;
 			m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
