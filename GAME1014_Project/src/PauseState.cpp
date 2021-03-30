@@ -26,6 +26,12 @@ void PauseState::Enter()
 	m_pbutton = new BoolButton({ 0,0,w/3,h }, { WIDTH / 2 - (float)w / 6,HEIGHT / 2,(float)w/3, (float)h }, TEMA::GetTexture("Back"));
 	m_objects.emplace_back("button", m_pbutton);
 
+<<<<<<< Updated upstream
+=======
+	SDL_QueryTexture(TEMA::GetTexture("e"), nullptr, nullptr, &w, &h);
+	m_pbutton2 = new BoolButton({ 0,0,w / 3,h }, { WIDTH / 2 - (float)w / 6,HEIGHT / 1.65,(float)w / 3, (float)h }, TEMA::GetTexture("e"));
+	m_objects.emplace_back("button2", m_pbutton2);
+>>>>>>> Stashed changes
 
 	
 	cout << "Entering PauseState" << endl;

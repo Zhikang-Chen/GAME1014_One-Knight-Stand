@@ -48,7 +48,8 @@ bool Engine::Init(const char* title, int xpos, int ypos, int width, int height, 
 	
 	FOMA::RegisterFont("../GAME1017_Template_W01/Font/minecraft_font.ttf", "Minecraft", 16);
 	FOMA::RegisterFont("../GAME1017_Template_W01/Font/zh-cn_0.ttf", "Genshi_font", 64);
-	
+	FOMA::RegisterFont("../GAME1017_Template_W01/Font/FreePixel.ttf", "Pixel", 35);
+	FOMA::RegisterFont("../GAME1017_Template_W01/Font/Boxy-Bold.ttf", "Bbold", 70);
 	STMA::PushState(new TitleState());
 	cout << "Engine Init success!" << endl;
 	return true;

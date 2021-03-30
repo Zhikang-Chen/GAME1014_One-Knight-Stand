@@ -25,10 +25,15 @@ public:
 private:
 	Label* m_pTitle;
 	Label *m_pSubTitle;
+<<<<<<< Updated upstream
 	Label* something;
 
+=======
+	Label* m_pInstruction;
+	Background* bleh;
+>>>>>>> Stashed changes
 	BoolButton* b;
-	
+	BoolButton* e;
 	Background* m_pBackground;
 
 };

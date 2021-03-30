@@ -28,10 +28,21 @@ public:
 	void SetAccelY(double a);
 	bool IsGrounded();
 	bool SetGrounded(bool g);
+<<<<<<< Updated upstream
 	bool GetAlive();
 	void SetAlive(bool a);
 	float GetVelX();
 	float GetVelY();
+=======
+
+	// GetDst and GetBoundingBox now both return m_pBoundingBox
+	// Too much work to remove GetBoundingBox so it will stay
+	SDL_FRect* GetDst() { return &m_pBoundingBox; }
+	//SDL_FRect* GetBoundingBox();
+	SDL_FRect* GetAttackHitBox();
+	SDL_FRect* GetSAttackHitBox();
+	bool getSkill1CD() {return m_isSkill1Up;}
+>>>>>>> Stashed changes
 	void SetX(float x);
 	void SetY(float y);
 
@@ -50,6 +61,7 @@ private:
 	bool m_secondJump;
 	bool m_showHitbox;
 	PlayerState m_state;
+<<<<<<< Updated upstream
 	float m_accelX, //Acceleration on the X axis, horizontal force
 		m_accelY,//Acceleration on the Y axis, vertical force
 		m_velX, //Velocity for X 
@@ -65,6 +77,12 @@ private:
 
 
 	
+=======
+	bool m_isSkill1Up;
+	bool m_isSkill2Up;
+	int skill1Timer = 0;
+	int skill2Timer = 0;
+>>>>>>> Stashed changes
 };
 
 #endif

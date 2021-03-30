@@ -8,25 +8,57 @@ TitleState::TitleState() {}
 void TitleState::Enter()
 {
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/DotC-LgXoAMrpqi.png", "Background_1");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/titlescreen.jpg", "Background_2");
+
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_ALL_ANIMATION-Sheet.png", "bleh");
 	int w, h;
-	SDL_QueryTexture(TEMA::GetTexture("Background_1"), nullptr, nullptr, &w, &h);
-	m_pBackground = new Background({ 0,0,(int)w,(int)h }, {0,0, (float)w*5, (float)h*5 }, TEMA::GetTexture("Background_1"));
+	SDL_QueryTexture(TEMA::GetTexture("Background_2"), nullptr, nullptr, &w, &h);
+	m_pBackground = new Background({ 0,0,(int)w,(int)h }, {-380,0, (float)w-400, (float)h-280}, TEMA::GetTexture("Background_2"));
 	m_objects.emplace_back("Background", m_pBackground);
 	
+<<<<<<< Updated upstream
 	m_pSubTitle = new Label("Minecraft",WIDTH / 20, HEIGHT / 7, "Insert sub title here", { 0,0,0,0 });
+=======
+	m_pSubTitle = new Label("Pixel",380 + WIDTH / 30, 400 + HEIGHT / 7, "Devs: OPRON", { 0,0,0,0 });
+>>>>>>> Stashed changes
 	m_objects.emplace_back("Subtitle", m_pSubTitle);
 	
-	m_pTitle = new Label("Genshi_font", WIDTH / 25, HEIGHT / 27, "One Knight Stand", { 0,0,0,0 });
+	m_pTitle = new Label("Bbold", 50 + WIDTH / 25, 160 + HEIGHT / 27, "One Knight Stand", { 0,0,0,0 });
 	m_objects.emplace_back("Title", m_pTitle);
 
+<<<<<<< Updated upstream
 	something = new Label("Minecraft", WIDTH /25, HEIGHT - 50, "I made the button but you can still use 'n' because I am too lazy to remove it", { 0,0,0,0 });
 	m_objects.emplace_back("idk", something);
+=======
+	SDL_QueryTexture(TEMA::GetTexture("bleh"), nullptr, nullptr, &w, &h);
+	bleh = new Background({ 0, 0, 77,h }, { 486, 295, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("bleh"));
+	
+	m_objects.emplace_back("bleh", bleh);
+>>>>>>> Stashed changes
 
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/p.png", "Play");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/e.png", "Exit");
 	SDL_QueryTexture(TEMA::GetTexture("Play"), nullptr, nullptr, &w, &h);
+<<<<<<< Updated upstream
 	b = new BoolButton({ 0,0,w/3,h }, { ((float)WIDTH / 2) - ((w/3) / 2),((float)HEIGHT / 2) - (h / 2) , (float)w/3, (float)h }, TEMA::GetTexture("Play"));
 	//m_objects.emplace("no", b);
 	m_objects.emplace_back("no", b);
+=======
+	b = new BoolButton({ 0,0,w/2 ,h }, { (float)WIDTH / 2 - w/2 /2,(float)HEIGHT / 2 - h / 2 , (float)w/2, (float)h }, TEMA::GetTexture("Play"));
+	//m_objects.emplace("no", b);
+	m_objects.emplace_back("no", b);
+	e = new BoolButton({ 0,0,w / 2 ,h }, { (float)WIDTH / 2 - w / 2 / 2,(float)HEIGHT / 2 - (h - 130) / 2 , (float)w/ 2, (float)h}, TEMA::GetTexture("Exit"));
+	m_objects.emplace_back("Exit", e);
+
+	//m_titleBgm = Mix_LoadMUS("../GAME1017_Template_W01/Aud/VisagerTreeLoop.mp3");
+	//Mix_PlayMusic(m_titleBgm, -1); // 0, 1-n, or -1 for infinite
+	//Mix_VolumeMusic(30);
+	
+	//Load and Play the music on the title screen
+	SoundManager::Load("Aud/VisagerTreeLoop.mp3", "title", SOUND_MUSIC );
+	SoundManager::PlayMusic("title", -1);
+	SoundManager::SetMusicVolume(4);
+>>>>>>> Stashed changes
 	
 	std::cout << "Entering TitleState..." << std::endl;
 }
@@ -37,8 +69,17 @@ void TitleState::Update()
 	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
 		i->second->Update();
 	
-	if (EVMA::KeyPressed(SDL_SCANCODE_N) || b->GetChangeState())
+	if (b->GetChangeState())
+	{
+		
 		STMA::ChangeState(new GameState());// Change to new GameState
+	}
+	else if (e->GetChangeState())
+	{
+
+		exit(-1);
+	}
+	
 }
 
 void TitleState::Render()

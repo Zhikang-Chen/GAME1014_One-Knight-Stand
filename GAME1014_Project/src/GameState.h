@@ -26,6 +26,7 @@ public:
 	void UpdateCam();
 
 private:
+<<<<<<< Updated upstream
 	Sword* m_pWeapon;
 	Label* m_pSwordSkill;
 	ItemObject* AnItem;
@@ -33,6 +34,21 @@ private:
 	Heart* m_pHeartbar;
 	Heart* m_pFullHeart;
 	Heart* m_pEmptyHeart;
+=======
+	SwordSkill* m_pSkillsUI;
+	SwordSkill* m_pHealthUI;
+	SwordSkill* m_pSwordSkill1;
+	SwordSkill* m_pSwordSkill2;
+	SwordSkill* m_pSwordSkill1CD;
+	SwordSkill* m_pSwordSkill2CD;
+	SwordSkill* m_pSwordAttack;
+	vector<Heart*> Hearts;
+
+	Tile* m_spawn;
+	vector<TiledLevel*> m_levels;
+	unsigned int m_currLevel;
+	
+>>>>>>> Stashed changes
 	std::vector<std::pair<std::string, GameObject*>> m_UIObject; //Almost the same as m_objecst but those wont move with the camera
 };
 
