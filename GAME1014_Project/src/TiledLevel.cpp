@@ -1,6 +1,7 @@
 #include "TiledLevel.h"
 
 #include "Slime.h"
+#include "Zombie.h"
 
 TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int w, const int h, 
                        const char* tileData, const char* levelData, const char* tileKey) :m_rows(r), m_cols(c), m_tileKey(tileKey)
@@ -29,7 +30,7 @@ TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int
 			m_tiles.emplace(k, new CheckPointTile({ x,y,32,32 }, { 0.0f, 0.0f, (float)w, (float)h }));
 		else if (k == '[' || k == 'P' || k == ']')
 			m_tiles.emplace(k, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey),PLATFORM));
-		else if(k != '*' && k != 's')
+		else if(k != '*' && k != 's' && k != 'z')
 			m_tiles.emplace(k, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey), OBSTACLE));
 		else
 			m_tiles.emplace(k, new Tile({ x * w, y * h, w, h }, { 0.0f, 0.0f, (float)w, (float)h }, TEMA::GetTexture(m_tileKey), AIR));
@@ -58,6 +59,15 @@ TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int
 					cout << r->x << ',' << r->y << endl;
 					m_enemy.push_back(new Slime({ 0,0,w,h },
 						{ r->x - w, r->y - h,(float)w,(float)h }));
+				}
+
+				if (key == 'z')
+				{
+					auto z = m_level[row][col]->GetDst();
+					SDL_QueryTexture(TEMA::GetTexture("Zombie"), nullptr, nullptr, &w, &h);
+					cout << z->x << ',' << z->y << endl;
+					m_enemy.push_back(new Zombie({ 0,0,w,h },
+						{ z->x - w, z->y - h,(float)w,(float)h }));
 				}
 				
 				switch (m_level[row][col]->GetTag()) {

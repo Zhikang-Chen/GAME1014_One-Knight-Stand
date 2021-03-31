@@ -16,6 +16,8 @@
 #include "Heart.h"
 #include "SwordSkill.h"
 #include "Slime.h"
+#include "Zombie.h"
+
 
 class GameState : public State
 {
