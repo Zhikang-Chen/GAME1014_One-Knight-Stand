@@ -5,16 +5,14 @@
 #include <fstream>
 #include <map>
 #include <vector>
-
 #include "Enemy.h"
-#include "Engine.h"
 #include "GameObject.h"
 #include "SpriteObject.h"
 #include "TextureManager.h"
 #include "tinyxml2.h"
 using namespace tinyxml2;
 
-enum Tag { NONE = -1 ,SPAWN, END, AIR, OBSTACLE, HAZARD, CHECKPOINT };
+enum Tag { NONE = -1, SPAWN, END, AIR, OBSTACLE, HAZARD, CHECKPOINT, PLATFORM };
 
 class Tile : public SpriteObject
 {
@@ -72,22 +70,19 @@ public:
 	void Render();
 	vector<Enemy*>& GetEnemy();
 	vector<Tile*>& GetObstacles();
-	//vector<Tile*>& GetCheckPoint() { return m_checkPoint; }
+	vector<Tile*>& GetCheckPoint() { return m_checkPoint; }
 	vector<Tile*>& GetVisibleTile() { return m_visibleTile; }
 	vector<vector<Tile*>>& GetAllTile() { return m_level; }
 	Tile* GetStartingTile() const { return m_pStartingTile; }
-	Tile* GetEndTile() const { return m_pEndTile; }
 	XMLDocument xmlDoc;
 
 private:
 	const char* m_tileKey;
 	int m_rows, m_cols;
 	Tile* m_pStartingTile;
-	Tile* m_pEndTile;
 	map<char, Tile*> m_tiles; // Our map of 16 prototype Tile objects.
 	vector<vector<Tile*>> m_level; // 2D vector.
-	//vector<Tile*> m_checkPoint; 
-	//vector<Tile*> m_obstacles;
+	vector<Tile*> m_checkPoint; 
 	vector<Enemy*> m_enemy;
 	vector<Tile*> m_visibleTile;
 };

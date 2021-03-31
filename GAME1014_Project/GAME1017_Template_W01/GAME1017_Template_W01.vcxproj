@@ -187,8 +187,8 @@
     <Text Include="Dat\Tiledata.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Xml Include="Dat\SaveData.xml" />
     <Xml Include="Dat\TileData.xml" />
-    <Xml Include="XMLFile.xml" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Img\Slime.png" />

@@ -226,7 +226,7 @@
     <Xml Include="Dat\TileData.xml">
       <Filter>Data</Filter>
     </Xml>
-    <Xml Include="XMLFile.xml">
+    <Xml Include="Dat\SaveData.xml">
       <Filter>Data</Filter>
     </Xml>
   </ItemGroup>

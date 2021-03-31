@@ -8,6 +8,7 @@
 #include "EventManager.h"
 #include "StateManager.h"
 #include "TextureManager.h"
+#include "SaveManager.h"
 #include <vector>
 #include "ItemObject.h"
 
@@ -29,7 +30,8 @@ public:
 	void MoveCamTo(GameObject* o);
 	void UpdateCam(GameObject* o);
 	void ChangeLevel(unsigned int level);
-
+	unsigned int GetLevel() const;
+	unsigned int GetCheckPoint() const;
 private:
 	SwordSkill* m_pSkillsUI;
 	SwordSkill* m_pHealthUI;
@@ -43,6 +45,7 @@ private:
 	Tile* m_spawn;
 	vector<TiledLevel*> m_levels;
 	unsigned int m_currLevel;
+	unsigned int m_currCheckPoint;
 	
 	std::vector<std::pair<std::string, GameObject*>> m_UIObject; //Almost the same as m_objecst but those wont move with the camera
 };

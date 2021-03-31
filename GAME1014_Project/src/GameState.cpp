@@ -1,6 +1,5 @@
 ﻿// Begin GameState
 #include "GameState.h"
-
 #include "EndState.h"
 #include "PauseState.h"
 #include "SoundManager.h"
@@ -11,7 +10,8 @@ GameState::GameState() {}
 void GameState::Enter()
 {
 	int w, h;
-
+	auto save = SAMA::GetSave();
+	
 	SDL_QueryTexture(TEMA::GetTexture("Background_1"), nullptr, nullptr, &w, &h);
 	m_objects.emplace_back("Background", new Background({ 0,0,static_cast<int>(w),static_cast<int>(h) }, { 0,0, static_cast<float>(w) * 5, static_cast<float>(h) * 5 }, TEMA::GetTexture("Background_1")));
 
@@ -73,20 +73,26 @@ void GameState::Enter()
 	m_UIObject.emplace_back("SwordSkill2", m_pSwordSkill2);
 
 	//First Level
-	m_currLevel = 0;
-	m_objects.emplace_back("level", m_levels[0]);
+	m_currLevel = save->m_currLevel;
+	m_objects.emplace_back("level", m_levels[m_currLevel]);
 
-	m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile();
+	m_currCheckPoint = save->m_checkpoint;
+	
+	m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetCheckPoint()[m_currCheckPoint];
 	SDL_FRect* s = m_spawn->GetDst();
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
 
-	m_objects.emplace_back("Player", new PlatformPlayer({ 0, 0, 77,h }, { s->x, s->y, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight")));
-
+	auto Pp = new PlatformPlayer({ 0, 0, 77,h }, { s->x, s->y, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight"));
+	m_objects.emplace_back("Player", Pp);
+	Pp->SetHeath(save->m_currHealth);
+	Pp->SetMaxHealth(save->m_maxHealth);
 	
 	SDL_QueryTexture(TEMA::GetTexture("HeartBar"), nullptr, nullptr, &w, &h);
-	for(auto i = 0; i < dynamic_cast<PlatformPlayer*>(FindObject("Player"))->GetHeath(); i++)
+	for(auto i = 0; i < Pp->GetMaxHealth(); i++)
 	{
 		auto* he = new Heart({ 0,0,w,h }, { static_cast<float>(100 + 25 * i), 40.0f, static_cast<float>(w),static_cast<float>(h) });
+		if (Pp->GetHeath() <= i )
+			he->SetEmpty(true);
 		Hearts.push_back(he);
 		m_UIObject.emplace_back("HeartBar" + i, he);
 	}
@@ -120,7 +126,13 @@ void GameState::Update()
 	if (EVMA::KeyPressed(SDL_SCANCODE_P))
 	{
 		STMA::PushState(new PauseState());
-	}	
+	}
+
+	if (EVMA::KeyPressed(SDL_SCANCODE_M))
+	{
+		SAMA::OverwriteSave();
+	}
+	
 }
 
 void GameState::Render()
@@ -142,6 +154,8 @@ void GameState::Render()
 
 void GameState::Exit()
 {
+	//SAMA::OverwriteSave();
+	
 	for (auto& m_object : m_objects)
 	{
 		delete m_object.second;
@@ -202,6 +216,18 @@ void GameState::CollisionCheck()
 					pp->SetX(t->x + t->w);
 				}
 			}
+			else if (i->GetTag() == PLATFORM)
+			{
+				if (!EVMA::KeyHeld(SDL_SCANCODE_S))
+				{
+					if (p->y + p->h - pp->GetVelY() <= t->y)
+					{ // Colliding with top side of tile.
+						pp->StopY();
+						pp->SetY(t->y - p->h);
+						pp->SetGrounded(true);
+					}
+				}
+			}
 			else if (i->GetTag() == END)
 			{
 				if (EVMA::KeyPressed(SDL_SCANCODE_E))
@@ -216,6 +242,15 @@ void GameState::CollisionCheck()
 			}
 			else if (i->GetTag() == CHECKPOINT)
 			{
+				for(unsigned int i2 = 0 ; i2 < dynamic_cast<TiledLevel*>(FindObject("level"))->GetCheckPoint().size() ; i2++)
+				{
+					if (dynamic_cast<TiledLevel*>(FindObject("level"))->GetCheckPoint()[i2] == i)
+					{
+						m_currCheckPoint = i2;
+					}
+					
+					//m_currCheckPoint;
+				}
 				i->Activate();
 				m_spawn = i;
 			}
@@ -392,6 +427,7 @@ void GameState::ChangeLevel(unsigned int level)
 			//m_object.second = nullptr;
 		}
 	}
+	m_currCheckPoint = 0;
 	m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile();
 	SDL_FRect* s = m_spawn->GetDst();
 	
@@ -402,3 +438,7 @@ void GameState::ChangeLevel(unsigned int level)
 	pp->SetY(s->y);
 	MoveCamTo(pp);
 }
+
+unsigned int GameState::GetLevel() const { return m_currLevel;}
+
+unsigned int GameState::GetCheckPoint() const { return m_currCheckPoint; }
