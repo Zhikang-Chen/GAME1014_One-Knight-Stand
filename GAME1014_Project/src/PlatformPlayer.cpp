@@ -24,6 +24,7 @@ PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : Entity
 	//Load Sound effects
 	SoundManager::Load("Aud/sword_swing.wav", "slash", SOUND_SFX);
 	SoundManager::Load("Aud/ice_slash.wav", "specSlash", SOUND_SFX);
+	SoundManager::Load("Aud/ding.mp3", "ding", SOUND_SFX);
 }
 
 
@@ -35,7 +36,22 @@ void PlatformPlayer::Update()
 	if (EVMA::KeyPressed(SDL_SCANCODE_H))
 		ShowHitbox();
 	
-	// Checking states.
+	if (m_isSkill1Up == false)
+	{
+		skill1Timer += 0;
+	}
+	else
+	{
+		skill1Timer += 1;
+	}
+	if (skill1Timer / 300 == 1)
+	{
+		cout << "skill 1 up" << endl;
+		//SoundManager::PlaySound("ding", 0, 0);
+		skill1Timer = 0;
+		m_isSkill1Up = false;
+	}
+	
 	switch (m_state)
 	{
 	case STATE_IDLING:
@@ -53,16 +69,23 @@ void PlatformPlayer::Update()
 			SoundManager::PlaySound("slash", 0, 0);
 		}
 		//ADDED A BUTTON to use weapon ability
-		if (EVMA::KeyPressed(SDL_SCANCODE_K))
+		if (m_isSkill1Up == false)
 		{
-			m_state = STATE_SPECIAL_ATTACK;
-			//SetAnimation()
-			SetAnimation(4, 23, 26);
+			if (EVMA::KeyPressed(SDL_SCANCODE_K))
+			{
+				m_state = STATE_SPECIAL_ATTACK;
+				//SetAnimation()
 
-			SoundManager::PlaySound("specSlash", 0, 0);
+				SetAnimation(4, 23, 26);
+
+				SoundManager::PlaySound("specSlash", 0, 0);
+				m_isSkill1Up = true;
+
+			}
 
 		}
 
+		
 		// Transition to jump.
 		if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
 		{
@@ -203,9 +226,14 @@ void PlatformPlayer::Update()
 			m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
 			SetAnimation(9, 13, 22);
 		}
+		
 		break;
 	}
 
+	// timer check for SKill CD 1
+	
+		
+	
 	
 	// x axis
 	m_velX += m_accelX;

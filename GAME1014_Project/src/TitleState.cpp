@@ -56,6 +56,11 @@ void TitleState::Update()
 	
 	if (EVMA::KeyPressed(SDL_SCANCODE_N) || b->GetChangeState())
 		STMA::ChangeState(new GameState());// Change to new GameState
+
+	if(e->GetChangeState())
+	{
+		exit(-1);
+	}
 }
 
 void TitleState::Render()

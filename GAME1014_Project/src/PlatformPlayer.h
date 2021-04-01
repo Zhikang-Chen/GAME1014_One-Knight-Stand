@@ -33,7 +33,11 @@ public:
 	SDL_FRect* GetAttackHitBox();
 	SDL_FRect* GetSAttackHitBox();
 	bool getSkill1CD() { return m_isSkill1Up; }
-
+	bool setSkill1CD(bool setSkillCD)
+	{
+		m_isSkill1Up = setSkillCD;
+		return m_isSkill1Up;
+	}
 	void SetX(float x);
 	void SetY(float y);
 

@@ -68,10 +68,12 @@ void GameState::Enter()
 	m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 100,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordSkill1"));
 	m_UIObject.emplace_back("SwordSkill1", m_pSwordSkill1);
 
+	
+	
 	SDL_QueryTexture(TEMA::GetTexture("SwordSkill2"), nullptr, nullptr, &w, &h);
 	m_pSwordSkill2 = new SwordSkill({ 0,0,w,h }, { 150,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordSkill2"));
 	m_UIObject.emplace_back("SwordSkill2", m_pSwordSkill2);
-
+	
 	//First Level
 	m_currLevel = save->m_currLevel;
 	m_objects.emplace_back("level", m_levels[m_currLevel]);
@@ -96,6 +98,7 @@ void GameState::Enter()
 		Hearts.push_back(he);
 		m_UIObject.emplace_back("HeartBar" + i, he);
 	}
+
 
 	//Load and play the game music
 	SoundManager::Load("Aud/TownTheme.mp3", "gameLevel1", SOUND_MUSIC);
@@ -127,14 +130,23 @@ void GameState::Update()
 	{
 		STMA::PushState(new PauseState());
 	}
+	int w, h;
 
-	if (EVMA::KeyPressed(SDL_SCANCODE_M))
+	if (dynamic_cast<PlatformPlayer*>(FindObject("Player"))->getSkill1CD() == true)
 	{
-		SAMA::OverwriteSave();
+		SDL_QueryTexture(TEMA::GetTexture("SwordSkill1CD"), nullptr, nullptr, &w, &h);
+		m_pSwordSkill1CD = new SwordSkill({ 0,0,w,h }, { 100,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordSkill1CD"));
+		m_UIObject.emplace_back("SwordSkill1CD", m_pSwordSkill1CD);
 	}
-	
-}
+	else
+	{
+		SDL_QueryTexture(TEMA::GetTexture("SwordSkill1"), nullptr, nullptr, &w, &h);
+		m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 100,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordSkill1"));
+		m_UIObject.emplace_back("SwordSkill1", m_pSwordSkill1);
+		dynamic_cast<PlatformPlayer*>(FindObject("Player"))->setSkill1CD(false);
+	}
 
+}
 void GameState::Render()
 {
 	//std::cout << "Rendering TitleState..." << std::endl;
