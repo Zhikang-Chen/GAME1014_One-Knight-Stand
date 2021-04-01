@@ -147,6 +147,7 @@
     <ClCompile Include="..\src\tinyxml2.cpp" />
     <ClCompile Include="..\src\TitleState.cpp" />
     <ClCompile Include="..\src\WeaponObject.cpp" />
+    <ClCompile Include="..\src\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Background.h" />
@@ -179,6 +180,7 @@
     <ClInclude Include="..\src\tinyxml2.h" />
     <ClInclude Include="..\src\TitleState.h" />
     <ClInclude Include="..\src\WeaponObject.h" />
+    <ClInclude Include="..\src\Zombie.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
