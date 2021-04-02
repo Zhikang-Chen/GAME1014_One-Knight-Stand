@@ -14,9 +14,23 @@ m_grounded(false)
 
 }
 
+// I don't like update to be change so don't
+// If you want to change anything do it with Move
 void Enemy::Update()
 {
-	//m_accelY = -JUMPFORCE;
+	Move();
+
+	for (unsigned int i = 0; i < m_effects.size(); i++)
+	{
+		m_effects[i]->Update();
+		if (m_effects[i]->HasEffectEnd())
+		{
+			delete m_effects[i];
+			m_effects.erase(m_effects.begin() + i);
+			m_effects.shrink_to_fit();
+		}
+	}
+
 	// x axis
 	m_velX += m_accelX;
 	m_velX *= (m_grounded ? m_drag : 1.0f);
@@ -42,4 +56,18 @@ void Enemy::LoseHealth() { m_curHealth -= 1; } //Send the player's weapon damage
 bool Enemy::IsGrounded() { return m_grounded; }
 
 bool Enemy::SetGrounded(bool g) { return m_grounded = g; }
+
+void Enemy::addEffect(Effect* e)
+{
+	for (auto ef : m_effects)
+	{
+		if(ef->GetType() == e->GetType())
+		{
+			delete e;
+			return;
+		}
+	}
+	e->SetEffectedEntity(this);
+	m_effects.push_back(e);
+}
 

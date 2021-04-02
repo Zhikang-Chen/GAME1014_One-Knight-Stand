@@ -13,9 +13,9 @@ private:
 
 public:
 	Zombie(SDL_Rect s, SDL_FRect d);
-	void Update();
+	//void Update();
 	void Render();
-	virtual void Move();
+	void Move();
 };
 
 #endif

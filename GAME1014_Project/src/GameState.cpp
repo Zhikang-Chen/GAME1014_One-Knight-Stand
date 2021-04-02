@@ -360,28 +360,21 @@ void GameState::CollisionCheck()
 		//Attack Collision with Enemies
 		if (COMA::AABBCheck(*attackbox, *s))
 		{
-			enemies[i]->LoseHealth();
-			if (enemies[i]->GetHeath() == 0)
-			{
-				delete enemies[i];
-				enemies.erase(enemies.begin() + i);
-				enemies.shrink_to_fit();
-				SoundManager::PlaySound("bounce", 0, 3);
-				//SoundManager::SetSoundVolume(15);
-			}
+			//enemies[i]->LoseHealth();
+
+			enemies[i]->addEffect(new Stun(300));
+			enemies[i]->addEffect(new Bleed(120));
 		}
 		if (COMA::AABBCheck(*Sattackbox, *s))
 		{
 			enemies[i]->LoseHealth();
-			if (enemies[i]->GetHeath() == 0)
-			{
-				delete enemies[i];
-				enemies.erase(enemies.begin() + i);
-				enemies.shrink_to_fit();
-				//SoundManager::PlaySound("bounce", 0, 0);
-				//SoundManager::SetSoundVolume(15);
-
-			}
+		}
+		
+		if (enemies[i]->GetHeath() <= 0)
+		{
+			delete enemies[i];
+			enemies.erase(enemies.begin() + i);
+			enemies.shrink_to_fit();
 		}
 	}
 

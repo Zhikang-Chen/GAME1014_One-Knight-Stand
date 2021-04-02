@@ -17,8 +17,18 @@ void StateManager::Update()
 		m_pNextState->Enter();
 		s_states.push_back(m_pNextState);
 		m_pNextState = nullptr;
-
-		
+	}
+	else if(m_popBackState)
+	{
+		m_popBackState = false;
+		if (!s_states.empty())
+		{
+			s_states.back()->Exit();
+			delete s_states.back();
+			s_states.back() = nullptr;
+			s_states.pop_back();
+		}
+		s_states.back()->Resume();
 	}
 }
 
@@ -54,14 +64,7 @@ void StateManager::ChangeState(State* pState)
 
 void StateManager::PopState()
 {
-	if (!s_states.empty())
-	{
-		s_states.back()->Exit();
-		delete s_states.back();
-		s_states.back() = nullptr;
-		s_states.pop_back();
-	}
-	s_states.back()->Resume();
+	m_popBackState = true;
 }
 
 void StateManager::Quit()
@@ -80,3 +83,5 @@ std::vector<State*>& StateManager::GetStates(){	return s_states; }
 std::vector<State*> StateManager::s_states;
 
 State* StateManager::m_pNextState;
+
+bool StateManager::m_popBackState = false;

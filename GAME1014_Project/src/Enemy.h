@@ -3,28 +3,31 @@
 #define _ENEMY_H_
 #define GRAV 4.0
 #define JUMPFORCE 40.0; //Acceleration
+#include "Effect.h"
 #include "EntityObject.h"
 
 class Enemy : public EntityObject
 {
 public:
-	Enemy(SDL_Rect s, SDL_FRect d, SDL_Texture* t);
+	Enemy(SDL_Rect s, SDL_FRect, SDL_Texture* t);
 
 	virtual void Update();
 	virtual void Render();
 	
 	virtual void LoseHealth();
-	virtual void AttackPattern(){};
+	virtual void Move(){}
 
 	bool IsGrounded();
 	bool SetGrounded(bool g);
 
+	void addEffect(Effect* e);
+
 protected:
-	/*A lot of this stuff is copied over from the PlatformPlayer class,
-	* but I don't think it makes sense to make Enemy a child of PlatformPlayer so here we are*/
 	bool m_grounded;
 	bool m_alive;
-
+	vector<Effect*> m_effects;
+	
+	friend Effect;
 };
 
 

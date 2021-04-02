@@ -26,6 +26,12 @@
     <Filter Include="Data">
       <UniqueIdentifier>{92e789be-de52-4230-9f69-2bef3f20d91b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game Objects\Entities">
+      <UniqueIdentifier>{cb06f6db-e2d7-417f-ad51-721fbd2bf04d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Objects\Entities\Effect">
+      <UniqueIdentifier>{600e7235-0e33-454e-9cab-e4db534df243}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\CollisionManager.cpp">
@@ -73,13 +79,7 @@
     <ClCompile Include="..\src\Label.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\PlatformPlayer.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Background.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\WeaponObject.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\EndState.cpp">
@@ -103,20 +103,26 @@
     <ClCompile Include="..\src\tinyxml2.cpp">
       <Filter>TinyXML2</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Enemy.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Slime.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\EntityObject.cpp">
-      <Filter>Game Objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\SaveManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Enemy.cpp">
+      <Filter>Game Objects\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\EntityObject.cpp">
+      <Filter>Game Objects\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Slime.cpp">
+      <Filter>Game Objects\Entities</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Zombie.cpp">
-      <Filter>Game Objects</Filter>
+      <Filter>Game Objects\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PlatformPlayer.cpp">
+      <Filter>Game Objects\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Effect.cpp">
+      <Filter>Game Objects\Entities\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -165,9 +171,6 @@
     <ClInclude Include="..\src\Label.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\PlatformPlayer.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\GameObject.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -175,9 +178,6 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Background.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\WeaponObject.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\TiledLevel.h">
@@ -201,20 +201,26 @@
     <ClInclude Include="..\src\tinyxml2.h">
       <Filter>TinyXML2</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Enemy.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Slime.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\EntityObject.h">
-      <Filter>Game Objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\SaveManager.h">
       <Filter>Managers</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Enemy.h">
+      <Filter>Game Objects\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\EntityObject.h">
+      <Filter>Game Objects\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Slime.h">
+      <Filter>Game Objects\Entities</Filter>
+    </ClInclude>
     <ClInclude Include="..\src\Zombie.h">
-      <Filter>Game Objects</Filter>
+      <Filter>Game Objects\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PlatformPlayer.h">
+      <Filter>Game Objects\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Effect.h">
+      <Filter>Game Objects\Entities\Effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -235,10 +241,5 @@
     <Xml Include="Dat\SaveData.xml">
       <Filter>Data</Filter>
     </Xml>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Img\Slime.png">
-      <Filter>Game Objects</Filter>
-    </Image>
   </ItemGroup>
 </Project>

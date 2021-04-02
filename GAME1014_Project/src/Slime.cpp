@@ -8,33 +8,12 @@ Slime::Slime(SDL_Rect s, SDL_FRect d) : Enemy(s, d, TEMA::GetTexture("Slime"))
 	m_jumpTimer = 0;
 }
 
-void Slime::Update()
-{
-	//AttackPattern();
-	// x axis
-	m_velX += m_accelX;
-	m_velX *= (m_grounded ? m_drag : 1.0f);
-
-	//Velocity clamping
-	m_velX = std::min(std::max(m_velX, -m_maxVelX), m_maxVelX); //std::max first check, std::min second	
-	m_dst.x += m_velX;
-
-	// y axis
-	m_velY += m_accelY + m_grav;
-	m_velY = std::min(std::max(m_velY, -m_maxVelY), (m_grav * 4.0f)); //m_grav is how fast you're going to fall
-	m_dst.y += m_velY;
-
-	//Reset acceleration
-	m_accelX = m_accelY = 0.0; //Similar to a keyup event
-
-}
-
 void Slime::Render()
 {
 	SDL_RenderCopyExF(Engine::Instance().GetRenderer(),m_pText ,GetSrc(), GetDst(), m_angle, 0, m_facingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
 }
 
-void Slime::AttackPattern()
+void Slime::Move()
 {
 	m_jumpTimer++;
 	if(m_jumpTimer >= 120)

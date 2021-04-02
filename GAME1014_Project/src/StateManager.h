@@ -5,7 +5,6 @@
 #include "TitleState.h"
 #include "GameState.h"
 #include "States.h"
-#include <vector>
 
 
 class StateManager
@@ -21,6 +20,7 @@ public:// Public methods.
 private: // Private methods.
 	static std::vector<State*> s_states;
 	static State* m_pNextState;
+	static bool m_popBackState;
 	StateManager() {}
 	
 };

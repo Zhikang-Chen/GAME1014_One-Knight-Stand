@@ -14,9 +14,9 @@ private:
 
 public:
 	Slime(SDL_Rect s, SDL_FRect d);
-	void Update();
+	//void Update();
 	void Render();
-	virtual void AttackPattern();
+	virtual void Move();
 	
 };
 
