@@ -152,7 +152,19 @@ void GameState::Update()
 		dynamic_cast<PlatformPlayer*>(FindObject("Player"))->setSkill1CD(false);
 	}
 
-
+	if (dynamic_cast<PlatformPlayer*>(FindObject("Player"))->getSkill2CD() == true)
+	{
+		SDL_QueryTexture(TEMA::GetTexture("SwordSkill2CD"), nullptr, nullptr, &w, &h);
+		m_pSwordSkill2CD = new SwordSkill({ 0,0,w,h }, { 150,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordSkill2CD"));
+		m_UIObject.emplace_back("SwordSkill2CD", m_pSwordSkill2CD);
+	}
+	else
+	{
+		SDL_QueryTexture(TEMA::GetTexture("SwordSkill2"), nullptr, nullptr, &w, &h);
+		m_pSwordSkill2 = new SwordSkill({ 0,0,w,h }, { 150,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordSkill2"));
+		m_UIObject.emplace_back("SwordSkill2", m_pSwordSkill2);
+		dynamic_cast<PlatformPlayer*>(FindObject("Player"))->setSkill2CD(false);
+	}
 	
 }
 
@@ -316,21 +328,6 @@ void GameState::CollisionCheck()
 		}
 	}
 
-	// Heal the player
-	// Remove at beta
-	//if(EVMA::KeyPressed(SDL_SCANCODE_EQUALS) && pp->GetHeath() != pp->GetMaxHealth())
-	//{
-	//	pp->SetHeath(pp->GetHeath() + 1);
-	//	for (auto i = 0; i < Hearts.size() ; ++i)
-	//	{
-	//		if (Hearts[i]->GetEmpty())
-	//		{
-	//			Hearts[i]->SetEmpty(false);
-	//			break;
-	//		}
-	//	}
-	//}
-
 	//Player and slime collision
 	auto &enemies = dynamic_cast<TiledLevel*>(FindObject("level"))->GetEnemy();
 	for (auto i = 0; i < enemies.size(); i++)
@@ -368,7 +365,6 @@ void GameState::CollisionCheck()
 			else if(a == AttackType::BONK)
 				enemies[i]->addEffect(new Stun(300));
 		}
-
 		if (enemies[i]->GetHeath() <= 0)
 		{
 			delete enemies[i];

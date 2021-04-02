@@ -6,7 +6,7 @@
 #define DRAG 0.85 //Acceleration
 #include "EntityObject.h"
 
-enum class PlayerState {STATE_IDLING, STATE_RUNNING, STATE_JUMPING, STATE_ATTACKING, STATE_SPECIAL_ATTACK};
+enum class PlayerState {STATE_IDLING, STATE_RUNNING, STATE_JUMPING, STATE_ATTACKING, STATE_SPECIAL_ATTACKICE, STATE_SPECIAL_ATTACKSTUN};
 
 enum class AttackType {NONE,NORMAL, ICE, BONK, BLEED};
 
@@ -41,6 +41,12 @@ public:
 		m_isSkillUp = setSkillCD;
 		return m_isSkillUp;
 	}
+	bool getSkill2CD() { return m_isSkillUpSTUN; }
+	bool setSkill2CD(bool setSkillCD)
+	{
+		m_isSkillUpSTUN = setSkillCD;
+		return m_isSkillUpSTUN;
+	}
 	void SetX(float x);
 	void SetY(float y);
 
@@ -49,6 +55,7 @@ private:
 	SDL_FRect m_pBoundingBox;
 	SDL_FRect m_pAttackHitBox;
 	SDL_FRect m_pSAttackHitBox;
+	SDL_FRect m_pSTUNAttackHitBox;
 	bool m_grounded; //In most platforming games, the player actually starts in the air
 	bool m_showHitbox;
 	PlayerState m_state;
@@ -56,6 +63,9 @@ private:
 	AttackType m_currentAttack;
 	bool m_isSkillUp;
 	int skillTimer = 0;
+
+	bool m_isSkillUpSTUN;
+	int skillSTUNTimer = 0;
 
 };
 #endif

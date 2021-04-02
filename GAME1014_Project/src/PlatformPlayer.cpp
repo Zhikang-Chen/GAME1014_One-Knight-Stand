@@ -39,14 +39,26 @@ void PlatformPlayer::Update()
 	
 
 	
-	if (m_isSkillUp && skillTimer / 300 >= 1)
+	if (m_isSkillUp && skillTimer / 500 >= 1)
 	{
 		//SoundManager::PlaySound("ding", 0, 0);
 		skillTimer = 0;
 		m_isSkillUp = false;
 	}
 	else
+	{
 		skillTimer++;
+	}
+	if (m_isSkillUpSTUN && skillSTUNTimer / 400 >= 1)
+	{
+		//SoundManager::PlaySound("ding", 0, 0);
+		skillSTUNTimer = 0;
+		m_isSkillUpSTUN = false;
+	}
+	else
+	{
+		skillSTUNTimer++;
+	}
 	
 	switch (m_state)
 	{
@@ -71,7 +83,7 @@ void PlatformPlayer::Update()
 			{
 				if (EVMA::KeyPressed(SDL_SCANCODE_K))
 				{
-					m_state = PlayerState::STATE_SPECIAL_ATTACK;
+					m_state = PlayerState::STATE_SPECIAL_ATTACKICE;
 					//SetAnimation()
 					SetAnimation(4, 0, 3, m_src.h * 3);
 					SoundManager::PlaySound("specSlash", 0, 0);
@@ -79,7 +91,18 @@ void PlatformPlayer::Update()
 					m_currentAttack = AttackType::ICE;
 				}
 			}
-
+			if (m_isSkillUpSTUN == false)
+			{
+				if (EVMA::KeyPressed(SDL_SCANCODE_L))
+				{
+					m_state = PlayerState::STATE_SPECIAL_ATTACKSTUN;
+					//SetAnimation()
+					SetAnimation(5, 0, 4, m_src.h * 4);
+					SoundManager::PlaySound("specSlash", 0, 0); // no bonk sound 
+					m_isSkillUpSTUN = true;
+					m_currentAttack = AttackType::BONK;
+				}
+			}
 
 			// Transition to jump.
 			if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
@@ -114,6 +137,8 @@ void PlatformPlayer::Update()
 				SoundManager::PlaySound("slash", 0, 0);
 				m_currentAttack = AttackType::NORMAL;
 			}
+				
+			
 			// Transition to jump.
 			if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
 			{
@@ -150,11 +175,10 @@ void PlatformPlayer::Update()
 			if (EVMA::KeyPressed(SDL_SCANCODE_J) || EVMA::MousePressed(1))
 			{
 				m_state = PlayerState::STATE_ATTACKING;
-				SetAnimation(5, 0, 4);
+				SetAnimation(5, 0, 4, m_src.h * 0);
 				SoundManager::PlaySound("slash", 0, 0);
 				m_currentAttack = AttackType::NORMAL;
 			}
-
 			// Hit the ground, transition to run.
 			if (m_grounded)
 			{
@@ -176,7 +200,8 @@ void PlatformPlayer::Update()
 			{
 				m_state = PlayerState::STATE_RUNNING;
 				//SetAnimation(9, 13, 22);
-				SetAnimation(9, 13, 22);
+				SetAnimation(6, 0, 7, m_src.h * 1); // , 256
+
 				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
 			}
 
@@ -192,11 +217,72 @@ void PlatformPlayer::Update()
 			{
 				m_state = PlayerState::STATE_IDLING;
 				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
-				SetAnimation(9, 13, 22);
+				SetAnimation(6, 0, 7, m_src.h * 2); // , 256
+
+			}
+			break;	
+		}
+		case PlayerState::STATE_SPECIAL_ATTACKICE:
+		{
+			if (m_facingLeft)
+				m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x - m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
+			else if (!m_facingLeft)
+				m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x + m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
+			m_pSAttackHitBox.y = m_pBoundingBox.y;
+
+			if ((m_sprite >= m_spriteMax / 2) && (EVMA::KeyHeld(SDL_SCANCODE_A) || EVMA::KeyHeld(SDL_SCANCODE_D)))
+			{
+				m_state = PlayerState::STATE_RUNNING;
+				//SetAnimation(9, 13, 22);
+				SetAnimation(6, 0, 7, m_src.h * 1);
+
+				m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
 			}
 
+			if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
+			{
+				m_state = PlayerState::STATE_JUMPING;
+				m_accelY = -JUMPFORCE;
+				m_grounded = false;
+				m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
+			}
+
+			if (m_sprite == m_spriteMax)
+			{
+				m_state = PlayerState::STATE_IDLING;
+				m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
+				SetAnimation(6, 0, 7, m_src.h * 2); // , 256
+
+			}
 			break;
-		}	
+		}
+		case PlayerState::STATE_SPECIAL_ATTACKSTUN:
+		{
+			if (m_facingLeft)
+				m_pSTUNAttackHitBox = SDL_FRect({ m_pBoundingBox.x - m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
+			else if (!m_facingLeft)
+				m_pSTUNAttackHitBox = SDL_FRect({ m_pBoundingBox.x + m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
+			m_pSTUNAttackHitBox.y = m_pBoundingBox.y;
+
+			if ((m_sprite >= m_spriteMax / 2) && (EVMA::KeyHeld(SDL_SCANCODE_A) || EVMA::KeyHeld(SDL_SCANCODE_D)))
+			{
+				m_state = PlayerState::STATE_RUNNING;
+				//SetAnimation(9, 13, 22);
+				SetAnimation(6, 0, 7, m_src.h * 1);
+
+				m_pSTUNAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
+			}
+
+			if (m_sprite == m_spriteMax)
+			{
+				m_state = PlayerState::STATE_IDLING;
+				m_pSTUNAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
+				SetAnimation(6, 0, 7, m_src.h * 2); // , 256
+
+			}
+			break;
+		}
+		
 	}
 	
 	// x axis
@@ -258,6 +344,7 @@ void PlatformPlayer::SetY(float y) { m_pBoundingBox.y = y; }
 PlayerState PlatformPlayer::GetState() { return m_state; }
 
 SDL_FRect* PlatformPlayer::GetAttackHitBox() { return &m_pAttackHitBox; }
+
 
 AttackType PlatformPlayer::GetCurrentAttack()
 {
