@@ -31,16 +31,15 @@ void TitleState::Enter()
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/p.png", "Play");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/e.png", "Exit");
 	SDL_QueryTexture(TEMA::GetTexture("Play"), nullptr, nullptr, &w, &h);
-	b = new BoolButton({ 0,0,w / 2 ,h }, { (float)WIDTH / 2 - w / 2 / 2,(float)HEIGHT / 2 - h / 2 , (float)w / 2, (float)h }, TEMA::GetTexture("Play"));
+	b = new PlayButton({ 0,0,w / 2 ,h }, { (float)WIDTH / 2 - w / 2 / 2,(float)HEIGHT / 2 - h / 2 , (float)w / 2, (float)h }, TEMA::GetTexture("Play"));
 	//m_objects.emplace("no", b);
 	m_objects.emplace_back("no", b);
-	e = new BoolButton({ 0,0,w / 2 ,h }, { (float)WIDTH / 2 - w / 2 / 2,(float)HEIGHT / 2 - (h - 130) / 2 , (float)w / 2, (float)h }, TEMA::GetTexture("Exit"));
+	e = new ExitButton({ 0,0,w / 2 ,h }, { (float)WIDTH / 2 - w / 2 / 2,(float)HEIGHT / 2 - (h - 130) / 2 , (float)w / 2, (float)h }, TEMA::GetTexture("Exit"));
 	m_objects.emplace_back("Exit", e);
 
 	//m_titleBgm = Mix_LoadMUS("../GAME1017_Template_W01/Aud/VisagerTreeLoop.mp3");
 	//Mix_PlayMusic(m_titleBgm, -1); // 0, 1-n, or -1 for infinite
 	//Mix_VolumeMusic(30);
-
 	//Load and Play the music on the title screen
 	SoundManager::Load("Aud/VisagerTreeLoop.mp3", "title", SOUND_MUSIC);
 	SoundManager::PlayMusic("title", -1);
@@ -54,13 +53,8 @@ void TitleState::Update()
 	for (auto i = m_objects.begin(); i != m_objects.end(); i++)
 		i->second->Update();
 	
-	if (EVMA::KeyPressed(SDL_SCANCODE_N) || b->GetChangeState())
+	if (EVMA::KeyPressed(SDL_SCANCODE_N))
 		STMA::ChangeState(new GameState());// Change to new GameState
-
-	if(e->GetChangeState())
-	{
-		exit(-1);
-	}
 }
 
 void TitleState::Render()

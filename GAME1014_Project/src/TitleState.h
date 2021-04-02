@@ -28,8 +28,8 @@ private:
 	Label* m_pInstruction;
 
 	Background* bleh;
-	BoolButton* b;
-	BoolButton* e;
+	Button* b;
+	ExitButton* e;
 	Background* m_pBackground;
 	Mix_Music* m_titleBgm;
 

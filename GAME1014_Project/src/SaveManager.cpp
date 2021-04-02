@@ -4,31 +4,33 @@
 void SaveManager::OverwriteSave()
 {
 	auto s = dynamic_cast<GameState*>(STMA::GetStates().back());
-	if (s != nullptr)
+	for (auto s : STMA::GetStates())
 	{
-		tinyxml2::XMLDocument doc;
-		doc.LoadFile("../GAME1017_Template_W01/Dat/SaveData.xml");
-		tinyxml2::XMLElement* pRoot = doc.FirstChildElement("Root");
-		tinyxml2::XMLElement* pPlayer = pRoot->FirstChildElement("Save")->FirstChildElement("Player");
-
-		if (pPlayer != nullptr)
+		auto GS = dynamic_cast<GameState*>(s);
+		if (GS != nullptr)
 		{
-			auto p = dynamic_cast<PlatformPlayer*>(s->FindObject("Player"));
+			tinyxml2::XMLDocument doc;
+			doc.LoadFile("../GAME1017_Template_W01/Dat/SaveData.xml");
+			tinyxml2::XMLElement* pRoot = doc.FirstChildElement("Root");
+			tinyxml2::XMLElement* pPlayer = pRoot->FirstChildElement("Save")->FirstChildElement("Player");
 
-			pPlayer->SetAttribute("Health", p->GetHeath());
-			pPlayer->SetAttribute("MaxHeath", p->GetMaxHealth());
-			pPlayer->SetAttribute("Checkpoint", s->GetCheckPoint());
-			pPlayer->SetAttribute("Level", s->GetLevel());
+			if (pPlayer != nullptr)
+			{
+				auto p = dynamic_cast<PlatformPlayer*>(s->FindObject("Player"));
+
+				pPlayer->SetAttribute("Health", p->GetHeath());
+				pPlayer->SetAttribute("MaxHeath", p->GetMaxHealth());
+				pPlayer->SetAttribute("Checkpoint", GS->GetCheckPoint());
+				pPlayer->SetAttribute("Level", GS->GetLevel());
+				doc.SaveFile("../GAME1017_Template_W01/Dat/SaveData.xml");
+				cout << "Data Save" << endl;
+				break;
+			}
+			else
+			{
+				cout << "Error: Could Not Load SaveDat" << endl;
+			}
 		}
-		else
-		{
-			cout << "Error: Could Not Load SaveDat" << endl;
-		}
-		doc.SaveFile("../GAME1017_Template_W01/Dat/SaveData.xml");
-	}
-	else
-	{
-		cout << "Error: Gamestate does not exist" << endl;
 	}
 }
 

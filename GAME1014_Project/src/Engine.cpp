@@ -6,12 +6,11 @@
 #include "SoundManager.h"
 #include "StateManager.h"
 #include "TextureManager.h"
+#include "SaveManager.h"
 #include <iostream>
 #include <ctime>
 #include <iostream>
 #include <SDL.h>
-
-#include "SaveManager.h"
 
 Engine::Engine():m_running(false){ cout << "Engine class constructed!" << endl; }
 
@@ -90,10 +89,6 @@ void Engine::Clean()
 	// Finish cleaning.
 	SDL_DestroyRenderer(m_pRenderer);
 	SDL_DestroyWindow(m_pWindow);
-	SOMA::Unload("title", SOUND_MUSIC);
-	SOMA::Unload("gameLevel1", SOUND_MUSIC);
-	SOMA::Unload("slash", SOUND_SFX);
-	SOMA::Unload("specSlash", SOUND_SFX);
 	DEMA::Quit();
 	EVMA::Quit();
 	FOMA::Quit();

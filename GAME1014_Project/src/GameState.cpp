@@ -130,6 +130,12 @@ void GameState::Update()
 	{
 		STMA::PushState(new PauseState());
 	}
+
+	if(EVMA::KeyPressed(SDL_SCANCODE_M))
+	{
+		SAMA::OverwriteSave();
+	}
+
 	int w, h;
 
 	if (dynamic_cast<PlatformPlayer*>(FindObject("Player"))->getSkill1CD() == true)
@@ -146,7 +152,10 @@ void GameState::Update()
 		dynamic_cast<PlatformPlayer*>(FindObject("Player"))->setSkill1CD(false);
 	}
 
+
+	
 }
+
 void GameState::Render()
 {
 	//std::cout << "Rendering TitleState..." << std::endl;
@@ -347,7 +356,7 @@ void GameState::CollisionCheck()
 			pp->SetY(s->y);
 			MoveCamTo(pp);
 		}
-		//SDL_FRect* slimes = m_slimes[i]->GetDst();
+
 		//Attack Collision with Enemies
 		if (COMA::AABBCheck(*attackbox, *s))
 		{
@@ -359,9 +368,7 @@ void GameState::CollisionCheck()
 				enemies.shrink_to_fit();
 				SoundManager::PlaySound("bounce", 0, 3);
 				//SoundManager::SetSoundVolume(15);
-				
 			}
-			cout << "Sword hits slimes" << endl;
 		}
 		if (COMA::AABBCheck(*Sattackbox, *s))
 		{
@@ -375,9 +382,7 @@ void GameState::CollisionCheck()
 				//SoundManager::SetSoundVolume(15);
 
 			}
-			cout << "Special hits slimes" << endl;
 		}
-
 	}
 
 	// This has to be at the end because of ChangeState

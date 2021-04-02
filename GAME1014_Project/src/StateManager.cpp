@@ -6,8 +6,8 @@ void StateManager::Update()
 		s_states.back()->Update();
 	
 	if (m_pNextState != nullptr)
-	{
-		if (!s_states.empty())
+	{		
+		while (!s_states.empty())
 		{
 			s_states.back()->Exit();
 			delete s_states.back(); // De-allocating the state in the heap.
@@ -17,6 +17,8 @@ void StateManager::Update()
 		m_pNextState->Enter();
 		s_states.push_back(m_pNextState);
 		m_pNextState = nullptr;
+
+		
 	}
 }
 
@@ -49,7 +51,6 @@ void StateManager::ChangeState(State* pState)
 	//pState->Enter();
 	//s_states.push_back(pState);
 }
-
 
 void StateManager::PopState()
 {

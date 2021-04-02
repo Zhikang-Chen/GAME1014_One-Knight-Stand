@@ -65,7 +65,6 @@ TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int
 				{
 					auto z = m_level[row][col]->GetDst();
 					SDL_QueryTexture(TEMA::GetTexture("Zombie"), nullptr, nullptr, &w, &h);
-					cout << z->x << ',' << z->y << endl;
 					m_enemy.push_back(new Zombie({ 0,0,w,h },
 						{ z->x - w, z->y - h,(float)w,(float)h }));
 				}

@@ -17,10 +17,10 @@ private:
 	virtual void Exit();
 
 	SDL_FRect* m_pBackground;
-	BoolButton* m_pbutton;
-	BoolButton* m_pbutton2;
-	BoolButton* m_pbutton3;
-	BoolButton* m_pbutton4;
+	Button* m_pbutton;
+	Button* m_pbutton2;
+	Button* m_pbutton3;
+	Button* m_pbutton4;
 };
 
 #endif

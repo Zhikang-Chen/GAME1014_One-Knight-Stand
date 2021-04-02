@@ -1,9 +1,6 @@
-#include <iostream>
 #include "Button.h"
 #include "EventManager.h"
-#include "SoundManager.h"
 #include "StateManager.h"
-#include <SDL.h>
 
 Button::Button(SDL_Rect src, SDL_FRect dst, SDL_Texture* t)
 	: SpriteObject(src, dst, t), m_state(STATE_UP) {}
@@ -58,4 +55,36 @@ void Button::Render()
 void BoolButton::Execute()
 {
 	m_changeState = true;
+}
+
+void PlayButton::Execute()
+{
+	STMA::ChangeState(new GameState);
+}
+
+void ExitButton::Execute()
+{
+	Engine::Instance().Running() = false;
+	//exit(-1);
+}
+
+void ReturnButton::Execute()
+{
+	STMA::PopState();
+}
+
+void SaveButton::Execute()
+{
+	SAMA::OverwriteSave();
+}
+
+void LoadButton::Execute()
+{
+	SAMA::load();
+	STMA::ChangeState(new GameState);
+}
+
+void TitleButton::Execute()
+{
+	STMA::ChangeState(new TitleState);
 }

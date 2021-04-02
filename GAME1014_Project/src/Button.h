@@ -4,7 +4,6 @@
 
 #include "SpriteObject.h"
 #include <SDL.h>
-#include "Button.h"
 #include "Label.h"
 #include "TextureManager.h"
 
@@ -24,7 +23,7 @@ protected: // Private but inherited!
 // List button subclasses here...
 
 // Button that return true or false
-class BoolButton : public Button
+class BoolButton final : public Button
 {
 public:
 	BoolButton(SDL_Rect src, SDL_FRect dst, SDL_Texture* t) : Button(src, dst, t), m_changeState(false) {}
@@ -35,19 +34,58 @@ private:
 };
 
 
-//class LabelButton : public Label
-//{
-//public:
-//	LabelButton(std::string key, const float x, const float y, const char* str) : Label(key,x,y,str)
-//	{
-//		l = new Label(key, x, y, str);
-//		
-//	}
-//	
-//
-//private:
-//	Label* l;
-//	void Execute() override {};
-//};
+// Button that change state to Play
+class PlayButton final : public Button
+{
+public:
+	PlayButton(SDL_Rect src, SDL_FRect dst, SDL_Texture* t) : Button(src, dst, t) {}
+private:
+	void Execute() override;
+};
+
+// Button that exit the game
+class ExitButton final : public Button
+{
+public:
+	ExitButton(SDL_Rect src, SDL_FRect dst, SDL_Texture* t) : Button(src, dst, t) {}
+private:
+	void Execute() override;
+};
+
+// Button that return to game
+class ReturnButton final : public Button
+{
+public:
+	ReturnButton(SDL_Rect src, SDL_FRect dst, SDL_Texture* t) : Button(src, dst, t) {}
+private:
+	void Execute() override;
+};
+
+// Button that save the game
+class SaveButton final : public Button
+{
+public:
+	SaveButton(SDL_Rect src, SDL_FRect dst, SDL_Texture* t) : Button(src, dst, t) {}
+private:
+	void Execute() override;
+};
+
+// Button that save the game
+class LoadButton final : public Button
+{
+public:
+	LoadButton(SDL_Rect src, SDL_FRect dst, SDL_Texture* t) : Button(src, dst, t) {}
+private:
+	void Execute() override;
+};
+
+// Button that save the game
+class TitleButton final : public Button
+{
+public:
+	TitleButton(SDL_Rect src, SDL_FRect dst, SDL_Texture* t) : Button(src, dst, t) {}
+private:
+	void Execute() override;
+};
 
 #endif
