@@ -8,7 +8,7 @@
 //Will fix someday
 
 PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : EntityObject(s, d, t),
- m_grounded(false), m_state(STATE_IDLING)
+ m_grounded(false), m_state(PlayerState::STATE_IDLING)
 {
 	//cout << addressof(m_dst) << endl;
 	m_pBoundingBox = SDL_FRect({m_dst.x,m_dst.y,40,60 });
@@ -20,7 +20,8 @@ PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : Entity
 	
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
 	m_curHealth = m_maxHealth = 5;
-	SetAnimation(9, 13, 22);
+	//SetAnimation(9, 13, 22);
+	SetAnimation(9, 0, 10, m_src.h * 2);
 	//Load Sound effects
 	SoundManager::Load("Aud/sword_swing.wav", "slash", SOUND_SFX);
 	SoundManager::Load("Aud/ice_slash.wav", "specSlash", SOUND_SFX);
@@ -36,204 +37,167 @@ void PlatformPlayer::Update()
 	if (EVMA::KeyPressed(SDL_SCANCODE_H))
 		ShowHitbox();
 	
-	if (m_isSkill1Up == false)
+
+	
+	if (m_isSkillUp && skillTimer / 300 >= 1)
 	{
-		skill1Timer += 0;
+		//SoundManager::PlaySound("ding", 0, 0);
+		skillTimer = 0;
+		m_isSkillUp = false;
 	}
 	else
-	{
-		skill1Timer += 1;
-	}
-	if (skill1Timer / 300 == 1)
-	{
-		cout << "skill 1 up" << endl;
-		//SoundManager::PlaySound("ding", 0, 0);
-		skill1Timer = 0;
-		m_isSkill1Up = false;
-	}
+		skillTimer++;
 	
 	switch (m_state)
 	{
-	case STATE_IDLING:
-		// Transition to run.
-		if (EVMA::KeyPressed(SDL_SCANCODE_A) || EVMA::KeyPressed(SDL_SCANCODE_D))
+		case PlayerState::STATE_IDLING:
 		{
-			m_state = STATE_RUNNING;
-			SetAnimation(6, 6, 12); // , 256
-		}
-		
-		if (EVMA::KeyPressed(SDL_SCANCODE_J) || EVMA::MousePressed(1))
-		{
-			m_state = STATE_ATTACKING;
-			SetAnimation(5, 0, 5);
-			SoundManager::PlaySound("slash", 0, 0);
-		}
-		//ADDED A BUTTON to use weapon ability
-		if (m_isSkill1Up == false)
-		{
-			if (EVMA::KeyPressed(SDL_SCANCODE_K))
+			// Transition to run.
+			if (EVMA::KeyPressed(SDL_SCANCODE_A) || EVMA::KeyPressed(SDL_SCANCODE_D))
 			{
-				m_state = STATE_SPECIAL_ATTACK;
-				//SetAnimation()
-
-				SetAnimation(4, 23, 26);
-
-				SoundManager::PlaySound("specSlash", 0, 0);
-				m_isSkill1Up = true;
-
+				m_state = PlayerState::STATE_RUNNING;
+				SetAnimation(6, 0, 7, m_src.h*1); // , 256
 			}
 
-		}
+			if (EVMA::KeyPressed(SDL_SCANCODE_J) || EVMA::MousePressed(1))
+			{
+				m_state = PlayerState::STATE_ATTACKING;
+				SetAnimation(5, 0, 4, m_src.h * 0);
+				SoundManager::PlaySound("slash", 0, 0);
+				m_currentAttack = AttackType::NORMAL;
+			}
+			//ADDED A BUTTON to use weapon ability
+			if (m_isSkillUp == false)
+			{
+				if (EVMA::KeyPressed(SDL_SCANCODE_K))
+				{
+					m_state = PlayerState::STATE_SPECIAL_ATTACK;
+					//SetAnimation()
+					SetAnimation(4, 0, 3, m_src.h * 3);
+					SoundManager::PlaySound("specSlash", 0, 0);
+					m_isSkillUp = true;
+					m_currentAttack = AttackType::ICE;
+				}
+			}
 
-		
-		// Transition to jump.
-		if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
-		{
-			m_accelY = -JUMPFORCE; // SetAccelY(-JUMPFORCE);
-			m_grounded = false; // SetGrounded(false);
-			m_state = STATE_JUMPING;
-			//SetAnimation(1, 8, 9, 256);
+
+			// Transition to jump.
+			if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
+			{
+				m_accelY = -JUMPFORCE; // SetAccelY(-JUMPFORCE);
+				m_grounded = false; // SetGrounded(false);
+				m_state = PlayerState::STATE_JUMPING;
+				//SetAnimation(1, 8, 9, 256);
+			}
+			break;
 		}
-		break;
-	case STATE_RUNNING:
-		// Move left and right.
-		if (EVMA::KeyHeld(SDL_SCANCODE_A))
+		case PlayerState::STATE_RUNNING:
 		{
-			m_accelX = -1.5;
-			if (!m_facingLeft)
-				m_facingLeft = true;
+			// Move left and right.
+			if (EVMA::KeyHeld(SDL_SCANCODE_A))
+			{
+				m_accelX = -1.5;
+				if (!m_facingLeft)
+					m_facingLeft = true;
+			}
+			else if (EVMA::KeyHeld(SDL_SCANCODE_D))
+			{
+				m_accelX = 1.5;
+				if (m_facingLeft)
+					m_facingLeft = false;
+			}
+
+			if (EVMA::KeyPressed(SDL_SCANCODE_J) || EVMA::MousePressed(1))
+			{
+				m_state = PlayerState::STATE_ATTACKING;
+				SetAnimation(5, 0, 4, m_src.h * 0);
+				SoundManager::PlaySound("slash", 0, 0);
+				m_currentAttack = AttackType::NORMAL;
+			}
+			// Transition to jump.
+			if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
+			{
+				m_accelY = -JUMPFORCE;
+				m_grounded = false;
+				m_state = PlayerState::STATE_JUMPING;
+				//SetAnimation(1, 8, 9, 256);
+			}
+
+			// Transition to idle.
+			if (!EVMA::KeyHeld(SDL_SCANCODE_A) && !EVMA::KeyHeld(SDL_SCANCODE_D))
+			{
+				m_state = PlayerState::STATE_IDLING;
+				SetAnimation(9, 0, 9, m_src.h * 2);
+			}
+			break;
 		}
-		else if (EVMA::KeyHeld(SDL_SCANCODE_D))
+		case PlayerState::STATE_JUMPING:
 		{
-			m_accelX = 1.5;
+			// Move in mid-air is cool.
+			if (EVMA::KeyHeld(SDL_SCANCODE_A))
+			{
+				m_accelX = -1.5;
+				if (!m_facingLeft)
+					m_facingLeft = true;
+			}
+			else if (EVMA::KeyHeld(SDL_SCANCODE_D))
+			{
+				m_accelX = 1.5;
+				if (m_facingLeft)
+					m_facingLeft = false;
+			}
+
+			if (EVMA::KeyPressed(SDL_SCANCODE_J) || EVMA::MousePressed(1))
+			{
+				m_state = PlayerState::STATE_ATTACKING;
+				SetAnimation(5, 0, 4);
+				SoundManager::PlaySound("slash", 0, 0);
+				m_currentAttack = AttackType::NORMAL;
+			}
+
+			// Hit the ground, transition to run.
+			if (m_grounded)
+			{
+				m_state = PlayerState::STATE_RUNNING;
+				SetAnimation(6, 0, 7, m_src.h * 1); // , 256
+				//SetAnimation(3, 0, 8, 256);
+			}
+			break;
+		}
+		case PlayerState::STATE_ATTACKING:
+		{
 			if (m_facingLeft)
-				m_facingLeft = false;
-		}
-		
-		if (EVMA::KeyPressed(SDL_SCANCODE_J) || EVMA::MousePressed(1))
-		{
-			m_state = STATE_ATTACKING;
-			SetAnimation(5, 0, 5);
-			SoundManager::PlaySound("slash", 0, 0);
-		}
-		// Transition to jump.
-		if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
-		{
-			m_accelY = -JUMPFORCE;
-			m_grounded = false;
-			m_state = STATE_JUMPING;
-			//SetAnimation(1, 8, 9, 256);
-		}
+				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x - m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
+			else if (!m_facingLeft)
+				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x + m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
+			m_pAttackHitBox.y = m_pBoundingBox.y;
 
-		// Transition to idle.
-		if (!EVMA::KeyHeld(SDL_SCANCODE_A) && !EVMA::KeyHeld(SDL_SCANCODE_D))
-		{
-			m_state = STATE_IDLING;
-			SetAnimation(9, 13, 22);
-		}
-		break;
-	case STATE_JUMPING:
-		// Move in mid-air is cool.
-		if (EVMA::KeyHeld(SDL_SCANCODE_A))
-		{
-			m_accelX = -1.5;
-			if (!m_facingLeft)
-				m_facingLeft = true;
-		}
-		else if (EVMA::KeyHeld(SDL_SCANCODE_D))
-		{
-			m_accelX = 1.5;
-			if (m_facingLeft)
-				m_facingLeft = false;
-		}
-		
-		if (EVMA::KeyPressed(SDL_SCANCODE_J) || EVMA::MousePressed(1))
-		{
-			m_state = STATE_ATTACKING;
-			SetAnimation(5, 0, 5);
-			SoundManager::PlaySound("slash", 0, 0);
+			if ((m_sprite >= m_spriteMax / 2) && (EVMA::KeyHeld(SDL_SCANCODE_A) || EVMA::KeyHeld(SDL_SCANCODE_D)))
+			{
+				m_state = PlayerState::STATE_RUNNING;
+				//SetAnimation(9, 13, 22);
+				SetAnimation(9, 13, 22);
+				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
+			}
 
-		}
-		
-		// Hit the ground, transition to run.
-		if (m_grounded)
-		{
-			m_state = STATE_RUNNING;
-			SetAnimation(6, 6, 12); // , 256
-			//SetAnimation(3, 0, 8, 256);
-		}
-		break;
+			if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
+			{
+				m_state = PlayerState::STATE_JUMPING;
+				m_accelY = -JUMPFORCE;
+				m_grounded = false;
+				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
+			}
 
-	case STATE_ATTACKING:
-		
-		if (m_facingLeft)
-			m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x - m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
-		else if (!m_facingLeft)
-			m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x + m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
-		m_pAttackHitBox.y = m_pBoundingBox.y;
+			if (m_sprite == m_spriteMax)
+			{
+				m_state = PlayerState::STATE_IDLING;
+				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
+				SetAnimation(9, 13, 22);
+			}
 
-		if ((m_sprite >= m_spriteMax / 2) && (EVMA::KeyHeld(SDL_SCANCODE_A) || EVMA::KeyHeld(SDL_SCANCODE_D)))
-		{
-			m_state = STATE_RUNNING;
-			//SetAnimation(9, 13, 22);
-			SetAnimation(9, 13, 22);
-			m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
-		}
-		
-		if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
-		{
-			m_state = STATE_JUMPING;
-			m_accelY = -JUMPFORCE;
-			m_grounded = false;
-			m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
-		}
-		
-		if(m_sprite == m_spriteMax)
-		{
-			m_state = STATE_IDLING;
-			m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
-			SetAnimation(9, 13, 22);
-		}
-		
-		break;
-
-	case STATE_SPECIAL_ATTACK:
-		
-		if (m_facingLeft)
-			m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x - m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
-		else if (!m_facingLeft)
-			m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x + m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
-		m_pSAttackHitBox.y = m_pBoundingBox.y;
-
-		if ((m_sprite >= m_spriteMax / 2) && (EVMA::KeyHeld(SDL_SCANCODE_A) || EVMA::KeyHeld(SDL_SCANCODE_D)))
-		{
-			m_state = STATE_RUNNING;
-			//SetAnimation(9, 13, 22);
-			SetAnimation(9, 13, 22);
-			m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
-		}
-		if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
-		{
-			m_state = STATE_JUMPING;
-			m_accelY = -JUMPFORCE;
-			m_grounded = false;
-			m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
-		}
-
-		if (m_sprite == m_spriteMax)
-		{
-			m_state = STATE_IDLING;
-			m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
-			SetAnimation(9, 13, 22);
-		}
-		
-		break;
+			break;
+		}	
 	}
-
-	// timer check for SKill CD 1
-	
-		
-	
 	
 	// x axis
 	m_velX += m_accelX;
@@ -295,7 +259,10 @@ PlayerState PlatformPlayer::GetState() { return m_state; }
 
 SDL_FRect* PlatformPlayer::GetAttackHitBox() { return &m_pAttackHitBox; }
 
-SDL_FRect* PlatformPlayer::GetSAttackHitBox() { return &m_pSAttackHitBox; }
+AttackType PlatformPlayer::GetCurrentAttack()
+{
+	return m_currentAttack;
+}
 
 bool PlatformPlayer::IsGrounded() { return m_grounded; }
 

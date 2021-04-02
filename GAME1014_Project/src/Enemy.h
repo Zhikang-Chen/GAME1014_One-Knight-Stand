@@ -3,14 +3,15 @@
 #define _ENEMY_H_
 #define GRAV 4.0
 #define JUMPFORCE 40.0; //Acceleration
-#include "Effect.h"
 #include "EntityObject.h"
+#include "Effect.h"
 
 class Enemy : public EntityObject
 {
 public:
 	Enemy(SDL_Rect s, SDL_FRect, SDL_Texture* t);
-
+	virtual ~Enemy();
+	
 	virtual void Update();
 	virtual void Render();
 	

@@ -14,6 +14,16 @@ m_grounded(false)
 
 }
 
+Enemy::~Enemy()
+{
+	for(auto &e : m_effects)
+	{
+		delete e;
+		e = nullptr;
+	}
+	m_effects.clear();
+}
+
 // I don't like update to be change so don't
 // If you want to change anything do it with Move
 void Enemy::Update()

@@ -16,7 +16,7 @@ void GameState::Enter()
 	m_objects.emplace_back("Background", new Background({ 0,0,static_cast<int>(w),static_cast<int>(h) }, { 0,0, static_cast<float>(w) * 5, static_cast<float>(h) * 5 }, TEMA::GetTexture("Background_1")));
 
 	//Register Textures
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight_Concept_ALL_ANIMATION-Sheet.png", "Knight");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Knight Edited.png", "Knight");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/skills-ui.png", "SkillsUI");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordSkill1.png", "SwordSkill1");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordSkill2.png", "SwordSkill2");
@@ -84,7 +84,7 @@ void GameState::Enter()
 	SDL_FRect* s = m_spawn->GetDst();
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
 
-	auto Pp = new PlatformPlayer({ 0, 0, 77,h }, { s->x, s->y, static_cast<float>(77),static_cast<float>(h) }, TEMA::GetTexture("Knight"));
+	auto Pp = new PlatformPlayer({ 0, 0, 77,h/5 }, { s->x, s->y, static_cast<float>(77),static_cast<float>(h)/5 }, TEMA::GetTexture("Knight"));
 	m_objects.emplace_back("Player", Pp);
 	Pp->SetHeath(save->m_currHealth);
 	Pp->SetMaxHealth(save->m_maxHealth);
@@ -206,7 +206,6 @@ void GameState::CollisionCheck()
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
 	SDL_FRect* p = pp->GetDst();
 	SDL_FRect* attackbox = pp->GetAttackHitBox();
-	SDL_FRect* Sattackbox = pp->GetSAttackHitBox();
 
 	for (auto i : dynamic_cast<TiledLevel*>(FindObject("level"))->GetVisibleTile())
 	{
@@ -331,6 +330,7 @@ void GameState::CollisionCheck()
 	//		}
 	//	}
 	//}
+
 	//Player and slime collision
 	auto &enemies = dynamic_cast<TiledLevel*>(FindObject("level"))->GetEnemy();
 	for (auto i = 0; i < enemies.size(); i++)
@@ -360,16 +360,15 @@ void GameState::CollisionCheck()
 		//Attack Collision with Enemies
 		if (COMA::AABBCheck(*attackbox, *s))
 		{
-			//enemies[i]->LoseHealth();
+			auto a = pp->GetCurrentAttack();
+			if(a == AttackType::NORMAL)
+				enemies[i]->LoseHealth();
+			else if(a == AttackType::ICE)
+				enemies[i]->addEffect(new Freeze(120));
+			else if(a == AttackType::BONK)
+				enemies[i]->addEffect(new Stun(300));
+		}
 
-			enemies[i]->addEffect(new Stun(300));
-			enemies[i]->addEffect(new Bleed(120));
-		}
-		if (COMA::AABBCheck(*Sattackbox, *s))
-		{
-			enemies[i]->LoseHealth();
-		}
-		
 		if (enemies[i]->GetHeath() <= 0)
 		{
 			delete enemies[i];

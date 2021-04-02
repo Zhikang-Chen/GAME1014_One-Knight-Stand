@@ -6,7 +6,9 @@
 #define DRAG 0.85 //Acceleration
 #include "EntityObject.h"
 
-enum PlayerState {STATE_IDLING, STATE_RUNNING, STATE_JUMPING, STATE_ATTACKING, STATE_SPECIAL_ATTACK};
+enum class PlayerState {STATE_IDLING, STATE_RUNNING, STATE_JUMPING, STATE_ATTACKING, STATE_SPECIAL_ATTACK};
+
+enum class AttackType {NONE,NORMAL, ICE, BONK, BLEED};
 
 class PlatformPlayer : public EntityObject
 {
@@ -31,12 +33,13 @@ public:
 	SDL_FRect* GetDst() { return &m_pBoundingBox; }
 	//SDL_FRect* GetBoundingBox();
 	SDL_FRect* GetAttackHitBox();
-	SDL_FRect* GetSAttackHitBox();
-	bool getSkill1CD() { return m_isSkill1Up; }
+	AttackType GetCurrentAttack();
+	
+	bool getSkill1CD() { return m_isSkillUp; }
 	bool setSkill1CD(bool setSkillCD)
 	{
-		m_isSkill1Up = setSkillCD;
-		return m_isSkill1Up;
+		m_isSkillUp = setSkillCD;
+		return m_isSkillUp;
 	}
 	void SetX(float x);
 	void SetY(float y);
@@ -49,10 +52,10 @@ private:
 	bool m_grounded; //In most platforming games, the player actually starts in the air
 	bool m_showHitbox;
 	PlayerState m_state;
-	bool m_isSkill1Up;
-	bool m_isSkill2Up;
-	int skill1Timer = 0;
-	int skill2Timer = 0;
-};
 
+	AttackType m_currentAttack;
+	bool m_isSkillUp;
+	int skillTimer = 0;
+
+};
 #endif
