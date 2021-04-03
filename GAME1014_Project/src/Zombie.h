@@ -12,6 +12,7 @@ public:
 	Zombie(SDL_Rect s, SDL_FRect d);
 	//void Update();
 	void Move();
+	bool DropTable(int r);
 };
 
 #endif

@@ -18,6 +18,8 @@ public:
 	virtual void LoseHealth();
 	virtual void Move(){}
 
+	virtual bool DropTable(int r) { return false; }
+
 	bool IsGrounded();
 	bool SetGrounded(bool g);
 

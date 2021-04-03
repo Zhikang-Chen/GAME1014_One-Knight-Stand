@@ -10,6 +10,7 @@
 #include "SpriteObject.h"
 #include "TextureManager.h"
 #include "tinyxml2.h"
+#include "ItemObject.h"
 using namespace tinyxml2;
 
 enum Tag { NONE = -1, SPAWN, END, AIR, OBSTACLE, HAZARD, CHECKPOINT, PLATFORM };

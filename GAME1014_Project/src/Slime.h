@@ -14,6 +14,9 @@ public:
 	Slime(SDL_Rect s, SDL_FRect d);
 	//void Update();
 	void Move();
+	void Render();
+	virtual void Move();
+	bool DropTable(int r);
 	
 };
 

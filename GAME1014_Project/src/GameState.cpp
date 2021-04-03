@@ -113,6 +113,7 @@ void GameState::Enter()
 
 void GameState::Update()
 {	
+	srand((unsigned)time(NULL));
 	MoveCamTo(FindObject("Player"));
 	for (auto& m_object : m_objects)
 		m_object.second->Update();
@@ -176,6 +177,11 @@ void GameState::Render()
 
 	for (auto& i : m_UIObject)
 		i.second->Render();
+
+	for (unsigned i = 0; i < m_potions.size(); i++)
+	{
+		m_potions[i]->Render();
+	}
 
 	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr) // Check to see if current state is of type GameState
 		State::Render();
@@ -389,9 +395,38 @@ void GameState::CollisionCheck()
 		}
 		if (enemies[i]->GetHeath() <= 0)
 		{
+			int randomDrop = rand() % 100;
+			if (enemies[i]->DropTable(randomDrop) == true)
+			{
+				m_potions.emplace_back(new HealthPotion({ 0, 0, 32, 32 }, { enemies[i]->GetDst()->x, enemies[i]->GetDst()->y, static_cast<float>(32), static_cast<float>(32) }));
+			}
 			delete enemies[i];
 			enemies.erase(enemies.begin() + i);
 			enemies.shrink_to_fit();
+		}
+	}
+
+	//Player and potion collision
+	for (unsigned i = 0; i < m_potions.size(); i++)
+	{
+		SDL_FRect* po = m_potions[i]->GetDst();
+		if (COMA::AABBCheck(*p, *po))
+		{
+			if (pp->GetHeath() < 10)
+			{
+				pp->SetHeath(pp->GetHeath() + 1);
+			}
+			delete m_potions[i];
+			m_potions.erase(m_potions.begin() + i);
+			m_potions.shrink_to_fit();
+			for (auto i2 = 0; i2 < Hearts.size(); i2++)
+			{
+				if (Hearts[i2]->GetEmpty())
+				{
+					Hearts[i2]->SetEmpty(false);
+					break;
+				}
+			}
 		}
 	}
 
@@ -436,6 +471,10 @@ void GameState::MoveCamTo(GameObject* o)
 	for(auto i : dynamic_cast<TiledLevel*>(FindObject("level"))->GetEnemy())
 	{
 		i->GetDst()->x += camOffset;
+	}
+	for (unsigned i = 0; i < m_potions.size(); i++)
+	{
+		m_potions[i]->GetDst()->x += camOffset;
 	}
 	o->GetDst()->x += camOffset;
 }

@@ -17,3 +17,13 @@ void Zombie::Move()
 		else
 			m_accelX = -0.2f;
 }
+
+bool Zombie::DropTable(int r)
+{
+	//For now, it will always return true so it will always drop an item
+	//But if we want chances, then we'd uncomment the stuff.
+	/*if (r < 39)*/
+	return true;
+	/*else
+		return false;*/
+}
