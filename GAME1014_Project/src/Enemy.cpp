@@ -28,19 +28,20 @@ Enemy::~Enemy()
 // If you want to change anything do it with Move
 void Enemy::Update()
 {
-	//Move();
-
-	for (unsigned int i = 0; i < m_effects.size(); i++)
+	if (m_dst.x < WIDTH && m_dst.x > 0)
 	{
-		m_effects[i]->Update();
-		if (m_effects[i]->HasEffectEnd())
+		Move();
+		for (unsigned int i = 0; i < m_effects.size(); i++)
 		{
-			delete m_effects[i];
-			m_effects.erase(m_effects.begin() + i);
-			m_effects.shrink_to_fit();
+			m_effects[i]->Update();
+			if (m_effects[i]->HasEffectEnd())
+			{
+				delete m_effects[i];
+				m_effects.erase(m_effects.begin() + i);
+				m_effects.shrink_to_fit();
+			}
 		}
 	}
-
 	// x axis
 	m_velX += m_accelX;
 	m_velX *= (m_grounded ? m_drag : 1.0f);
@@ -56,7 +57,6 @@ void Enemy::Update()
 
 	//Reset acceleration
 	m_accelX = m_accelY = 0.0; //Similar to a keyup event
-	
 }
 
 void Enemy::Render()

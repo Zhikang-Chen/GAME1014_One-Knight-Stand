@@ -21,7 +21,7 @@ PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : Entity
 	m_accelX = m_accelY = m_velX = m_velY = 0.0;
 	m_curHealth = m_maxHealth = 5;
 	//SetAnimation(9, 13, 22);
-	SetAnimation(9, 0, 10, m_src.h * 2);
+	SetAnimation(9, 0, 9, m_src.h * 2);
 	//Load Sound effects
 	SoundManager::Load("Aud/sword_swing.wav", "slash", SOUND_SFX);
 	SoundManager::Load("Aud/ice_slash.wav", "specSlash", SOUND_SFX);

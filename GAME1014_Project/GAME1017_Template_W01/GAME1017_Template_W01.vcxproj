@@ -133,6 +133,7 @@
     <ClCompile Include="..\src\Heart.cpp" />
     <ClCompile Include="..\src\ItemObject.cpp" />
     <ClCompile Include="..\src\Label.cpp" />
+    <ClCompile Include="..\src\LoadState.cpp" />
     <ClCompile Include="..\src\Main.cpp" />
     <ClCompile Include="..\src\MathManager.cpp" />
     <ClCompile Include="..\src\PauseState.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="..\src\Heart.h" />
     <ClInclude Include="..\src\ItemObject.h" />
     <ClInclude Include="..\src\Label.h" />
+    <ClInclude Include="..\src\LoadState.h" />
     <ClInclude Include="..\src\MathManager.h" />
     <ClInclude Include="..\src\PauseState.h" />
     <ClInclude Include="..\src\PlatformPlayer.h" />

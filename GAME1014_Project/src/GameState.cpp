@@ -3,6 +3,7 @@
 #include "EndState.h"
 #include "PauseState.h"
 #include "SoundManager.h"
+#include "LoadState.h"
 GameState::GameState() {}
 
 // State function
@@ -37,9 +38,9 @@ void GameState::Enter()
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tileset.png", "tiles");
 	//TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tiles.png", "tiles2");
 	
-	//m_levels.push_back(new TiledLevel(24, 200, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
+	m_levels.push_back(new TiledLevel(24, 200, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
 	m_levels.push_back(new TiledLevel(24, 247, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level2.txt", "tiles"));
-	//m_levels.push_back(new TiledLevel(24, 48, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
+	m_levels.push_back(new TiledLevel(24, 48, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
 
 	//UI INTERFACE
 	m_objects.emplace_back("Label3", new Label("Minecraft", 56, 150, "J", { 0,0,0,0 }));
@@ -379,6 +380,7 @@ void GameState::CollisionCheck()
 			switch (a)
 			{
 			case AttackType::NORMAL:
+				cout << "hit" << endl;
 				enemies[i]->LoseHealth();
 				break;
 			case AttackType::ICE:
@@ -503,6 +505,7 @@ void GameState::ChangeLevel(unsigned int level)
 	pp->SetX(s->x);
 	pp->SetY(s->y);
 	MoveCamTo(pp);
+	STMA::PushState(new LoadState());
 }
 
 unsigned int GameState::GetLevel() const { return m_currLevel;}
