@@ -8,11 +8,6 @@ Slime::Slime(SDL_Rect s, SDL_FRect d) : Enemy(s, d, TEMA::GetTexture("Slime"))
 	m_jumpTimer = 0;
 }
 
-void Slime::Render()
-{
-	SDL_RenderCopyExF(Engine::Instance().GetRenderer(),m_pText ,GetSrc(), GetDst(), m_angle, 0, m_facingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-}
-
 void Slime::Move()
 {
 	m_jumpTimer++;

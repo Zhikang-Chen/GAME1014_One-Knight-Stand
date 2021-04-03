@@ -6,15 +6,11 @@
 
 
 
-class Zombie : public Enemy
+class Zombie final : public Enemy
 {
-private: 
-	int m_maxHealth;
-
 public:
 	Zombie(SDL_Rect s, SDL_FRect d);
 	//void Update();
-	void Render();
 	void Move();
 };
 

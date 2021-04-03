@@ -13,6 +13,7 @@ void Effect::Update()
 	}
 	else
 	{
+		m_pEffectedEntity->SetColour(225, 225, 225);
 		m_hasEffectEnd = true;
 	}
 }
@@ -51,6 +52,7 @@ Freeze::Freeze(int m, EntityObject* e) : Effect(m, e)
 
 void Freeze::Execute()
 {
+	m_pEffectedEntity->SetColour(112, 112, 225);
 	m_pEffectedEntity->Stop();
 }
 

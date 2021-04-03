@@ -8,11 +8,6 @@ Zombie::Zombie(SDL_Rect s, SDL_FRect d) : Enemy(s, d, TEMA::GetTexture("Zombie")
 	m_curHealth = 7;
 }
 
-void Zombie::Render()
-{
-	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, GetSrc(), GetDst(), m_angle, 0, m_facingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-}
-
 void Zombie::Move()
 {
 		//The zombie will slowly approach the player.

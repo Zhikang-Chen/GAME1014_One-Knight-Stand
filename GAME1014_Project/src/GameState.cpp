@@ -133,11 +133,6 @@ void GameState::Update()
 		STMA::PushState(new PauseState());
 	}
 
-	if(EVMA::KeyPressed(SDL_SCANCODE_M))
-	{
-		SAMA::OverwriteSave();
-	}
-
 	int w, h;
 
 	if (dynamic_cast<PlatformPlayer*>(FindObject("Player"))->getSkill1CD() == true)
@@ -325,11 +320,9 @@ void GameState::CollisionCheck()
 					slime->SetX(t->x + t->w);
 				}
 			}
-
-
 		}
 	}
-
+	
 	//Player and slime collision
 	auto &enemies = dynamic_cast<TiledLevel*>(FindObject("level"))->GetEnemy();
 	for (auto i = 0; i < enemies.size(); i++)
@@ -359,13 +352,40 @@ void GameState::CollisionCheck()
 		//Attack Collision with Enemies
 		if (COMA::AABBCheck(*attackbox, *s))
 		{
+			//enemies[i]->addEffect(new Stun(300));
 			auto a = pp->GetCurrentAttack();
-			if(a == AttackType::NORMAL)
+			//if (a == AttackType::NORMAL)
+			//{
+			//	//cout << "Normal" << endl;
+			//	enemies[i]->LoseHealth();
+			//}
+			//else if (a == AttackType::ICE)
+			//{
+			//	//cout << "Freeze" << endl;
+			//	enemies[i]->addEffect(new Freeze(120));
+			//}
+			//else if (a == AttackType::BONK)
+			//{
+			//	//cout << "Stun" << endl;
+			//	enemies[i]->addEffect(new Stun(300));
+			//}
+
+			switch (a)
+			{
+			case AttackType::NORMAL:
 				enemies[i]->LoseHealth();
-			else if(a == AttackType::ICE)
+				break;
+			case AttackType::ICE:
+				enemies[i]->addEffect(new Bleed(61));
 				enemies[i]->addEffect(new Freeze(120));
-			else if(a == AttackType::BONK)
+				break;
+			case AttackType::BONK:
 				enemies[i]->addEffect(new Stun(300));
+				break;
+			case AttackType::BLEED:
+				enemies[i]->addEffect(new Bleed(300));
+				break;
+			}
 		}
 		if (enemies[i]->GetHeath() <= 0)
 		{

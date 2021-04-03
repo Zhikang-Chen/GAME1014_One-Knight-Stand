@@ -79,11 +79,11 @@ void PlatformPlayer::Update()
 				m_currentAttack = AttackType::NORMAL;
 			}
 			//ADDED A BUTTON to use weapon ability
-			if (m_isSkillUp == false)
+			if (!m_isSkillUp)
 			{
 				if (EVMA::KeyPressed(SDL_SCANCODE_K))
 				{
-					m_state = PlayerState::STATE_SPECIAL_ATTACKICE;
+					m_state = PlayerState::STATE_ATTACKING;
 					//SetAnimation()
 					SetAnimation(4, 0, 3, m_src.h * 3);
 					SoundManager::PlaySound("specSlash", 0, 0);
@@ -91,11 +91,11 @@ void PlatformPlayer::Update()
 					m_currentAttack = AttackType::ICE;
 				}
 			}
-			if (m_isSkillUpSTUN == false)
+			if (!m_isSkillUpSTUN)
 			{
 				if (EVMA::KeyPressed(SDL_SCANCODE_L))
 				{
-					m_state = PlayerState::STATE_SPECIAL_ATTACKSTUN;
+					m_state = PlayerState::STATE_ATTACKING;
 					//SetAnimation()
 					SetAnimation(5, 0, 4, m_src.h * 4);
 					SoundManager::PlaySound("specSlash", 0, 0); // no bonk sound 
@@ -201,8 +201,8 @@ void PlatformPlayer::Update()
 				m_state = PlayerState::STATE_RUNNING;
 				//SetAnimation(9, 13, 22);
 				SetAnimation(6, 0, 7, m_src.h * 1); // , 256
-
 				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
+				m_currentAttack = AttackType::NONE;
 			}
 
 			if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
@@ -211,6 +211,7 @@ void PlatformPlayer::Update()
 				m_accelY = -JUMPFORCE;
 				m_grounded = false;
 				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
+				m_currentAttack = AttackType::NONE;
 			}
 
 			if (m_sprite == m_spriteMax)
@@ -218,71 +219,10 @@ void PlatformPlayer::Update()
 				m_state = PlayerState::STATE_IDLING;
 				m_pAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
 				SetAnimation(6, 0, 7, m_src.h * 2); // , 256
-
+				m_currentAttack = AttackType::NONE;
 			}
 			break;	
-		}
-		case PlayerState::STATE_SPECIAL_ATTACKICE:
-		{
-			if (m_facingLeft)
-				m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x - m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
-			else if (!m_facingLeft)
-				m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x + m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
-			m_pSAttackHitBox.y = m_pBoundingBox.y;
-
-			if ((m_sprite >= m_spriteMax / 2) && (EVMA::KeyHeld(SDL_SCANCODE_A) || EVMA::KeyHeld(SDL_SCANCODE_D)))
-			{
-				m_state = PlayerState::STATE_RUNNING;
-				//SetAnimation(9, 13, 22);
-				SetAnimation(6, 0, 7, m_src.h * 1);
-
-				m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
-			}
-
-			if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
-			{
-				m_state = PlayerState::STATE_JUMPING;
-				m_accelY = -JUMPFORCE;
-				m_grounded = false;
-				m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
-			}
-
-			if (m_sprite == m_spriteMax)
-			{
-				m_state = PlayerState::STATE_IDLING;
-				m_pSAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
-				SetAnimation(6, 0, 7, m_src.h * 2); // , 256
-
-			}
-			break;
-		}
-		case PlayerState::STATE_SPECIAL_ATTACKSTUN:
-		{
-			if (m_facingLeft)
-				m_pSTUNAttackHitBox = SDL_FRect({ m_pBoundingBox.x - m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
-			else if (!m_facingLeft)
-				m_pSTUNAttackHitBox = SDL_FRect({ m_pBoundingBox.x + m_pBoundingBox.w + 3,m_pBoundingBox.y,35,50 });
-			m_pSTUNAttackHitBox.y = m_pBoundingBox.y;
-
-			if ((m_sprite >= m_spriteMax / 2) && (EVMA::KeyHeld(SDL_SCANCODE_A) || EVMA::KeyHeld(SDL_SCANCODE_D)))
-			{
-				m_state = PlayerState::STATE_RUNNING;
-				//SetAnimation(9, 13, 22);
-				SetAnimation(6, 0, 7, m_src.h * 1);
-
-				m_pSTUNAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
-			}
-
-			if (m_sprite == m_spriteMax)
-			{
-				m_state = PlayerState::STATE_IDLING;
-				m_pSTUNAttackHitBox = SDL_FRect({ m_pBoundingBox.x,m_pBoundingBox.y,0,0 });
-				SetAnimation(6, 0, 7, m_src.h * 2); // , 256
-
-			}
-			break;
-		}
-		
+		}		
 	}
 	
 	// x axis
@@ -327,7 +267,6 @@ void PlatformPlayer::Render()
 		SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 255, 255);
 		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_pAttackHitBox);
 		SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 255, 255);
-		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_pSAttackHitBox);
 	}
 	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, &m_src, &m_dst, m_angle, 0, m_facingLeft?SDL_FLIP_HORIZONTAL:SDL_FLIP_NONE);
 }
@@ -346,7 +285,7 @@ PlayerState PlatformPlayer::GetState() { return m_state; }
 SDL_FRect* PlatformPlayer::GetAttackHitBox() { return &m_pAttackHitBox; }
 
 
-AttackType PlatformPlayer::GetCurrentAttack()
+AttackType PlatformPlayer::GetCurrentAttack() const
 {
 	return m_currentAttack;
 }

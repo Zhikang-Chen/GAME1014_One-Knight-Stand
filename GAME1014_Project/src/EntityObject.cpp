@@ -1,6 +1,9 @@
 ﻿#include "EntityObject.h"
 
-EntityObject::EntityObject(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : AnimatedSpriteObject(s,d,t,0,0,0,0) { }
+EntityObject::EntityObject(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : AnimatedSpriteObject(s,d,t,0,0,0,0)
+{
+	m_colour = { (Uint8)225,(Uint8)225,(Uint8)225 };
+}
 
 EntityObject::~EntityObject() = default;
 
@@ -30,9 +33,13 @@ int EntityObject::GetHeath() { return m_curHealth; }
 
 int EntityObject::GetMaxHealth() { return m_maxHealth; }
 
+SDL_Color EntityObject::GetColour() { return m_colour; }
+
 void EntityObject::SetHeath(int h) { m_curHealth = h; }
 
 void EntityObject::SetMaxHealth(int h) { m_maxHealth = h; }
 
 void EntityObject::faceDir(bool f) { m_facingLeft = f; }
+
+void EntityObject::SetColour(Uint8 r, Uint8 g, Uint8 b) { m_colour = { r,g,b }; }
 

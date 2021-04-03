@@ -25,12 +25,14 @@ public:
 	virtual void SetHeath(int h);
 	virtual void SetMaxHealth(int h);
 	virtual void faceDir(bool f);
+	virtual void SetColour(Uint8 r, Uint8 g, Uint8 b);
 
 	// Getter
 	virtual float GetVelX();
 	virtual float GetVelY();
 	virtual int GetHeath();
 	virtual int GetMaxHealth();
+	virtual SDL_Color GetColour();
 
 protected:
 	virtual void Update() = 0;
@@ -48,6 +50,8 @@ protected:
 		m_grav;
 	int m_curHealth,
 		m_maxHealth;
+
+	SDL_Color m_colour;
 };
 
 #endif

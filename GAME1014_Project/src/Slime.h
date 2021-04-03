@@ -4,19 +4,16 @@
 #include "SpriteObject.h"
 #include "Enemy.h"
 
-class Slime : public Enemy
+class Slime final : public Enemy
 {
 private:
-	int m_maxHealth;
-
 	int m_jumpTimer;
 	
 
 public:
 	Slime(SDL_Rect s, SDL_FRect d);
 	//void Update();
-	void Render();
-	virtual void Move();
+	void Move();
 	
 };
 

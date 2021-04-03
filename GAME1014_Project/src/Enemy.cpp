@@ -59,7 +59,12 @@ void Enemy::Update()
 	
 }
 
-void Enemy::Render() {}
+void Enemy::Render()
+{
+	SDL_SetTextureColorMod(m_pText, m_colour.r, m_colour.g, m_colour.b);
+	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, GetSrc(), GetDst(), m_angle, 0, m_facingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+	SDL_SetTextureColorMod(m_pText, 225, 225, 225);
+}
 
 void Enemy::LoseHealth() { m_curHealth -= 1; } //Send the player's weapon damage in as argument
 
