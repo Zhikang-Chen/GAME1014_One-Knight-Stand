@@ -28,7 +28,7 @@ Enemy::~Enemy()
 // If you want to change anything do it with Move
 void Enemy::Update()
 {
-	Move();
+	//Move();
 
 	for (unsigned int i = 0; i < m_effects.size(); i++)
 	{

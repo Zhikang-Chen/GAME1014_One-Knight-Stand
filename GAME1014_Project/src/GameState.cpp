@@ -37,8 +37,9 @@ void GameState::Enter()
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tileset.png", "tiles");
 	//TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tiles.png", "tiles2");
 	
-	m_levels.push_back(new TiledLevel(24, 200, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
-	m_levels.push_back(new TiledLevel(24, 48, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
+	//m_levels.push_back(new TiledLevel(24, 200, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
+	m_levels.push_back(new TiledLevel(24, 247, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level2.txt", "tiles"));
+	//m_levels.push_back(new TiledLevel(24, 48, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
 
 	//UI INTERFACE
 	m_objects.emplace_back("Label3", new Label("Minecraft", 56, 150, "J", { 0,0,0,0 }));
