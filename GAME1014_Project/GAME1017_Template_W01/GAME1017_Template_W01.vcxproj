@@ -186,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="Dat\Level1.txt" />
+    <Text Include="Dat\Level3.txt" />
     <Text Include="Dat\Mario_test.txt" />
     <Text Include="Dat\Tiledata.txt" />
   </ItemGroup>

@@ -232,6 +232,9 @@
     <Text Include="Dat\Tiledata.txt">
       <Filter>Data</Filter>
     </Text>
+    <Text Include="Dat\Level3.txt">
+      <Filter>Data</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Dat\TileData.xml">
