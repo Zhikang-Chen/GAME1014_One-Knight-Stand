@@ -42,8 +42,9 @@ void GameState::Enter()
 	
 	m_levels.push_back(new TiledLevel(24, 200, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
 	m_levels.push_back(new TiledLevel(24, 247, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level2.txt", "tiles"));
-	//m_levels.push_back(new TiledLevel(24, 48, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
 	m_levels.push_back(new TiledLevel(24, 284, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level3.txt", "tiles"));
+	m_levels.push_back(new TiledLevel(24, 283, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level3.txt", "tiles"));
+	m_levels.push_back(new TiledLevel(24, 48, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
 
 	//UI INTERFACE
 	m_UIObject.emplace_back("Label3", new Label("Minecraft", 56, 150, "J", { 0,0,0,0 }));
@@ -128,10 +129,11 @@ void GameState::Update()
 	{
 		//STMA::PushState(new PauseState());
 		m_currLevel++;
-		if (m_currLevel > m_levels.size() - 1)
-			STMA::ChangeState(new GameClearState());
-		else
+		if (m_currLevel < m_levels.size())
 			ChangeLevel(m_currLevel);
+		else
+			STMA::ChangeState(new GameClearState());
+			return;
 	}
 	
 	if (EVMA::KeyPressed(SDL_SCANCODE_P))
@@ -272,10 +274,13 @@ void GameState::CollisionCheck()
 				{
 					//STMA::PushState(new PauseState());
 					m_currLevel++;
-					if (m_currLevel <= m_levels.size() - 1)
+					if (m_currLevel < m_levels.size())
 						ChangeLevel(m_currLevel);
 					else
+					{
 						STMA::ChangeState(new GameClearState());
+						return;
+					}
 				}
 			}
 			else if (i->GetTag() == CHECKPOINT)

@@ -123,14 +123,21 @@ TiledLevel::~TiledLevel()
 			m_level[row][col] = nullptr;
 		}
 	}
+	m_level.clear();
 	for (auto& enemy : m_enemy)
 	{
 		delete enemy;
 		enemy = nullptr;
 	}
+	m_enemy.clear();
+	for (auto& potion : m_potions)
+	{
+		delete potion;
+		potion = nullptr;
+	}
+	m_potions.clear();
+	m_renderTile.clear();
 	m_level.clear();
-	//m_obstacles.clear();
-	//m_checkPoint.clear();
 	m_visibleTile.clear();
 	m_enemy.clear();
 	m_pStartingTile = nullptr;

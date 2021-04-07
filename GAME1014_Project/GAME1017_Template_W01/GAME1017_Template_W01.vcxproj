@@ -129,6 +129,7 @@
     <ClCompile Include="..\src\EntityObject.cpp" />
     <ClCompile Include="..\src\EventManager.cpp" />
     <ClCompile Include="..\src\FontManager.cpp" />
+    <ClCompile Include="..\src\GameClearState.cpp" />
     <ClCompile Include="..\src\GameState.cpp" />
     <ClCompile Include="..\src\Heart.cpp" />
     <ClCompile Include="..\src\ItemObject.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="..\src\EntityObject.h" />
     <ClInclude Include="..\src\EventManager.h" />
     <ClInclude Include="..\src\FontManager.h" />
+    <ClInclude Include="..\src\GameClearState.h" />
     <ClInclude Include="..\src\GameObject.h" />
     <ClInclude Include="..\src\GameState.h" />
     <ClInclude Include="..\src\Heart.h" />

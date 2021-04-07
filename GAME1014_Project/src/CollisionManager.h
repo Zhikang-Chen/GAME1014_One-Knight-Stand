@@ -19,7 +19,7 @@ public:
 
 	static bool LinePointCheck(const SDL_FPoint object1_start, const SDL_FPoint object1_end, const SDL_FPoint object2);
 private:
-	CollisionManager() {}
+	CollisionManager() = default;
 };
 
 typedef CollisionManager COMA;
