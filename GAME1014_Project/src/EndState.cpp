@@ -9,7 +9,7 @@ void EndState::Enter()
 {
 	std::cout << "Entering End State" << std::endl;
 	
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/20191103_131848.png", "NoIdea");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/GAME_OVER.png", "NoIdea");
 	auto* LP = new Label("Genshi_font", WIDTH / 2, HEIGHT / 2, "Game Over", SDL_Color{ 255,255,255,255 });
 	m_objects.emplace_back("GameoverText", LP);	
 	//Label* LP = dynamic_cast<Label*>(m_objects.get);
@@ -34,8 +34,8 @@ void EndState::Enter()
 void EndState::Update()
 {
 	// Spin the image
-	SpriteObject* I = dynamic_cast<SpriteObject*>(FindObject("image"));
-	I->SetAngle(++I->GetAngle());
+	//SpriteObject* I = dynamic_cast<SpriteObject*>(FindObject("image"));
+	//I->SetAngle(++I->GetAngle());
 	
 	if(EVMA::MousePressed(1))
 	{

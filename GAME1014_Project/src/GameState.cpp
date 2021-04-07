@@ -108,6 +108,7 @@ void GameState::Enter()
 	SoundManager::PlayMusic("gameLevel1", -1);
 	SoundManager::Load("Aud/slime_movement.wav", "bounce", SOUND_SFX);
 	SoundManager::Load("Aud/ouch.wav", "hit", SOUND_SFX);
+	SoundManager::Load("Aud/bonk.wav", "bonk", SOUND_SFX);
 	//SoundManager::SetMusicVolume(16);
 	std::cout << "Entering GameState..." << std::endl;
 }
@@ -389,6 +390,7 @@ void GameState::CollisionCheck()
 				break;
 			case AttackType::BONK:
 				enemies[i]->addEffect(new Stun(300));
+				SoundManager::PlaySound("bonk", 0, 0);
 				break;
 			case AttackType::BLEED:
 				enemies[i]->addEffect(new Bleed(300));

@@ -26,6 +26,7 @@ PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : Entity
 	SoundManager::Load("Aud/sword_swing.wav", "slash", SOUND_SFX);
 	SoundManager::Load("Aud/ice_slash.wav", "specSlash", SOUND_SFX);
 	SoundManager::Load("Aud/ding.mp3", "ding", SOUND_SFX);
+	SoundManager::Load("Aud/whip.wav", "whip", SOUND_SFX);
 }
 
 
@@ -98,7 +99,7 @@ void PlatformPlayer::Update()
 					m_state = PlayerState::STATE_ATTACKING;
 					//SetAnimation()
 					SetAnimation(5, 0, 4, m_src.h * 4);
-					SoundManager::PlaySound("specSlash", 0, 0); // no bonk sound 
+					SoundManager::PlaySound("whip", 0, 0); // no bonk sound 
 					m_isSkillUpSTUN = true;
 					m_currentAttack = AttackType::BONK;
 				}
