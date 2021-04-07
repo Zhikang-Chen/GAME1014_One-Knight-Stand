@@ -2,15 +2,15 @@
 #ifndef _TILEDLEVEL_H_
 #define _TILEDLEVEL_H_
 
-#include <fstream>
 #include <map>
 #include <vector>
 #include "Enemy.h"
 #include "GameObject.h"
+#include "ItemObject.h"
 #include "SpriteObject.h"
 #include "TextureManager.h"
 #include "tinyxml2.h"
-#include "ItemObject.h"
+
 using namespace tinyxml2;
 
 enum Tag { NONE = -1, SPAWN, END, AIR, OBSTACLE, HAZARD, CHECKPOINT, PLATFORM };
@@ -73,6 +73,10 @@ public:
 	vector<Tile*>& GetObstacles();
 	vector<Tile*>& GetCheckPoint() { return m_checkPoint; }
 	vector<Tile*>& GetVisibleTile() { return m_visibleTile; }
+	vector<Tile*>& GetRenderTile() { return m_renderTile; }
+	vector<HealthPotion*>& GetPotion() { return m_potions; }
+	void AddPotion(HealthPotion* p);
+	
 	vector<vector<Tile*>>& GetAllTile() { return m_level; }
 	Tile* GetStartingTile() const { return m_pStartingTile; }
 	XMLDocument xmlDoc;
@@ -83,9 +87,11 @@ private:
 	Tile* m_pStartingTile;
 	map<char, Tile*> m_tiles; // Our map of 16 prototype Tile objects.
 	vector<vector<Tile*>> m_level; // 2D vector.
-	vector<Tile*> m_checkPoint; 
-	vector<Enemy*> m_enemy;
+	vector<Tile*> m_checkPoint;
+	vector<Tile*> m_renderTile;
 	vector<Tile*> m_visibleTile;
+	vector<HealthPotion*> m_potions;
+	vector<Enemy*> m_enemy;
 };
 
 #endif

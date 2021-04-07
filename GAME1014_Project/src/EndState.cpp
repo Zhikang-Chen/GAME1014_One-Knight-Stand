@@ -1,7 +1,5 @@
-﻿#include "EndState.h"
-
-#include <iostream>
-#include "Engine.h"
+﻿#include "Engine.h"
+#include "EventManager.h"
 #include "StateManager.h"
 #include "SoundManager.h"
 

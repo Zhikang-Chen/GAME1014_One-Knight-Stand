@@ -183,7 +183,6 @@
     <ClInclude Include="..\src\tinyxml2.h" />
     <ClInclude Include="..\src\TitleState.h" />
     <ClInclude Include="..\src\Zombie.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Dat\Level1.txt" />

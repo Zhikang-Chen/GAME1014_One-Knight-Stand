@@ -27,7 +27,7 @@ public:
 
 protected:
 	bool m_grounded;
-	bool m_alive;
+	bool m_inRenderRange;
 	vector<Effect*> m_effects;
 	
 	friend Effect;

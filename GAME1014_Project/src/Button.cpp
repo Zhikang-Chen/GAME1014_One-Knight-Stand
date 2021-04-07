@@ -1,5 +1,6 @@
 #include "Button.h"
 #include "EventManager.h"
+#include "SaveManager.h"
 #include "StateManager.h"
 
 Button::Button(SDL_Rect src, SDL_FRect dst, SDL_Texture* t)

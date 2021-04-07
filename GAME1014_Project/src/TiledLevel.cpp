@@ -1,5 +1,5 @@
 #include "TiledLevel.h"
-
+#include <fstream>
 #include "Slime.h"
 #include "Zombie.h"
 
@@ -20,7 +20,7 @@ TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int
 		key = pElement->Attribute("key");
 		pElement->QueryAttribute("x", &x);
 		pElement->QueryAttribute("y", &y);
-		
+
 		char k = key[0];
 		if(k == 'S')
 			m_tiles.emplace(k, new SpawnTile({x,y,32,32}, { 0.0f, 0.0f, (float)w, (float)h }));
@@ -92,48 +92,6 @@ TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int
 				}
 			}
 		}
-
-		//m_level.resize(m_cols);
-		//for (unsigned short col = 0; col < m_cols; col++)
-		//{
-		//	m_level[col].resize(m_rows);
-		//	for (unsigned short row = 0; row < m_rows; row++)
-		//	{
-		//		inFile >> key;
-		//		m_level[row][col] = m_tiles[key]->Clone(); // Common prototype method.
-		//		m_level[row][col]->SetXY((float)(col * w), (float)(row * h));
-		//		int w, h;
-		//		if (key == 's')
-		//		{
-		//			auto r = m_level[col][row]->GetDst();
-		//			SDL_QueryTexture(TEMA::GetTexture("Slime"), nullptr, nullptr, &w, &h);
-		//			cout << r->x << ',' << r->y << endl;
-		//			m_enemy.push_back(new Slime({ 0,0,w,h },
-		//				{ r->x - w, r->y - h,(float)w,(float)h }));
-		//		}
-		//		switch (m_level[row][col]->GetTag()) {
-		//		case SPAWN:
-		//			m_pStartingTile = m_level[row][col];
-		//			m_visibleTile.push_back(m_pStartingTile);
-		//			break;
-		//		case CHECKPOINT:
-		//			//m_checkPoint.push_back(m_level[row][col]);
-		//			m_visibleTile.push_back(m_level[row][col]);
-		//			break;
-		//		case END:
-		//			m_visibleTile.push_back(m_level[row][col]);
-		//			break;
-		//		case OBSTACLE:
-		//			//m_obstacles.push_back(m_level[row][col]);
-		//			m_visibleTile.push_back(m_level[row][col]);
-		//			break;
-		//		case PLATFORM:
-		//			//m_checkPoint.push_back(m_level[row][col]);
-		//			m_visibleTile.push_back(m_level[row][col]);
-		//			break;
-		//		}
-		//	}
-		//}
 	}
 	inFile.close();
 
@@ -187,25 +145,40 @@ TiledLevel::~TiledLevel()
 
 void TiledLevel::Render()
 {
-	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 255, 255, 255);
-	for (auto& enemy : m_enemy)
-	{
-		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), enemy->GetDst());
-		enemy->Render();
-	}
-	for (auto tile : m_visibleTile)
+	for (auto tile : m_renderTile)
 		tile->Render();
+	
+	for (auto& enemy : m_enemy)
+		enemy->Render();
+	
+	for (auto p : m_potions)
+		p->Render();
+
 	
 }
 
 void TiledLevel::Update()
 {
+	m_renderTile.clear();
+	for (auto& i : m_visibleTile)
+	{
+		if(i->GetDst()->x < WIDTH + WIDTH / 2 && i->GetDst()->x > 0 - WIDTH / 2)
+		{
+			m_renderTile.push_back(i);
+		}
+	}
+
 	for (auto i : m_enemy)
 		i->Update();
 }
 
 
 vector<Enemy*>& TiledLevel::GetEnemy() { return m_enemy; }
+
+void TiledLevel::AddPotion(HealthPotion* p)
+{
+	m_potions.push_back(p);
+}
 
 //vector<Tile*>& TiledLevel::GetObstacles() { return m_obstacles; }
 

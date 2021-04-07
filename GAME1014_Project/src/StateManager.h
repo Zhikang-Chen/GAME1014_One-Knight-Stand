@@ -4,6 +4,10 @@
 
 #include "TitleState.h"
 #include "GameState.h"
+#include "PauseState.h"
+#include "LoadState.h"
+#include "EndState.h"
+
 #include "States.h"
 
 

@@ -2,11 +2,8 @@
 #ifndef _STATES_H_
 #define _STATES_H_
 
-#include <map>
-#include <SDL.h>
 #include <string>
 #include <vector>
-#include <algorithm> 
 
 #include "GameObject.h"
 

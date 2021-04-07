@@ -3,21 +3,10 @@
 #define _GAMESTATE_H_
 
 #include "States.h"
-#include "CollisionManager.h"
-#include "Engine.h"
-#include "EventManager.h"
-#include "StateManager.h"
-#include "TextureManager.h"
-#include "SaveManager.h"
 #include <vector>
-#include <cstdlib>
-#include <ctime>
-
 #include "TiledLevel.h"
 #include "Heart.h"
 #include "SwordSkill.h"
-#include "Slime.h"
-#include "Zombie.h"
 #include "ItemObject.h"
 
 
@@ -32,7 +21,6 @@ public:
 	virtual void Resume();
 	void CollisionCheck();
 	void MoveCamTo(GameObject* o);
-	void UpdateCam(GameObject* o);
 	void ChangeLevel(unsigned int level);
 	unsigned int GetLevel() const;
 	unsigned int GetCheckPoint() const;
@@ -45,7 +33,7 @@ private:
 	SwordSkill* m_pSwordSkill2CD;
 	SwordSkill* m_pSwordAttack;
 	vector<Heart*> Hearts;
-	vector<HealthPotion*> m_potions;
+	//vector<HealthPotion*> m_potions;
 
 	Tile* m_spawn;
 	vector<TiledLevel*> m_levels;

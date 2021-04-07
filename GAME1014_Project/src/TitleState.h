@@ -5,13 +5,8 @@
 #include "Button.h"
 #include "Label.h"
 #include "States.h"
-
-#include "PlatformPlayer.h"
-#include "CollisionManager.h"
 #include "Engine.h"
-#include "EventManager.h"
-#include "StateManager.h"
-#include "TextureManager.h"
+
 
 class TitleState : public State
 {

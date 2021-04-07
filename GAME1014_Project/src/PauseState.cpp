@@ -1,6 +1,4 @@
 ﻿#include "PauseState.h"
-
-
 #include "SoundManager.h"
 #include "StateManager.h"
 #include "TextureManager.h"

@@ -80,3 +80,8 @@ void Label::UseFont(std::string key)
 {
 	SetText(m_String);
 }
+
+string Label::GetString() const
+{
+	return m_String;
+}

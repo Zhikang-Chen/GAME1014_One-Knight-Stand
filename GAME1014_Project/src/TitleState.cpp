@@ -1,8 +1,9 @@
 ﻿// Begin TitleState
 #include "TitleState.h"
-
 #include "EndState.h"
+#include "EventManager.h"
 #include "SoundManager.h"
+#include "StateManager.h"
 
 TitleState::TitleState() {}
 

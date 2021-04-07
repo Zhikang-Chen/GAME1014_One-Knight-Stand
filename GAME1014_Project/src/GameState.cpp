@@ -1,9 +1,11 @@
 ﻿// Begin GameState
-#include "GameState.h"
-#include "EndState.h"
-#include "PauseState.h"
+#include <ctime>
+#include "EventManager.h"
+#include "SaveManager.h"
+#include "StateManager.h"
 #include "SoundManager.h"
-#include "LoadState.h"
+#include "CollisionManager.h"
+
 GameState::GameState() {}
 
 // State function
@@ -43,16 +45,16 @@ void GameState::Enter()
 	m_levels.push_back(new TiledLevel(24, 48, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
 
 	//UI INTERFACE
-	m_objects.emplace_back("Label3", new Label("Minecraft", 56, 150, "J", { 0,0,0,0 }));
-	m_objects.emplace_back("Label4", new Label("Minecraft", 110, 150, "K", { 0,0,0,0 }));
-	m_objects.emplace_back("Label5", new Label("Minecraft", 160, 150, "L", { 0,0,0,0 }));
-	m_objects.emplace_back("HealthLabel", new Label("Minecraft", 400, 20, "Sponsored by: NornVPN", { 0,0,0,0 }));
-	m_objects.emplace_back("InstructionLabel1", new Label("Minecraft", 790, 20, "Press Esc to exit game", { 0,0,0,0 }));
-	m_objects.emplace_back("InstructionLabel2", new Label("Minecraft", 790, 40, "Press P to pause game", { 0,0,0,0 }));
-	m_objects.emplace_back("InstructionLabel3", new Label("Minecraft", 790, 60, "Press Space to Jump", { 0,0,0,0 }));
-	m_objects.emplace_back("InstructionLabel4", new Label("Minecraft", 790, 80, "Press J to Attack", { 0,0,0,0 }));
-	m_objects.emplace_back("InstructionLabel5", new Label("Minecraft", 790, 100, "Press K to use Special 1", { 0,0,0,0 }));
-	m_objects.emplace_back("InstructionLabel6", new Label("Minecraft", 790, 120, "Press L to use Special 2", { 0,0,0,0 }));
+	m_UIObject.emplace_back("Label3", new Label("Minecraft", 56, 150, "J", { 0,0,0,0 }));
+	m_UIObject.emplace_back("Label4", new Label("Minecraft", 110, 150, "K", { 0,0,0,0 }));
+	m_UIObject.emplace_back("Label5", new Label("Minecraft", 160, 150, "L", { 0,0,0,0 }));
+	m_UIObject.emplace_back("HealthLabel", new Label("Minecraft", 400, 20, "Sponsored by: NornVPN", { 0,0,0,0 }));
+	m_UIObject.emplace_back("InstructionLabel1", new Label("Minecraft", 790, 20, "Press Esc to exit game", { 0,0,0,0 }));
+	m_UIObject.emplace_back("InstructionLabel2", new Label("Minecraft", 790, 40, "Press P to pause game", { 0,0,0,0 }));
+	m_UIObject.emplace_back("InstructionLabel3", new Label("Minecraft", 790, 60, "Press Space to Jump", { 0,0,0,0 }));
+	m_UIObject.emplace_back("InstructionLabel4", new Label("Minecraft", 790, 80, "Press J to Attack", { 0,0,0,0 }));
+	m_UIObject.emplace_back("InstructionLabel5", new Label("Minecraft", 790, 100, "Press K to use Special 1", { 0,0,0,0 }));
+	m_UIObject.emplace_back("InstructionLabel6", new Label("Minecraft", 790, 120, "Press L to use Special 2", { 0,0,0,0 }));
 
 	//UI Icons
 	SDL_QueryTexture(TEMA::GetTexture("SkillsUI"), nullptr, nullptr, &w, &h);
@@ -114,7 +116,7 @@ void GameState::Enter()
 }
 
 void GameState::Update()
-{	
+{
 	srand((unsigned)time(NULL));
 	MoveCamTo(FindObject("Player"));
 	for (auto& m_object : m_objects)
@@ -180,14 +182,9 @@ void GameState::Render()
 	for (auto& i : m_UIObject)
 		i.second->Render();
 
-	for (unsigned i = 0; i < m_potions.size(); i++)
-	{
-		m_potions[i]->Render();
-	}
 
 	if (dynamic_cast<GameState*>(STMA::GetStates().back()) != nullptr) // Check to see if current state is of type GameState
 		State::Render();
-	
 }
 
 void GameState::Exit()
@@ -206,6 +203,9 @@ void GameState::Exit()
 		delete UI.second;
 		UI.second = nullptr;
 	}
+
+
+	
 	m_UIObject.clear();
 	Hearts.clear();
 	std::cout << "Exiting GameState..." << std::endl;
@@ -224,7 +224,7 @@ void GameState::CollisionCheck()
 	SDL_FRect* p = pp->GetDst();
 	SDL_FRect* attackbox = pp->GetAttackHitBox();
 
-	for (auto i : dynamic_cast<TiledLevel*>(FindObject("level"))->GetVisibleTile())
+	for (auto i : m_levels[m_currLevel]->GetRenderTile())
 	{
 		auto t = i->GetDst();
 		if (COMA::AABBCheck(*p, *t)) // Collision check between player rect and tile rect.
@@ -279,9 +279,9 @@ void GameState::CollisionCheck()
 			}
 			else if (i->GetTag() == CHECKPOINT)
 			{
-				for(unsigned int i2 = 0 ; i2 < dynamic_cast<TiledLevel*>(FindObject("level"))->GetCheckPoint().size() ; i2++)
+				for(unsigned int i2 = 0 ; i2 < m_levels[m_currLevel]->GetCheckPoint().size() ; i2++)
 				{
-					if (dynamic_cast<TiledLevel*>(FindObject("level"))->GetCheckPoint()[i2] == i)
+					if (m_levels[m_currLevel]->GetCheckPoint()[i2] == i)
 					{
 						m_currCheckPoint = i2;
 					}
@@ -292,47 +292,47 @@ void GameState::CollisionCheck()
 				m_spawn = i;
 			}
 		}
-		for (auto slime : dynamic_cast<TiledLevel*>(FindObject("level"))->GetEnemy())
+		for (auto enemy : m_levels[m_currLevel]->GetEnemy())
 		{
-			auto e = slime->GetDst();
+			auto e = enemy->GetDst();
 			if (p->x < e->x)
 			{
-				slime->faceDir(false);
+				enemy->faceDir(false);
 			}
 			else
 			{
-				slime->faceDir(true);
+				enemy->faceDir(true);
 			}
 
 			if (COMA::AABBCheck(*e, *t)) // Collision check between player rect and tile rect.
 			{
-				if ((e->y + e->h) - slime->GetVelY() <= t->y)
+				if ((e->y + e->h) - enemy->GetVelY() <= t->y)
 				{ // Colliding with top side of tile.
-					slime->StopY();
-					slime->SetY(t->y - e->h);
-					slime->SetGrounded(true);
+					enemy->StopY();
+					enemy->SetY(t->y - e->h);
+					enemy->SetGrounded(true);
 				}
-				else if (e->y - slime->GetVelY() >= (t->y + t->h))
+				else if (e->y - enemy->GetVelY() >= (t->y + t->h))
 				{ // Colliding with bottom side of tile.
-					slime->StopY();
-					slime->SetY(t->y + t->h);
+					enemy->StopY();
+					enemy->SetY(t->y + t->h);
 				}
-				else if (e->x - slime->GetVelX() <= t->x - t->w)
+				else if (e->x - enemy->GetVelX() <= t->x - t->w)
 				{ // Colliding with left side of tile.
-					slime->StopX();
-					slime->SetX(t->x - e->w);
+					enemy->StopX();
+					enemy->SetX(t->x - e->w);
 				}
-				else if (e->x - slime->GetVelX() >= t->x + t->w)
+				else if (e->x - enemy->GetVelX() >= t->x + t->w)
 				{ // Colliding with right side of tile.
-					slime->StopX();
-					slime->SetX(t->x + t->w);
+					enemy->StopX();
+					enemy->SetX(t->x + t->w);
 				}
 			}
 		}
 	}
 	
 	//Player and slime collision
-	auto &enemies = dynamic_cast<TiledLevel*>(FindObject("level"))->GetEnemy();
+	auto &enemies = m_levels[m_currLevel]->GetEnemy();
 	for (auto i = 0; i < enemies.size(); i++)
 	{
 		SDL_FRect* s = enemies[i]->GetDst();
@@ -360,25 +360,7 @@ void GameState::CollisionCheck()
 		//Attack Collision with Enemies
 		if (COMA::AABBCheck(*attackbox, *s))
 		{
-			//enemies[i]->addEffect(new Stun(300));
-			auto a = pp->GetCurrentAttack();
-			//if (a == AttackType::NORMAL)
-			//{
-			//	//cout << "Normal" << endl;
-			//	enemies[i]->LoseHealth();
-			//}
-			//else if (a == AttackType::ICE)
-			//{
-			//	//cout << "Freeze" << endl;
-			//	enemies[i]->addEffect(new Freeze(120));
-			//}
-			//else if (a == AttackType::BONK)
-			//{
-			//	//cout << "Stun" << endl;
-			//	enemies[i]->addEffect(new Stun(300));
-			//}
-
-			switch (a)
+			switch (pp->GetCurrentAttack())
 			{
 			case AttackType::NORMAL:
 				cout << "hit" << endl;
@@ -397,12 +379,13 @@ void GameState::CollisionCheck()
 				break;
 			}
 		}
+		
 		if (enemies[i]->GetHeath() <= 0)
 		{
 			int randomDrop = rand() % 100;
 			if (enemies[i]->DropTable(randomDrop) == true)
 			{
-				m_potions.emplace_back(new HealthPotion({ 0, 0, 32, 32 }, { enemies[i]->GetDst()->x, enemies[i]->GetDst()->y, static_cast<float>(32), static_cast<float>(32) }));
+				m_levels[m_currLevel]->AddPotion(new HealthPotion({ 0, 0, 32, 32 }, { enemies[i]->GetDst()->x, enemies[i]->GetDst()->y, static_cast<float>(32), static_cast<float>(32) }));
 			}
 			delete enemies[i];
 			enemies.erase(enemies.begin() + i);
@@ -411,18 +394,20 @@ void GameState::CollisionCheck()
 	}
 
 	//Player and potion collision
-	for (unsigned i = 0; i < m_potions.size(); i++)
+	auto &idk = m_levels[m_currLevel]->GetPotion();
+	for (unsigned i = 0; i < idk.size(); i++)
 	{
-		SDL_FRect* po = m_potions[i]->GetDst();
+		SDL_FRect* po = idk[i]->GetDst();
 		if (COMA::AABBCheck(*p, *po))
 		{
 			if (pp->GetHeath() < 10)
 			{
 				pp->SetHeath(pp->GetHeath() + 1);
 			}
-			delete m_potions[i];
-			m_potions.erase(m_potions.begin() + i);
-			m_potions.shrink_to_fit();
+			delete idk[i];
+			idk.erase(idk.begin() + i);
+			idk.shrink_to_fit();
+			
 			for (auto i2 = 0; i2 < Hearts.size(); i2++)
 			{
 				if (Hearts[i2]->GetEmpty())
@@ -464,21 +449,19 @@ void GameState::MoveCamTo(GameObject* o)
 {
 	auto camOffset = (WIDTH / 2) - o->GetDst()->x;
 	
-	for(auto i : dynamic_cast<TiledLevel*>(FindObject("level"))->GetAllTile())
+	for(auto i : m_levels[m_currLevel]->GetVisibleTile())
 	{
-		for(auto i2 : i)
-		{
-			SDL_FRect* t = i2->GetDst();
-			t->x += camOffset;
-		}
+		SDL_FRect* t = i->GetDst();
+		t->x += camOffset;
 	}
-	for(auto i : dynamic_cast<TiledLevel*>(FindObject("level"))->GetEnemy())
+	
+	for(auto i : m_levels[m_currLevel]->GetEnemy())
 	{
 		i->GetDst()->x += camOffset;
 	}
-	for (unsigned i = 0; i < m_potions.size(); i++)
+	for (unsigned i = 0; i < m_levels[m_currLevel]->GetPotion().size(); i++)
 	{
-		m_potions[i]->GetDst()->x += camOffset;
+		m_levels[m_currLevel]->GetPotion()[i]->GetDst()->x += camOffset;
 	}
 	o->GetDst()->x += camOffset;
 }

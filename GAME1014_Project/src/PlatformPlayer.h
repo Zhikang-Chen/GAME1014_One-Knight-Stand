@@ -1,9 +1,6 @@
 ﻿#pragma once
 #ifndef _PLATFORMPLAYER_H_
 #define _PLATFORMPLAYER_H_
-#define GRAV 4.0f //Gravity
-#define JUMPFORCE 40.0f //Acceleration
-#define DRAG 0.85 //Acceleration
 #include "EntityObject.h"
 
 enum class PlayerState {STATE_IDLING, STATE_RUNNING, STATE_JUMPING, STATE_ATTACKING};

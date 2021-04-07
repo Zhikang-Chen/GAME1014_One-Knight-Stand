@@ -21,6 +21,7 @@ public: // Public methods.
 	void SetPos(const float x, const float y);
 	void SetColor(const SDL_Color& col);
 	void UseFont(std::string key);
+	string GetString() const;
 
 private: // Private properties.
 	TTF_Font* m_Font;

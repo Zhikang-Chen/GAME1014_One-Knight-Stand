@@ -1,6 +1,4 @@
-﻿#include "LoadState.h"
-//#include <iostream>
-#include "Engine.h"
+﻿#include "EventManager.h"
 #include "StateManager.h"
 #include "SoundManager.h"
 
@@ -36,7 +34,7 @@ void LoadState::Enter()
 
 void LoadState::Update()
 {
-	m_frame++;
+	m_frame += rand() % 10;
 	if(m_frame > m_endFrame)
 	{
 		STMA::PopState();
@@ -45,8 +43,15 @@ void LoadState::Update()
 	
 	// Spin the image
 	LoadSword->SetAngle(LoadSword->GetAngle() + 10);
+	
 	int number = (float)m_frame / m_endFrame * 100;
 	dynamic_cast<Label*>(FindObject("Load"))->SetText(to_string(number)+'%');
+
+	if(EVMA::MousePressed(1))
+	{
+		//cout << "a" <<endl;
+		m_frame += 100;
+	}
 	
 }
 
