@@ -25,7 +25,9 @@ void GameState::Enter()
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordAttack.png", "SwordAttack");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Slime.png", "Slime");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Zombie.png", "Zombie");
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/ice bullet.png", "Project");
+
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/icebullet.png", "Project");
+
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Potion.png", "Potion");
 
 
@@ -112,13 +114,13 @@ void GameState::Enter()
 }
 
 void GameState::Update()
-{	
+{
 	srand((unsigned)time(NULL));
 	MoveCamTo(FindObject("Player"));
 	for (auto& m_object : m_objects)
 		m_object.second->Update();
 	CollisionCheck();
-	
+
 	if (EVMA::KeyPressed(SDL_SCANCODE_V))
 	{
 		//STMA::PushState(new PauseState());
@@ -128,25 +130,36 @@ void GameState::Update()
 		else
 			ChangeLevel(m_currLevel);
 	}
-	
+
 	if (EVMA::KeyPressed(SDL_SCANCODE_P))
 	{
 		STMA::PushState(new PauseState());
 	}
 
 	int w, h;
-
+	if (EVMA::KeyPressed(SDL_SCANCODE_K) && dynamic_cast<PlatformPlayer*>(FindObject("Player"))->getSkill1CD() == t	rue)
+	{
+		SDL_FRect* p = dynamic_cast<PlatformPlayer*>(FindObject("Player"))->GetDst();
+		SDL_QueryTexture(TEMA::GetTexture("Project"), nullptr, nullptr, &w, &h);
+		m_pBullets = new Bullet({ 0,0,w,h }, { p->x + 50,p->y,p->w,p->h }, TEMA::GetTexture("Project"));
+		//m_pBullets.push_back(new Bullet({ 0,0,w,h }, { p->x + 50,p->y,p->w,p->h }, TEMA::GetTexture("Project")));
+		m_objects.emplace_back("Project", m_pBullets);
+	}
+	
 	if (dynamic_cast<PlatformPlayer*>(FindObject("Player"))->getSkill1CD() == true)
 	{
 		SDL_QueryTexture(TEMA::GetTexture("SwordSkill1CD"), nullptr, nullptr, &w, &h);
 		m_pSwordSkill1CD = new SwordSkill({ 0,0,w,h }, { 100,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordSkill1CD"));
 		m_UIObject.emplace_back("SwordSkill1CD", m_pSwordSkill1CD);
+
+		
 	}
 	else
 	{
 		SDL_QueryTexture(TEMA::GetTexture("SwordSkill1"), nullptr, nullptr, &w, &h);
 		m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 100,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordSkill1"));
 		m_UIObject.emplace_back("SwordSkill1", m_pSwordSkill1);
+	
 		dynamic_cast<PlatformPlayer*>(FindObject("Player"))->setSkill1CD(false);
 	}
 
@@ -163,7 +176,7 @@ void GameState::Update()
 		m_UIObject.emplace_back("SwordSkill2", m_pSwordSkill2);
 		dynamic_cast<PlatformPlayer*>(FindObject("Player"))->setSkill2CD(false);
 	}
-	
+
 }
 
 void GameState::Render()

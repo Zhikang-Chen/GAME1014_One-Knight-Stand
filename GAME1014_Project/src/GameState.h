@@ -16,6 +16,7 @@
 #include "TiledLevel.h"
 #include "Heart.h"
 #include "SwordSkill.h"
+#include "Bullet.h"
 #include "Slime.h"
 #include "Zombie.h"
 #include "ItemObject.h"
@@ -46,7 +47,7 @@ private:
 	SwordSkill* m_pSwordAttack;
 	vector<Heart*> Hearts;
 	vector<HealthPotion*> m_potions;
-
+	Bullet* m_pBullets;
 	Tile* m_spawn;
 	vector<TiledLevel*> m_levels;
 	unsigned int m_currLevel;
