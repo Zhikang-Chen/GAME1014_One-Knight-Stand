@@ -25,7 +25,7 @@ void GameState::Enter()
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordAttack.png", "SwordAttack");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Slime.png", "Slime");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Zombie.png", "Zombie");
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/dagger.png", "Project");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/ice bullet.png", "Project");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Potion.png", "Potion");
 
 
