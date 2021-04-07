@@ -26,7 +26,8 @@ void LoadState::Enter()
 	LoadSword = new SpriteObject({ 0,0,width, height }, { (WIDTH / 2) + (float)(width/1.5) ,HEIGHT / 2, (float)width,(float)height }, TEMA::GetTexture("LoadSword"));
 	m_objects.emplace_back("sword", LoadSword);
 	m_frame = 0;
-	m_endFrame = 600 + rand()%6000;
+	//Im commenting this out just to avoid unnecesary time wasted for loading the state for testing. Uncomment when the game is done
+	m_endFrame = 600; //+ rand()%6000; 
 
 	//cout << m_endFrame << endl;
 	

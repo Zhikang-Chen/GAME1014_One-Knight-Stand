@@ -7,6 +7,7 @@
 #include "PauseState.h"
 #include "LoadState.h"
 #include "EndState.h"
+#include "GameClearState.h"
 
 #include "States.h"
 
