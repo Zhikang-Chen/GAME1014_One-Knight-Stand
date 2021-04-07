@@ -129,7 +129,7 @@ void GameState::Update()
 		//STMA::PushState(new PauseState());
 		m_currLevel++;
 		if (m_currLevel > m_levels.size() - 1)
-			STMA::ChangeState(new TitleState());
+			STMA::ChangeState(new GameClearState());
 		else
 			ChangeLevel(m_currLevel);
 	}
@@ -275,7 +275,7 @@ void GameState::CollisionCheck()
 					if (m_currLevel <= m_levels.size() - 1)
 						ChangeLevel(m_currLevel);
 					else
-						STMA::ChangeState(new TitleState());
+						STMA::ChangeState(new GameClearState());
 				}
 			}
 			else if (i->GetTag() == CHECKPOINT)
