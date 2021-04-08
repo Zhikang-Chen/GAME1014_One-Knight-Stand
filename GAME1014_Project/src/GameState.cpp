@@ -137,7 +137,7 @@ void GameState::Update()
 	}
 
 	int w, h;
-	if (EVMA::KeyPressed(SDL_SCANCODE_K) && dynamic_cast<PlatformPlayer*>(FindObject("Player"))->getSkill1CD() == t	rue)
+	if (EVMA::KeyPressed(SDL_SCANCODE_K) && dynamic_cast<PlatformPlayer*>(FindObject("Player"))->getSkill1CD() == true)
 	{
 		SDL_FRect* p = dynamic_cast<PlatformPlayer*>(FindObject("Player"))->GetDst();
 		SDL_QueryTexture(TEMA::GetTexture("Project"), nullptr, nullptr, &w, &h);
@@ -360,6 +360,7 @@ void GameState::CollisionCheck()
 					break;
 				}
 			}
+			
 			SDL_FRect* s = m_spawn->GetDst();
 			pp->StopX();
 			pp->StopY();
@@ -418,7 +419,17 @@ void GameState::CollisionCheck()
 			enemies.shrink_to_fit();
 		}
 	}
+	//bullets and enemies collision
+	for (unsigned i = 0; i++;)
+	{
+		SDL_FRect* bu = m_pBullets[i].GetDst();
+		SDL_FRect* eee = enemies[i]->GetDst();
 
+		if (COMA::AABBCheck(*bu, *eee))
+		{
+			enemies[i]->LoseHealth();
+		}
+	}
 	//Player and potion collision
 	for (unsigned i = 0; i < m_potions.size(); i++)
 	{

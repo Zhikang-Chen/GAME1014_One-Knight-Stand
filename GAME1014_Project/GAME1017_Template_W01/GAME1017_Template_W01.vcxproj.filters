@@ -124,6 +124,9 @@
     <ClCompile Include="..\src\Effect.cpp">
       <Filter>Game Objects\Entities\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Bullet.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -221,6 +224,9 @@
     </ClInclude>
     <ClInclude Include="..\src\Effect.h">
       <Filter>Game Objects\Entities\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Bullet.h">
+      <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

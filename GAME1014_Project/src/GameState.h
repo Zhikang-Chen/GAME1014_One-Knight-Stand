@@ -47,6 +47,7 @@ private:
 	SwordSkill* m_pSwordAttack;
 	vector<Heart*> Hearts;
 	vector<HealthPotion*> m_potions;
+	//vector<Bullet*> m_pBullets; // error no overloaded function takes two pairs
 	Bullet* m_pBullets;
 	Tile* m_spawn;
 	vector<TiledLevel*> m_levels;
