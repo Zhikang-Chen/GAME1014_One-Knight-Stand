@@ -26,6 +26,10 @@ void GameClearState::Enter()
 	m_objects.emplace_back("SubText", instructionText);
 	instructionText->SetPos((WIDTH - instructionText->GetDst()->w) / 2, HEIGHT / 3);
 
+	//Game music 
+	SoundManager::Load("Aud/victory.mp3", "victory", SOUND_MUSIC);
+	SoundManager::PlayMusic("victory", -1);
+	//SoundManager::SetMusicVolume(16);
 }
 
 void GameClearState::Update()

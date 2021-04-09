@@ -110,7 +110,9 @@ void GameState::Enter()
 	//Load and play the game music
 	SoundManager::Load("Aud/TownTheme.mp3", "gameLevel1", SOUND_MUSIC);
 	SoundManager::PlayMusic("gameLevel1", -1);
+	SoundManager::Load("Aud/zombie_movement.wav", "movement", SOUND_SFX);
 	SoundManager::Load("Aud/slime_movement.wav", "bounce", SOUND_SFX);
+	SoundManager::Load("Aud/healing_pot.wav", "heal", SOUND_SFX);
 	SoundManager::Load("Aud/ouch.wav", "hit", SOUND_SFX);
 	SoundManager::Load("Aud/bonk.wav", "bonk", SOUND_SFX);
 	//SoundManager::SetMusicVolume(16);
@@ -408,6 +410,7 @@ void GameState::CollisionCheck()
 		{
 			if (pp->GetHeath() < 10)
 			{
+				SoundManager::PlaySound("heal", 0, 3);
 				pp->SetHeath(pp->GetHeath() + 1);
 			}
 			delete idk[i];
