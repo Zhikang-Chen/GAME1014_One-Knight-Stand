@@ -14,6 +14,7 @@ void Slime::Move()
 	m_jumpTimer++;
 	if(m_jumpTimer >= 120)
 	{
+		m_grounded = false;
 		SoundManager::PlaySound("bounce", 0, 3);
 		m_jumpTimer = 0;
 		if(m_facingLeft)
@@ -22,6 +23,16 @@ void Slime::Move()
 			m_accelX = -30.0f;
 		m_accelY = -JUMPFORCE; // SetAccelY(-JUMPFORCE);
 	}
+	else if(m_jumpTimer >= 110)
+	{
+		SetColour(180, 180, 255);
+	}
+	else if(m_grounded)
+	{
+		SetColour(255, 255, 255);
+	}
+
+
 
 	//m_accelY = JUMPFORCE;
 }
