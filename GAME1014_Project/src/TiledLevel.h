@@ -68,18 +68,19 @@ public:
 		const char* tileData, const char* levelData, const char* tileKey);
 	~TiledLevel();
 	void Update(); // Empty.
-	vector<Enemy*>& GetEnemies();
 	void Render();
+	void AddPotion(HealthPotion* p);
 
 	void Remove(Enemy* object);
 	void Remove(HealthPotion* object);
-	
+
+	// Getters
+	vector<Enemy*>& GetEnemies();
 	vector<Enemy*>& GetRenderEnemies();
 	vector<Tile*>& GetCheckPoint();
 	vector<Tile*>& GetVisibleTile();
 	vector<Tile*>& GetRenderTile();
 	vector<HealthPotion*>& GetPotion();
-	void AddPotion(HealthPotion* p);
 	Tile* GetStartingTile() const;
 
 private:
@@ -98,4 +99,3 @@ private:
 };
 
 #endif
-

@@ -287,36 +287,18 @@ void GameState::CollisionCheck()
 			}
 			else if (i->GetTag() == CHECKPOINT)
 			{
-				
-				
 				for(unsigned int i2 = 0 ; i2 < m_levels[m_currLevel]->GetCheckPoint().size() ; i2++)
 				{
-					
-				
 					if (m_levels[m_currLevel]->GetCheckPoint()[i2] == i)
 					{
 						//Play the checkpoint sound once after touching the flag. Shouldnt play again if touching it twice
 						m_currCheckPoint = i2;
-
-				
-				
 						SoundManager::PlaySound("check", 0, 4);
-						
-
-						
-					}
-					
-				
-								
+					}			
 				}
 				i->Activate();
 				m_spawn = i;
-
-				
 			}
-	
-
-			
 		}
 		for (auto enemy : m_levels[m_currLevel]->GetRenderEnemies())
 		{
@@ -332,26 +314,39 @@ void GameState::CollisionCheck()
 
 			if (COMA::AABBCheck(*e, *t)) // Collision check between player rect and tile rect.
 			{
-				if ((e->y + e->h) - enemy->GetVelY() <= t->y)
-				{ // Colliding with top side of tile.
-					enemy->StopY();
-					enemy->SetY(t->y - e->h);
-					enemy->SetGrounded(true);
+				if (i->GetTag() == OBSTACLE)
+				{
+					if ((e->y + e->h) - enemy->GetVelY() <= t->y)
+					{ // Colliding with top side of tile.
+						enemy->StopY();
+						enemy->SetY(t->y - e->h);
+						enemy->SetGrounded(true);
+					}
+					else if (e->y - enemy->GetVelY() >= (t->y + t->h))
+					{ // Colliding with bottom side of tile.
+						enemy->StopY();
+						enemy->SetY(t->y + t->h);
+					}
+					else if (e->x - enemy->GetVelX() <= t->x - t->w)
+					{ // Colliding with left side of tile.
+						enemy->StopX();
+						enemy->SetX(t->x - e->w);
+					}
+					else if (e->x - enemy->GetVelX() >= t->x + t->w)
+					{ // Colliding with right side of tile.
+						enemy->StopX();
+						enemy->SetX(t->x + t->w);
+					}
 				}
-				else if (e->y - enemy->GetVelY() >= (t->y + t->h))
-				{ // Colliding with bottom side of tile.
-					enemy->StopY();
-					enemy->SetY(t->y + t->h);
-				}
-				else if (e->x - enemy->GetVelX() <= t->x - t->w)
-				{ // Colliding with left side of tile.
-					enemy->StopX();
-					enemy->SetX(t->x - e->w);
-				}
-				else if (e->x - enemy->GetVelX() >= t->x + t->w)
-				{ // Colliding with right side of tile.
-					enemy->StopX();
-					enemy->SetX(t->x + t->w);
+				else if (i->GetTag() == PLATFORM)
+				{
+					
+					if ((e->y + e->h) - enemy->GetVelY() <= t->y)
+					{ // Colliding with top side of tile.
+						enemy->StopY();
+						enemy->SetY(t->y - e->h);
+						enemy->SetGrounded(true);
+					}
 				}
 			}
 		}
