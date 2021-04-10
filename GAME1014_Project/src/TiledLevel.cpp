@@ -56,16 +56,14 @@ TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int
 				{
 					auto r = m_level[row][col]->GetDst();
 					SDL_QueryTexture(TEMA::GetTexture("Slime"), nullptr, nullptr, &w, &h);
-					cout << r->x << ',' << r->y << endl;
-					m_enemy.push_back(new Slime({ 0,0,w,h },
+					m_enemies.push_back(new Slime({ 0,0,w,h },
 						{ r->x - w, r->y - h,(float)w,(float)h }));
 				}
-
-				if (key == 'z')
+				else if (key == 'z')
 				{
 					auto z = m_level[row][col]->GetDst();
 					SDL_QueryTexture(TEMA::GetTexture("Zombie"), nullptr, nullptr, &w, &h);
-					m_enemy.push_back(new Zombie({ 0,0,w,h },
+					m_enemies.push_back(new Zombie({ 0,0,w,h },
 						{ z->x - w, z->y - h,(float)w,(float)h }));
 				}
 				
@@ -124,12 +122,12 @@ TiledLevel::~TiledLevel()
 		}
 	}
 	m_level.clear();
-	for (auto& enemy : m_enemy)
+	for (auto& enemy : m_enemies)
 	{
 		delete enemy;
 		enemy = nullptr;
 	}
-	m_enemy.clear();
+	m_enemies.clear();
 	for (auto& potion : m_potions)
 	{
 		delete potion;
@@ -139,7 +137,7 @@ TiledLevel::~TiledLevel()
 	m_renderTile.clear();
 	m_level.clear();
 	m_visibleTile.clear();
-	m_enemy.clear();
+	m_enemies.clear();
 	m_pStartingTile = nullptr;
 	// Clear the original tiles.
 	for (map<char, Tile*>::iterator i = m_tiles.begin(); i != m_tiles.end(); i++)
@@ -155,7 +153,7 @@ void TiledLevel::Render()
 	for (auto tile : m_renderTile)
 		tile->Render();
 	
-	for (auto& enemy : m_enemy)
+	for (auto enemy : m_renderEnemies)
 		enemy->Render();
 	
 	for (auto p : m_potions)
@@ -164,10 +162,44 @@ void TiledLevel::Render()
 	
 }
 
+void TiledLevel::Remove(Enemy* object)
+{
+	auto i = find(m_enemies.begin(), m_enemies.end(), object);
+	if (i != m_enemies.end())
+	{
+		m_enemies.erase(i);
+		m_enemies.shrink_to_fit();
+
+		auto i2 = find(m_renderEnemies.begin(), m_renderEnemies.end(), object);
+		m_renderEnemies.erase(i2);
+		m_renderEnemies.shrink_to_fit();
+		delete object;
+	}
+	else
+	{
+		cout << "Unable to find enemy" << endl;
+	}
+}
+
+void TiledLevel::Remove(HealthPotion* object)
+{
+	auto i = find(m_potions.begin(), m_potions.end(), object);
+	if (i != m_potions.end())
+	{
+		m_potions.erase(i);
+		m_renderEnemies.shrink_to_fit();
+		delete object;
+	}
+	else
+	{
+		cout << "Unable to find potion" << endl;
+	}
+}
+
 void TiledLevel::Update()
 {
 	m_renderTile.clear();
-	for (auto& i : m_visibleTile)
+	for (auto i : m_visibleTile)
 	{
 		if(i->GetDst()->x < WIDTH + WIDTH / 2 && i->GetDst()->x > 0 - WIDTH / 2)
 		{
@@ -175,12 +207,51 @@ void TiledLevel::Update()
 		}
 	}
 
-	for (auto i : m_enemy)
-		i->Update();
+	m_renderEnemies.clear();
+	for(auto i : m_enemies)
+	{
+		if (i->GetDst()->x < WIDTH + WIDTH / 3 && i->GetDst()->x > 0 - WIDTH / 3)
+		{
+			i->Update();
+			m_renderEnemies.push_back(i);
+		}
+	}
 }
 
+vector<Enemy*>& TiledLevel::GetEnemies()
+{
+	return m_enemies;
+}
 
-vector<Enemy*>& TiledLevel::GetEnemy() { return m_enemy; }
+vector<Enemy*>& TiledLevel::GetRenderEnemies()
+{
+	return m_renderEnemies;
+}
+
+vector<Tile*>& TiledLevel::GetCheckPoint()
+{
+	return m_checkPoint;
+}
+
+vector<Tile*>& TiledLevel::GetVisibleTile()
+{
+	return m_visibleTile;
+}
+
+vector<Tile*>& TiledLevel::GetRenderTile()
+{
+	return m_renderTile;
+}
+
+vector<HealthPotion*>& TiledLevel::GetPotion()
+{
+	return m_potions;
+}
+
+Tile* TiledLevel::GetStartingTile() const
+{
+	return m_pStartingTile;
+}
 
 void TiledLevel::AddPotion(HealthPotion* p)
 {
@@ -199,7 +270,6 @@ void CheckPointTile::Activate()
 {
 	if (!m_activate)
 	{
-		cout << "check" << endl;
 		m_activate = true;
 		m_src.x = 32;
 	}

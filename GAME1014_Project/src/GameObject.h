@@ -22,46 +22,4 @@ protected: // Methods.
 
 };
 
-//class SpriteObject : public GameObject
-//{
-//public: 
-//	virtual void Update() = 0;
-//	SDL_Rect* GetSrc() { return &m_src; }
-//protected: // Attributes.
-//	SDL_Rect m_src;
-//protected: // Methods.
-//	SpriteObject(const SDL_Rect s, const SDL_FRect d) :GameObject(d), m_src(s) {}
-//};
-//
-//class AnimatedSpriteObject : public SpriteObject
-//{
-//public:
-//	virtual void Update() = 0;
-//protected: // Attributes.
-//	unsigned short m_frame, m_frameMax, m_sprite, m_spriteMin, m_spriteMax;
-//protected: // Methods.
-//	AnimatedSpriteObject(const SDL_Rect s, const SDL_FRect d) :SpriteObject(s, d), 
-//		m_frame(0), m_frameMax(0), m_sprite(0),	m_spriteMin(0), m_spriteMax(0) {}
-//	void SetAnimation(const unsigned short fMax, const unsigned short sMin, const unsigned short sMax, 
-//		const int srcY = 0)
-//	{
-//		m_frame = 0;
-//		m_frameMax = fMax;
-//		m_sprite = m_spriteMin = sMin;
-//		m_spriteMax = sMax;
-//		m_src.x = m_src.w * m_sprite;
-//		m_src.y = srcY;
-//	}
-//	void Animate()
-//	{
-//		if (m_frame++ == m_frameMax)
-//		{
-//			m_frame = 0;
-//			if (++m_sprite == m_spriteMax)
-//				m_sprite = m_spriteMin; // I don't use % in case m_sprite doesn't start at 0.
-//			m_src.x = m_src.w * m_sprite; // Moved to outside if.
-//		}
-//	}
-//};
-
 #endif

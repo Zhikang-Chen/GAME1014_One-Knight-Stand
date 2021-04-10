@@ -19,22 +19,14 @@ private:
 	virtual void DoesStuff() { cout << "Doing stuff" << endl; };
 };
 
-class CheckPoint : public ItemObject
-{
-	
-};
-
 class HealthPotion : public ItemObject
 {
-private:
-	bool m_facingLeft = false;
-
 public:
 	HealthPotion(SDL_Rect s, SDL_FRect d) : ItemObject(s, d, TEMA::GetTexture("Potion")){}
 
 	void Render()
 	{
-		SDL_RenderCopyExF(Engine::Instance().GetRenderer(), TEMA::GetTexture("Potion"), GetSrc(), GetDst(), m_angle, 0, m_facingLeft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+		SDL_RenderCopyExF(Engine::Instance().GetRenderer(), TEMA::GetTexture("Potion"), GetSrc(), GetDst(), m_angle, 0, SDL_FLIP_NONE);
 	}
 };
 

@@ -68,20 +68,22 @@ public:
 		const char* tileData, const char* levelData, const char* tileKey);
 	~TiledLevel();
 	void Update(); // Empty.
+	vector<Enemy*>& GetEnemies();
 	void Render();
-	vector<Enemy*>& GetEnemy();
-	vector<Tile*>& GetObstacles();
-	vector<Tile*>& GetCheckPoint() { return m_checkPoint; }
-	vector<Tile*>& GetVisibleTile() { return m_visibleTile; }
-	vector<Tile*>& GetRenderTile() { return m_renderTile; }
-	vector<HealthPotion*>& GetPotion() { return m_potions; }
-	void AddPotion(HealthPotion* p);
+
+	void Remove(Enemy* object);
+	void Remove(HealthPotion* object);
 	
-	vector<vector<Tile*>>& GetAllTile() { return m_level; }
-	Tile* GetStartingTile() const { return m_pStartingTile; }
-	XMLDocument xmlDoc;
+	vector<Enemy*>& GetRenderEnemies();
+	vector<Tile*>& GetCheckPoint();
+	vector<Tile*>& GetVisibleTile();
+	vector<Tile*>& GetRenderTile();
+	vector<HealthPotion*>& GetPotion();
+	void AddPotion(HealthPotion* p);
+	Tile* GetStartingTile() const;
 
 private:
+	XMLDocument xmlDoc;
 	const char* m_tileKey;
 	int m_rows, m_cols;
 	Tile* m_pStartingTile;
@@ -91,7 +93,8 @@ private:
 	vector<Tile*> m_renderTile;
 	vector<Tile*> m_visibleTile;
 	vector<HealthPotion*> m_potions;
-	vector<Enemy*> m_enemy;
+	vector<Enemy*> m_enemies;
+	vector<Enemy*> m_renderEnemies;
 };
 
 #endif

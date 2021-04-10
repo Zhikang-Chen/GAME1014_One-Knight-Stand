@@ -62,16 +62,13 @@ void GameState::Enter()
 
 	//UI Icons
 	SDL_QueryTexture(TEMA::GetTexture("SkillsUI"), nullptr, nullptr, &w, &h);
-	m_pSkillsUI = new SwordSkill({ 0,0,w,h }, { 10,5, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("SkillsUI"));
-	m_UIObject.emplace_back("SkillsUI", m_pSkillsUI);
+	m_UIObject.emplace_back("SkillsUI", new SwordSkill({ 0,0,w,h }, { 10,5, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("SkillsUI")));
 
 	SDL_QueryTexture(TEMA::GetTexture("HealthUI"), nullptr, nullptr, &w, &h);
-	m_pHealthUI = new SwordSkill({ 0,0,w,h }, { 10,200, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("HealthUI"));
-	m_UIObject.emplace_back("HealthUI", m_pHealthUI);
+	m_UIObject.emplace_back("HealthUI", new SwordSkill({ 0,0,w,h }, { 10,200, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("HealthUI")));
 
 	SDL_QueryTexture(TEMA::GetTexture("SwordAttack"), nullptr, nullptr, &w, &h);
-	m_pSwordAttack = new SwordSkill({ 0,0,w,h }, { 50,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordAttack"));
-	m_UIObject.emplace_back("SwordAttack", m_pSwordAttack);
+	m_UIObject.emplace_back("SwordAttack", new SwordSkill({ 0,0,w,h }, { 50,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordAttack")));
 
 	SDL_QueryTexture(TEMA::GetTexture("SwordSkill1"), nullptr, nullptr, &w, &h);
 	m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 100,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordSkill1"));
@@ -83,26 +80,26 @@ void GameState::Enter()
 	m_pSwordSkill2 = new SwordSkill({ 0,0,w,h }, { 150,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordSkill2"));
 	m_UIObject.emplace_back("SwordSkill2", m_pSwordSkill2);
 	
-	//First Level
+	// Load level
 	m_currLevel = save->m_currLevel;
 	m_objects.emplace_back("level", m_levels[m_currLevel]);
 
 	m_currCheckPoint = save->m_checkpoint;
 	
-	m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetCheckPoint()[m_currCheckPoint];
+	m_spawn = m_levels[m_currLevel]->GetStartingTile();
 	SDL_FRect* s = m_spawn->GetDst();
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
 
-	auto Pp = new PlatformPlayer({ 0, 0, 77,h/5 }, { s->x, s->y, static_cast<float>(77),static_cast<float>(h)/5 }, TEMA::GetTexture("Knight"));
-	m_objects.emplace_back("Player", Pp);
-	Pp->SetHeath(save->m_currHealth);
-	Pp->SetMaxHealth(save->m_maxHealth);
+	auto pp = new PlatformPlayer({ 0, 0, 77,h/5 }, { s->x, s->y, static_cast<float>(77),static_cast<float>(h)/5 }, TEMA::GetTexture("Knight"));
+	m_objects.emplace_back("Player", pp);
+	pp->SetHeath(save->m_currHealth);
+	pp->SetMaxHealth(save->m_maxHealth);
 	
 	SDL_QueryTexture(TEMA::GetTexture("HeartBar"), nullptr, nullptr, &w, &h);
-	for(auto i = 0; i < Pp->GetMaxHealth(); i++)
+	for(auto i = 0; i < pp->GetMaxHealth(); i++)
 	{
 		auto* he = new Heart({ 0,0,w,h }, { static_cast<float>(100 + 25 * i), 40.0f, static_cast<float>(w),static_cast<float>(h) });
-		if (Pp->GetHeath() <= i )
+		if (pp->GetHeath() <= i )
 			he->SetEmpty(true);
 		Hearts.push_back(he);
 		m_UIObject.emplace_back("HeartBar" + i, he);
@@ -125,7 +122,6 @@ void GameState::Enter()
 
 void GameState::Update()
 {
-	srand((unsigned)time(NULL));
 	MoveCamTo(FindObject("Player"));
 	for (auto& m_object : m_objects)
 		m_object.second->Update();
@@ -138,8 +134,11 @@ void GameState::Update()
 		if (m_currLevel < m_levels.size())
 			ChangeLevel(m_currLevel);
 		else
+		{
 			STMA::ChangeState(new GameClearState());
 			return;
+		}
+		return;
 	}
 	
 	if (EVMA::KeyPressed(SDL_SCANCODE_P))
@@ -212,9 +211,6 @@ void GameState::Exit()
 		delete UI.second;
 		UI.second = nullptr;
 	}
-
-
-	
 	m_UIObject.clear();
 	Hearts.clear();
 	std::cout << "Exiting GameState..." << std::endl;
@@ -231,7 +227,6 @@ void GameState::CollisionCheck()
 {
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
 	SDL_FRect* p = pp->GetDst();
-	SDL_FRect* attackbox = pp->GetAttackHitBox();
 
 
 	for (auto i : m_levels[m_currLevel]->GetRenderTile())
@@ -323,7 +318,7 @@ void GameState::CollisionCheck()
 
 			
 		}
-		for (auto enemy : m_levels[m_currLevel]->GetEnemy())
+		for (auto enemy : m_levels[m_currLevel]->GetRenderEnemies())
 		{
 			auto e = enemy->GetDst();
 			if (p->x < e->x)
@@ -363,7 +358,10 @@ void GameState::CollisionCheck()
 	}
 	
 	//Player attack and enemies collision
-	auto &enemies = m_levels[m_currLevel]->GetEnemy();
+	if (pp->GetState() == PlayerState::STATE_ATTACKING);
+
+	SDL_FRect* attackbox = pp->GetAttackHitBox();
+	auto &enemies = m_levels[m_currLevel]->GetRenderEnemies();
 	for (auto i = 0; i < enemies.size(); i++)
 	{
 		SDL_FRect* s = enemies[i]->GetDst();
@@ -419,9 +417,7 @@ void GameState::CollisionCheck()
 			{
 				m_levels[m_currLevel]->AddPotion(new HealthPotion({ 0, 0, 32, 32 }, { enemies[i]->GetDst()->x, enemies[i]->GetDst()->y, static_cast<float>(32), static_cast<float>(32) }));
 			}
-			delete enemies[i];
-			enemies.erase(enemies.begin() + i);
-			enemies.shrink_to_fit();
+			m_levels[m_currLevel]->Remove(enemies[i]);
 		}
 	}
 
@@ -438,15 +434,12 @@ void GameState::CollisionCheck()
 				
 				pp->SetHeath(pp->GetHeath() + 1);
 			}
-			delete idk[i];
-			idk.erase(idk.begin() + i);
-			idk.shrink_to_fit();
-			
-			for (auto i2 = 0; i2 < Hearts.size(); i2++)
+			m_levels[m_currLevel]->Remove(idk[i]);			
+			for (auto& Heart : Hearts)
 			{
-				if (Hearts[i2]->GetEmpty())
+				if (Heart->GetEmpty())
 				{
-					Hearts[i2]->SetEmpty(false);
+					Heart->SetEmpty(false);
 					break;
 				}
 			}
@@ -489,7 +482,7 @@ void GameState::MoveCamTo(GameObject* o)
 		t->x += camOffset;
 	}
 	
-	for(auto i : m_levels[m_currLevel]->GetEnemy())
+	for(auto i : m_levels[m_currLevel]->GetEnemies())
 	{
 		i->GetDst()->x += camOffset;
 	}
@@ -515,7 +508,7 @@ void GameState::ChangeLevel(unsigned int level)
 		}
 	}
 	m_currCheckPoint = 0;
-	m_spawn = dynamic_cast<TiledLevel*>(FindObject("level"))->GetStartingTile();
+	m_spawn = m_levels[m_currLevel]->GetStartingTile();
 	SDL_FRect* s = m_spawn->GetDst();
 	
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
