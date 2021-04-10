@@ -25,7 +25,8 @@ PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : Entity
 	//Load Sound effects
 	SoundManager::Load("Aud/sword_swing.wav", "slash", SOUND_SFX);
 	SoundManager::Load("Aud/ice_slash.wav", "specSlash", SOUND_SFX);
-	SoundManager::Load("Aud/ding.mp3", "ding", SOUND_SFX);
+	SoundManager::Load("Aud/cooldownActivate.wav", "cdActive", SOUND_SFX);
+	SoundManager::Load("Aud/ding.wav", "cdActive", SOUND_SFX);
 	SoundManager::Load("Aud/whip.wav", "whip", SOUND_SFX);
 }
 
@@ -42,7 +43,7 @@ void PlatformPlayer::Update()
 	
 	if (m_isSkillUp && skillTimer / 500 >= 1)
 	{
-		//SoundManager::PlaySound("ding", 0, 0);
+		SoundManager::PlaySound("cdActive", 0, 0);
 		skillTimer = 0;
 		m_isSkillUp = false;
 	}
@@ -52,7 +53,7 @@ void PlatformPlayer::Update()
 	}
 	if (m_isSkillUpSTUN && skillSTUNTimer / 400 >= 1)
 	{
-		//SoundManager::PlaySound("ding", 0, 0);
+		SoundManager::PlaySound("cdActive", 0, 0);
 		skillSTUNTimer = 0;
 		m_isSkillUpSTUN = false;
 	}

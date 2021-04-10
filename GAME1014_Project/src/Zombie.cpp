@@ -1,6 +1,7 @@
 #include "Zombie.h"
 #include "Enemy.h"
 #include "TextureManager.h"
+#include "SoundManager.h"
 
 Zombie::Zombie(SDL_Rect s, SDL_FRect d) : Enemy(s, d, TEMA::GetTexture("Zombie"))
 {
@@ -10,6 +11,13 @@ Zombie::Zombie(SDL_Rect s, SDL_FRect d) : Enemy(s, d, TEMA::GetTexture("Zombie")
 
 void Zombie::Move()
 {
+	m_zSoundCount++;
+	if (m_zSoundCount >= 100)
+	{
+		SoundManager::PlaySound("zombie", 0, 3);
+		m_zSoundCount = 0;
+	}
+
 		//The zombie will slowly approach the player.
 		if (m_facingLeft)
 			m_accelX = 0.2f;

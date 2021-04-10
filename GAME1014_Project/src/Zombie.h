@@ -13,6 +13,8 @@ public:
 	//void Update();
 	void Move();
 	bool DropTable(int r);
+
+	int m_zSoundCount = 0;
 };
 
 #endif

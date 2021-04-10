@@ -12,6 +12,8 @@ GameState::GameState() {}
 
 void GameState::Enter()
 {
+
+
 	int w, h;
 	auto save = SAMA::GetSave();
 	
@@ -110,11 +112,13 @@ void GameState::Enter()
 	//Load and play the game music
 	SoundManager::Load("Aud/TownTheme.mp3", "gameLevel1", SOUND_MUSIC);
 	SoundManager::PlayMusic("gameLevel1", -1);
-	SoundManager::Load("Aud/zombie_movement.wav", "movement", SOUND_SFX);
+	SoundManager::Load("Aud/healing.wav", "heal", SOUND_SFX);
 	SoundManager::Load("Aud/slime_movement.wav", "bounce", SOUND_SFX);
-	SoundManager::Load("Aud/healing_pot.wav", "heal", SOUND_SFX);
 	SoundManager::Load("Aud/ouch.wav", "hit", SOUND_SFX);
 	SoundManager::Load("Aud/bonk.wav", "bonk", SOUND_SFX);
+	SoundManager::Load("Aud/zombie.wav", "zombie", SOUND_SFX);
+	SoundManager::Load("Aud/checkpoint.wav", "check", SOUND_SFX);
+	
 	//SoundManager::SetMusicVolume(16);
 	std::cout << "Entering GameState..." << std::endl;
 }
@@ -229,6 +233,7 @@ void GameState::CollisionCheck()
 	SDL_FRect* p = pp->GetDst();
 	SDL_FRect* attackbox = pp->GetAttackHitBox();
 
+
 	for (auto i : m_levels[m_currLevel]->GetRenderTile())
 	{
 		auto t = i->GetDst();
@@ -287,18 +292,36 @@ void GameState::CollisionCheck()
 			}
 			else if (i->GetTag() == CHECKPOINT)
 			{
+				
+				
 				for(unsigned int i2 = 0 ; i2 < m_levels[m_currLevel]->GetCheckPoint().size() ; i2++)
 				{
+					
+				
 					if (m_levels[m_currLevel]->GetCheckPoint()[i2] == i)
 					{
+						//Play the checkpoint sound once after touching the flag. Shouldnt play again if touching it twice
 						m_currCheckPoint = i2;
+
+				
+				
+						SoundManager::PlaySound("check", 0, 4);
+						
+
+						
 					}
 					
-					//m_currCheckPoint;
+				
+								
 				}
 				i->Activate();
 				m_spawn = i;
+
+				
 			}
+	
+
+			
 		}
 		for (auto enemy : m_levels[m_currLevel]->GetEnemy())
 		{
@@ -339,7 +362,7 @@ void GameState::CollisionCheck()
 		}
 	}
 	
-	//Player and slime collision
+	//Player attack and enemies collision
 	auto &enemies = m_levels[m_currLevel]->GetEnemy();
 	for (auto i = 0; i < enemies.size(); i++)
 	{
@@ -390,6 +413,7 @@ void GameState::CollisionCheck()
 		
 		if (enemies[i]->GetHeath() <= 0)
 		{
+		
 			int randomDrop = rand() % 100;
 			if (enemies[i]->DropTable(randomDrop) == true)
 			{
@@ -408,9 +432,10 @@ void GameState::CollisionCheck()
 		SDL_FRect* po = idk[i]->GetDst();
 		if (COMA::AABBCheck(*p, *po))
 		{
+			SoundManager::PlaySound("heal", 0, 2);
 			if (pp->GetHeath() < 10)
 			{
-				SoundManager::PlaySound("heal", 0, 3);
+				
 				pp->SetHeath(pp->GetHeath() + 1);
 			}
 			delete idk[i];

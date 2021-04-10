@@ -1,6 +1,7 @@
 #include "Slime.h"
 #include "Enemy.h"
 #include "TextureManager.h"
+#include "SoundManager.h"
 
 Slime::Slime(SDL_Rect s, SDL_FRect d) : Enemy(s, d, TEMA::GetTexture("Slime"))
 {
@@ -13,6 +14,7 @@ void Slime::Move()
 	m_jumpTimer++;
 	if(m_jumpTimer >= 120)
 	{
+		SoundManager::PlaySound("bounce", 0, 3);
 		m_jumpTimer = 0;
 		if(m_facingLeft)
 			m_accelX = 30.0f;
