@@ -23,6 +23,7 @@ PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : Entity
 	//SetAnimation(9, 13, 22);
 	SetAnimation(9, 0, 9, m_src.h * 2);
 	//Load Sound effects
+	SoundManager::Load("Aud/jump.wav", "jump", SOUND_SFX);
 	SoundManager::Load("Aud/sword_swing.wav", "slash", SOUND_SFX);
 	SoundManager::Load("Aud/ice_slash.wav", "specSlash", SOUND_SFX);
 	SoundManager::Load("Aud/cooldownActivate.wav", "cdActive", SOUND_SFX);
@@ -109,6 +110,7 @@ void PlatformPlayer::Update()
 			// Transition to jump.
 			if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
 			{
+				SoundManager::PlaySound("jump", 0, 0);
 				m_accelY = -JUMPFORCE; // SetAccelY(-JUMPFORCE);
 				m_grounded = false; // SetGrounded(false);
 				m_state = PlayerState::STATE_JUMPING;
@@ -144,6 +146,7 @@ void PlatformPlayer::Update()
 			// Transition to jump.
 			if (EVMA::KeyPressed(SDL_SCANCODE_SPACE) && m_grounded)
 			{
+				SoundManager::PlaySound("jump", 0, 0);
 				m_accelY = -JUMPFORCE;
 				m_grounded = false;
 				m_state = PlayerState::STATE_JUMPING;
