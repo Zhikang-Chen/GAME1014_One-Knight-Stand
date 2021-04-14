@@ -58,6 +58,7 @@ void GameState::Enter()
 	m_UIObject.emplace_back("InstructionLabel4", new Label("Minecraft", 790, 80, "Press J to Attack", { 0,0,0,0 }));
 	m_UIObject.emplace_back("InstructionLabel5", new Label("Minecraft", 790, 100, "Press K to use Special 1", { 0,0,0,0 }));
 	m_UIObject.emplace_back("InstructionLabel6", new Label("Minecraft", 790, 120, "Press L to use Special 2", { 0,0,0,0 }));
+	m_UIObject.emplace_back("InstructionLabel7", new Label("Minecraft", 330, 10, "Press E at the end of the level to advance", SDL_Color{ 255,255,255,255 }));
 	
 	//UI Icons
 	SDL_QueryTexture(TEMA::GetTexture("SkillsUI"), nullptr, nullptr, &w, &h);
@@ -257,8 +258,10 @@ void GameState::CollisionCheck()
 			}
 			else if (i->GetTag() == END)
 			{
+				
 				if (EVMA::KeyPressed(SDL_SCANCODE_E))
 				{
+					
 					//STMA::PushState(new PauseState());
 					m_currLevel++;
 					if (m_currLevel < m_levels.size())
@@ -266,10 +269,16 @@ void GameState::CollisionCheck()
 					else
 					{
 						STMA::ChangeState(new GameClearState());
+						
 						return;
 					}
 				}
+
+
 			}
+
+		
+			
 			else if (i->GetTag() == CHECKPOINT)
 			{
 				for(unsigned int i2 = 0 ; i2 < m_levels[m_currLevel]->GetCheckPoint().size() ; i2++)

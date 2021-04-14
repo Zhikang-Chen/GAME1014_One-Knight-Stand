@@ -41,6 +41,7 @@ Stun::Stun(int m, EntityObject* e) : Effect(m,e)
 
 void Stun::Execute()
 {
+	m_pEffectedEntity->SetColour(240, 240, 0);
 	m_pEffectedEntity->SetAccelX(0);
 	m_pEffectedEntity->SetAccelY(0);
 }
