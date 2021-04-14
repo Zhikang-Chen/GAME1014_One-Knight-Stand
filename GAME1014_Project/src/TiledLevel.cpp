@@ -2,6 +2,7 @@
 #include <fstream>
 #include "Slime.h"
 #include "Zombie.h"
+#include "SoundManager.h"
 
 TiledLevel::TiledLevel(const unsigned short r, const unsigned short c, const int w, const int h, 
                        const char* tileData, const char* levelData, const char* tileKey) :m_rows(r), m_cols(c), m_tileKey(tileKey)
@@ -268,8 +269,10 @@ void Tile::Render()
 
 void CheckPointTile::Activate()
 {
+	SoundManager::Load("Aud/checkpoint.wav", "check", SOUND_SFX);
 	if (!m_activate)
 	{
+		SoundManager::PlaySound("check", 0, 4);
 		m_activate = true;
 		m_src.x = 32;
 	}

@@ -37,9 +37,6 @@ void PlatformPlayer::Update()
 	//Set Sound Volume
 	SoundManager::SetSoundVolume(30);
 
-	if (EVMA::KeyPressed(SDL_SCANCODE_H))
-		ShowHitbox();
-	
 
 	
 	if (m_isSkillUp && skillTimer / 500 >= 1)

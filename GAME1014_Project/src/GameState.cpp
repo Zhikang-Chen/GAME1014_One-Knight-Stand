@@ -45,13 +45,12 @@ void GameState::Enter()
 	m_levels.push_back(new TiledLevel(24, 200, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
 	m_levels.push_back(new TiledLevel(24, 247, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level2.txt", "tiles"));
 	m_levels.push_back(new TiledLevel(24, 284, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level3.txt", "tiles"));
-	//m_levels.push_back(new TiledLevel(24, 48, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
+
 
 	//UI INTERFACE
 	m_UIObject.emplace_back("Label3", new Label("Minecraft", 56, 150, "J", { 0,0,0,0 }));
 	m_UIObject.emplace_back("Label4", new Label("Minecraft", 110, 150, "K", { 0,0,0,0 }));
 	m_UIObject.emplace_back("Label5", new Label("Minecraft", 160, 150, "L", { 0,0,0,0 }));
-	m_UIObject.emplace_back("HealthLabel", new Label("Minecraft", 400, 20, "Sponsored by: NornVPN", { 0,0,0,0 }));
 	m_UIObject.emplace_back("InstructionLabel1", new Label("Minecraft", 790, 20, "Press Esc to exit game", { 0,0,0,0 }));
 	m_UIObject.emplace_back("InstructionLabel2", new Label("Minecraft", 790, 40, "Press P to pause game", { 0,0,0,0 }));
 	m_UIObject.emplace_back("InstructionLabel3", new Label("Minecraft", 790, 60, "Press Space to Jump", { 0,0,0,0 }));
@@ -113,7 +112,7 @@ void GameState::Enter()
 	SoundManager::Load("Aud/ouch.wav", "hit", SOUND_SFX);
 	SoundManager::Load("Aud/bonk.wav", "bonk", SOUND_SFX);
 	SoundManager::Load("Aud/zombie.wav", "zombie", SOUND_SFX);
-	SoundManager::Load("Aud/checkpoint.wav", "check", SOUND_SFX);
+	
 	
 	//SoundManager::SetMusicVolume(16);
 	std::cout << "Entering GameState..." << std::endl;
@@ -126,19 +125,6 @@ void GameState::Update()
 		m_object.second->Update();
 	CollisionCheck();
 	
-	if (EVMA::KeyPressed(SDL_SCANCODE_V))
-	{
-		//STMA::PushState(new PauseState());
-		m_currLevel++;
-		if (m_currLevel < m_levels.size())
-			ChangeLevel(m_currLevel);
-		else
-		{
-			STMA::ChangeState(new GameClearState());
-			return;
-		}
-		return;
-	}
 	
 	if (EVMA::KeyPressed(SDL_SCANCODE_P))
 	{
@@ -292,7 +278,7 @@ void GameState::CollisionCheck()
 					{
 						//Play the checkpoint sound once after touching the flag. Shouldnt play again if touching it twice
 						m_currCheckPoint = i2;
-						SoundManager::PlaySound("check", 0, 4);
+						
 					}			
 				}
 				i->Activate();

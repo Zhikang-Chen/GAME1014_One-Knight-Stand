@@ -41,8 +41,8 @@ bool Slime::DropTable(int r)
 {
 	//For now, it will always return true so it will always drop an item
 	//But if we want chances, then we'd uncomment the stuff.
-	/*if (r < 39)*/
+	if (r < 39)
 	return true;
-	/*else
-		return false;*/
+	else
+		return false;
 }
