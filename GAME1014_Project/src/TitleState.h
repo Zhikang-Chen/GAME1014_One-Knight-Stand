@@ -16,18 +16,6 @@ public:
 	virtual void Update();
 	virtual void Render();
 	virtual void Exit();
-
-private:
-	Label* m_pTitle;
-	Label *m_pSubTitle;
-	Label* m_pInstruction;
-
-	Background* bleh;
-	Button* b;
-	ExitButton* e;
-	Background* m_pBackground;
-	Mix_Music* m_titleBgm;
-
 };
 
 #endif

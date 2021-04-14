@@ -89,3 +89,10 @@ void TitleButton::Execute()
 {
 	STMA::ChangeState(new TitleState);
 }
+
+void NewGameButton::Execute()
+{
+	SAMA::resetSave();
+	SAMA::load();
+	STMA::ChangeState(new GameState);
+}

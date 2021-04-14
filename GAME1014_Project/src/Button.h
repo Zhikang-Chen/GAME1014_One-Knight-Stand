@@ -88,4 +88,13 @@ private:
 	void Execute() override;
 };
 
+// Button that reset save
+class NewGameButton final : public Button
+{
+public:
+	NewGameButton(SDL_Rect src, SDL_FRect dst, SDL_Texture* t) : Button(src, dst, t) {}
+private:
+	void Execute() override;
+};
+
 #endif

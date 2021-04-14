@@ -34,11 +34,29 @@ void SaveManager::OverwriteSave()
 	}
 }
 
-void SaveManager::deleteSave()
+void SaveManager::resetSave()
 {
+		tinyxml2::XMLDocument doc;
+		doc.LoadFile("../GAME1017_Template_W01/Dat/SaveData.xml");
+		tinyxml2::XMLElement* pRoot = doc.FirstChildElement("Root");
+		tinyxml2::XMLElement* pPlayer = pRoot->FirstChildElement("Save")->FirstChildElement("Player");
+
+		if (pPlayer != nullptr)
+		{
+			pPlayer->SetAttribute("Health", 10);
+			pPlayer->SetAttribute("MaxHeath", 10);
+			pPlayer->SetAttribute("Checkpoint", 0);
+			pPlayer->SetAttribute("Level", 0);
+			doc.SaveFile("../GAME1017_Template_W01/Dat/SaveData.xml");
+			cout << "Data Rest" << endl;
+		}
+		else
+		{
+			cout << "Error: Could Not Load SaveDat" << endl;
+		}
 }
 
-Save* SaveManager::GetSave()
+SaveManager::Save* SaveManager::GetSave()
 {
 	return m_saveDat;
 }
@@ -75,6 +93,8 @@ void SaveManager::load()
 
 void SaveManager::Quit()
 {
+	delete m_saveDat;
+	m_saveDat = nullptr;
 }
 
 void SaveManager::Init()
@@ -82,4 +102,4 @@ void SaveManager::Init()
 	load();
 }
 
-Save* SaveManager::m_saveDat;
+SaveManager::Save* SaveManager::m_saveDat;

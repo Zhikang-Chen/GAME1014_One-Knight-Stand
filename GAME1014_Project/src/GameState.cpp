@@ -15,7 +15,6 @@ void GameState::Enter()
 
 
 	int w, h;
-	auto save = SAMA::GetSave();
 	
 	SDL_QueryTexture(TEMA::GetTexture("Background_1"), nullptr, nullptr, &w, &h);
 	m_objects.emplace_back("Background", new Background({ 0,0,static_cast<int>(w),static_cast<int>(h) }, { 0,0, static_cast<float>(w) * 5, static_cast<float>(h) * 5 }, TEMA::GetTexture("Background_1")));
@@ -45,7 +44,9 @@ void GameState::Enter()
 	m_levels.push_back(new TiledLevel(24, 200, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
 	m_levels.push_back(new TiledLevel(24, 247, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level2.txt", "tiles"));
 	m_levels.push_back(new TiledLevel(24, 284, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level3.txt", "tiles"));
-
+	
+	//m_levels.push_back(new TiledLevel(24, 283, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level3.txt", "tiles"));
+	//m_levels.push_back(new TiledLevel(24, 48, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level1.txt", "tiles"));
 
 	//UI INTERFACE
 	m_UIObject.emplace_back("Label3", new Label("Minecraft", 56, 150, "J", { 0,0,0,0 }));
@@ -57,7 +58,7 @@ void GameState::Enter()
 	m_UIObject.emplace_back("InstructionLabel4", new Label("Minecraft", 790, 80, "Press J to Attack", { 0,0,0,0 }));
 	m_UIObject.emplace_back("InstructionLabel5", new Label("Minecraft", 790, 100, "Press K to use Special 1", { 0,0,0,0 }));
 	m_UIObject.emplace_back("InstructionLabel6", new Label("Minecraft", 790, 120, "Press L to use Special 2", { 0,0,0,0 }));
-
+	
 	//UI Icons
 	SDL_QueryTexture(TEMA::GetTexture("SkillsUI"), nullptr, nullptr, &w, &h);
 	m_UIObject.emplace_back("SkillsUI", new SwordSkill({ 0,0,w,h }, { 10,5, static_cast<float>(w),static_cast<float>(h) }, TEMA::GetTexture("SkillsUI")));
@@ -72,19 +73,18 @@ void GameState::Enter()
 	m_pSwordSkill1 = new SwordSkill({ 0,0,w,h }, { 100,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordSkill1"));
 	m_UIObject.emplace_back("SwordSkill1", m_pSwordSkill1);
 
-	
-	
 	SDL_QueryTexture(TEMA::GetTexture("SwordSkill2"), nullptr, nullptr, &w, &h);
 	m_pSwordSkill2 = new SwordSkill({ 0,0,w,h }, { 150,109, static_cast<float>(w - 16),static_cast<float>(h - 16) }, TEMA::GetTexture("SwordSkill2"));
 	m_UIObject.emplace_back("SwordSkill2", m_pSwordSkill2);
 	
 	// Load level
+	auto save = SAMA::GetSave();
 	m_currLevel = save->m_currLevel;
 	m_objects.emplace_back("level", m_levels[m_currLevel]);
 
 	m_currCheckPoint = save->m_checkpoint;
 	
-	m_spawn = m_levels[m_currLevel]->GetStartingTile();
+	m_spawn = m_levels[m_currLevel]->GetCheckPoint()[m_currCheckPoint];
 	SDL_FRect* s = m_spawn->GetDst();
 	SDL_QueryTexture(TEMA::GetTexture("Knight"), nullptr, nullptr, &w, &h);
 
@@ -278,7 +278,7 @@ void GameState::CollisionCheck()
 					{
 						//Play the checkpoint sound once after touching the flag. Shouldnt play again if touching it twice
 						m_currCheckPoint = i2;
-						
+
 					}			
 				}
 				i->Activate();

@@ -19,20 +19,16 @@ void PauseState::Enter()
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/save button.png", "Save");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/load button.png", "Load");
 	SDL_QueryTexture(TEMA::GetTexture("Back"), nullptr, nullptr, &w, &h);
-	m_pbutton = new ReturnButton({ 0,0,w/2,h }, { WIDTH / 2 - (float)w / 6,HEIGHT - 480,(float)w/2, (float)h }, TEMA::GetTexture("Back"));
-	m_objects.emplace_back("button", m_pbutton);
+	m_objects.emplace_back("button", new ReturnButton({ 0,0,w / 2,h }, { WIDTH / 2 - (float)w / 6,HEIGHT - 480,(float)w / 2, (float)h }, TEMA::GetTexture("Back")));
 
 	SDL_QueryTexture(TEMA::GetTexture("Exit"), nullptr, nullptr, &w, &h);
-	m_pbutton2 = new TitleButton({ 0,0,w / 2,h }, { WIDTH / 2 - (float)w / 6, HEIGHT - 270,(float)w / 2, (float)h }, TEMA::GetTexture("Exit"));
-	m_objects.emplace_back("button2", m_pbutton2);
+	m_objects.emplace_back("button2", new TitleButton({ 0,0,w / 2,h }, { WIDTH / 2 - (float)w / 6, HEIGHT - 270,(float)w / 2, (float)h }, TEMA::GetTexture("Exit")));
 
 	SDL_QueryTexture(TEMA::GetTexture("Save"), nullptr, nullptr, &w, &h);
-	m_pbutton3 = new SaveButton({ 0,0,w / 2,h }, { WIDTH / 2 - (float)w / 6,HEIGHT-410,(float)w / 2, (float)h }, TEMA::GetTexture("Save"));
-	m_objects.emplace_back("button3", m_pbutton3);
+	m_objects.emplace_back("button3", new SaveButton({ 0,0,w / 2,h }, { WIDTH / 2 - (float)w / 6,HEIGHT - 410,(float)w / 2, (float)h }, TEMA::GetTexture("Save")));
 
 	SDL_QueryTexture(TEMA::GetTexture("Load"), nullptr, nullptr, &w, &h);
-	m_pbutton4 = new LoadButton({ 0,0,w / 2,h }, { WIDTH / 2 - (float)w / 6, HEIGHT- 340,(float)w / 2, (float)h }, TEMA::GetTexture("Load"));
-	m_objects.emplace_back("button4", m_pbutton4);
+	m_objects.emplace_back("button4", new LoadButton({ 0,0,w / 2,h }, { WIDTH / 2 - (float)w / 6, HEIGHT - 340,(float)w / 2, (float)h }, TEMA::GetTexture("Load")));
 
 	m_pBackground = new SDL_FRect({ 0, 0, (float)WIDTH, (float)HEIGHT });
 	std::cout << "Entering PauseState" << endl;
