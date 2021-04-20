@@ -58,7 +58,9 @@ void GameState::Enter()
 	m_UIObject.emplace_back("InstructionLabel4", new Label("Minecraft", 790, 80, "Press J to Attack", { 0,0,0,0 }));
 	m_UIObject.emplace_back("InstructionLabel5", new Label("Minecraft", 790, 100, "Press K to use Special 1", { 0,0,0,0 }));
 	m_UIObject.emplace_back("InstructionLabel6", new Label("Minecraft", 790, 120, "Press L to use Special 2", { 0,0,0,0 }));
-	m_UIObject.emplace_back("InstructionLabel7", new Label("Minecraft", 330, 10, "Press E at the end of the level to advance", SDL_Color{ 255,255,255,255 }));
+	m_UIObject.emplace_back("InstructionLabel7", new Label("Minecraft", 770, 140, "Press P to pause the game", { 0,0,0,0 }));
+	m_UIObject.emplace_back("InstructionLabel8", new Label("Minecraft", 330, 10, "Press E at the end of the level to advance", SDL_Color{ 255,255,255,255 }));
+
 	
 	//UI Icons
 	SDL_QueryTexture(TEMA::GetTexture("SkillsUI"), nullptr, nullptr, &w, &h);
