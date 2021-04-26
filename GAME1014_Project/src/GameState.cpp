@@ -1,10 +1,15 @@
 ﻿// Begin GameState
 #include <ctime>
+
+#include "Bullet.h"
 #include "EventManager.h"
 #include "SaveManager.h"
 #include "StateManager.h"
 #include "SoundManager.h"
 #include "CollisionManager.h"
+
+//To Do:
+//
 
 GameState::GameState() {}
 
@@ -12,8 +17,6 @@ GameState::GameState() {}
 
 void GameState::Enter()
 {
-
-
 	int w, h;
 	
 	SDL_QueryTexture(TEMA::GetTexture("Background_1"), nullptr, nullptr, &w, &h);
@@ -29,17 +32,13 @@ void GameState::Enter()
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/swordAttack.png", "SwordAttack");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Slime.png", "Slime");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Zombie.png", "Zombie");
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/dagger.png", "Project");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Potion.png", "Potion");
-
-
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heart.png", "HeartBar");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/heartempty.png", "EmptyHeart");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/spawn.png", "Spawn");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Sign_End.png", "End");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/on off.png", "On off");
 	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tileset.png", "tiles");
-	//TEMA::RegisterTexture("../GAME1017_Template_W01/Img/Tiles.png", "tiles2");
 	
 	m_levels.push_back(new TiledLevel(24, 200, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Mario_test.txt", "tiles"));
 	m_levels.push_back(new TiledLevel(24, 247, 32, 32, "../GAME1017_Template_W01/Dat/Tiledata.xml", "../GAME1017_Template_W01/Dat/Level2.txt", "tiles"));
@@ -134,7 +133,7 @@ void GameState::Update()
 	}
 
 	int w, h;
-
+	
 	if (dynamic_cast<PlatformPlayer*>(FindObject("Player"))->getSkill1CD() == true)
 	{
 		SDL_QueryTexture(TEMA::GetTexture("SwordSkill1CD"), nullptr, nullptr, &w, &h);
@@ -223,7 +222,24 @@ void GameState::CollisionCheck()
 		{
 			if (i->GetTag() == OBSTACLE)
 			{
-				if (p->y + p->h - pp->GetVelY() <= t->y)
+				if (p->x - pp->GetVelX() <= t->x - t->w)
+				{ // Colliding with left side of tile.
+					pp->StopX();
+					pp->SetX(t->x - p->w);
+				}
+				else if (p->x - pp->GetVelX() >= t->x + t->w)
+				{ // Colliding with right side of tile.
+
+					//for some reason when colliding with the right side the tile on the bottom left will stop it
+					//the y of the p has 4 pixel lower
+					if (t->y < p->y + p->h - 4)
+					{
+						pp->StopX();
+						pp->SetX(t->x + t->w);
+					}
+					//cout << t->y << "," << p->y + p->h << endl;
+				}
+				else if (p->y + p->h - pp->GetVelY() <= t->y)
 				{ // Colliding with top side of tile.
 					pp->StopY();
 					pp->SetY(t->y - p->h);
@@ -234,16 +250,7 @@ void GameState::CollisionCheck()
 					pp->StopY();
 					pp->SetY(t->y + t->h);
 				}
-				else if (p->x - pp->GetVelX() <= t->x - t->w)
-				{ // Colliding with left side of tile.
-					pp->StopX();
-					pp->SetX(t->x - p->w);
-				}
-				else if (p->x - pp->GetVelX() >= t->x + t->w)
-				{ // Colliding with right side of tile.
-					pp->StopX();
-					pp->SetX(t->x + t->w);
-				}
+				
 			}
 			else if (i->GetTag() == PLATFORM)
 			{
@@ -257,6 +264,20 @@ void GameState::CollisionCheck()
 					}
 				}
 			}
+			else if (i->GetTag() == CHECKPOINT)
+			{
+				for(unsigned int i2 = 0 ; i2 < m_levels[m_currLevel]->GetCheckPoint().size() ; i2++)
+				{
+					if (m_levels[m_currLevel]->GetCheckPoint()[i2] == i && !i->GetActivate())
+					{
+						//Play the checkpoint sound once after touching the flag. Shouldnt play again if touching it twice
+						m_currCheckPoint = i2;
+						SAMA::OverwriteSave();
+					}			
+				}
+				i->Activate();
+				m_spawn = i;
+			}
 			else if (i->GetTag() == END)
 			{
 				
@@ -266,7 +287,10 @@ void GameState::CollisionCheck()
 					//STMA::PushState(new PauseState());
 					m_currLevel++;
 					if (m_currLevel < m_levels.size())
+					{
 						ChangeLevel(m_currLevel);
+						SAMA::OverwriteSave();
+					}
 					else
 					{
 						STMA::ChangeState(new GameClearState());
@@ -277,9 +301,6 @@ void GameState::CollisionCheck()
 
 
 			}
-
-		
-			
 			else if (i->GetTag() == CHECKPOINT)
 			{
 				for(unsigned int i2 = 0 ; i2 < m_levels[m_currLevel]->GetCheckPoint().size() ; i2++)
@@ -307,7 +328,7 @@ void GameState::CollisionCheck()
 				enemy->faceDir(true);
 			}
 
-			if (COMA::AABBCheck(*e, *t)) // Collision check between player rect and tile rect.
+			if (COMA::AABBCheck(*e, *t)) // Collision check between enemy rect and tile rect.
 			{
 				if (i->GetTag() == OBSTACLE)
 				{
@@ -322,15 +343,19 @@ void GameState::CollisionCheck()
 						enemy->StopY();
 						enemy->SetY(t->y + t->h);
 					}
-					else if (e->x - enemy->GetVelX() <= t->x - t->w)
+					
+					if (e->x - enemy->GetVelX() <= t->x - t->w)
 					{ // Colliding with left side of tile.
 						enemy->StopX();
 						enemy->SetX(t->x - e->w);
 					}
 					else if (e->x - enemy->GetVelX() >= t->x + t->w)
 					{ // Colliding with right side of tile.
-						enemy->StopX();
-						enemy->SetX(t->x + t->w);
+						if (t->y < p->y + p->h)
+						{
+							enemy->StopX();
+							enemy->SetX(t->x + t->w);
+						}
 					}
 				}
 				else if (i->GetTag() == PLATFORM)
@@ -346,16 +371,46 @@ void GameState::CollisionCheck()
 			}
 		}
 	}
-	
-	//Player attack and enemies collision
-	if (pp->GetState() == PlayerState::STATE_ATTACKING);
 
 	SDL_FRect* attackbox = pp->GetAttackHitBox();
+	auto projectile = pp->GetProjectiles();
 	auto &enemies = m_levels[m_currLevel]->GetRenderEnemies();
 	for (auto i = 0; i < enemies.size(); i++)
 	{
 		SDL_FRect* s = enemies[i]->GetDst();
-		if (COMA::AABBCheck(*s, *p))
+		//Attack Collision with Enemies
+		if (COMA::AABBCheck(*attackbox, *s))
+		{
+			switch (pp->GetCurrentAttack())
+			{
+			case AttackType::NORMAL:
+				enemies[i]->LoseHealth();
+				break;
+			case AttackType::ICE:
+				enemies[i]->addEffect(new Bleed(61));
+				enemies[i]->addEffect(new Freeze(120));
+				break;
+			case AttackType::BONK:
+				enemies[i]->addEffect(new Stun(300));
+				SoundManager::PlaySound("bonk", 0, 0);
+				break;
+			case AttackType::BLEED:
+				enemies[i]->addEffect(new Bleed(300));
+				break;
+			}
+		}
+		else if(!projectile.empty())
+		{
+			for(unsigned int i2 = 0 ; i2 < projectile.size() ; i2++)
+			{
+				if(COMA::AABBCheck(*s, *projectile[i2]->GetDst()))
+				{
+					enemies[i]->SetHeath(enemies[i]->GetHeath() - 10);
+					//pp->Remove(projectile[i2]);
+				}
+			}
+		}
+		else if (COMA::AABBCheck(*s, *p))
 		{
 			SoundManager::PlaySound("hit", 0, 1);
 			pp->SetHeath(pp->GetHeath() - 1);
@@ -376,28 +431,6 @@ void GameState::CollisionCheck()
 			MoveCamTo(pp);
 		}
 
-		//Attack Collision with Enemies
-		if (COMA::AABBCheck(*attackbox, *s))
-		{
-			switch (pp->GetCurrentAttack())
-			{
-			case AttackType::NORMAL:
-				cout << "hit" << endl;
-				enemies[i]->LoseHealth();
-				break;
-			case AttackType::ICE:
-				enemies[i]->addEffect(new Bleed(61));
-				enemies[i]->addEffect(new Freeze(120));
-				break;
-			case AttackType::BONK:
-				enemies[i]->addEffect(new Stun(300));
-				SoundManager::PlaySound("bonk", 0, 0);
-				break;
-			case AttackType::BLEED:
-				enemies[i]->addEffect(new Bleed(300));
-				break;
-			}
-		}
 		
 		if (enemies[i]->GetHeath() <= 0)
 		{
@@ -418,10 +451,9 @@ void GameState::CollisionCheck()
 		SDL_FRect* po = idk[i]->GetDst();
 		if (COMA::AABBCheck(*p, *po))
 		{
-			SoundManager::PlaySound("heal", 0, 2);
 			if (pp->GetHeath() < 10)
 			{
-				
+				SoundManager::PlaySound("heal", 0, 2);
 				pp->SetHeath(pp->GetHeath() + 1);
 			}
 			m_levels[m_currLevel]->Remove(idk[i]);			
@@ -456,7 +488,7 @@ void GameState::CollisionCheck()
 		MoveCamTo(pp);
 	}
 
-	if (pp->GetHeath() == 0)
+	if (pp->GetHeath() <= 0)
 	{
 		STMA::ChangeState(new EndState());
 	}

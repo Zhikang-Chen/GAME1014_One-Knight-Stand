@@ -2,6 +2,7 @@
 #ifndef _PLATFORMPLAYER_H_
 #define _PLATFORMPLAYER_H_
 #include "EntityObject.h"
+#include "Projectile.h"
 
 enum class PlayerState {STATE_IDLING, STATE_RUNNING, STATE_JUMPING, STATE_ATTACKING};
 
@@ -11,7 +12,7 @@ class PlatformPlayer : public EntityObject
 {
 public:
 	PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t);
-
+	~PlatformPlayer();
 	//PlatformPlayer(SDL_Rect s, SDL_Rect d, SDL_Renderer* r, SDL_Texture* t)
 	//	:SpriteObject(s, { static_cast<float>(d.x, d.y, d.w, d.h)}, r, t) {}
 
@@ -19,7 +20,8 @@ public:
 	void Render();
 
 	void ShowHitbox();
-	
+	void Remove(Projectile* object);
+
 	PlayerState GetState();
 
 	bool IsGrounded();
@@ -31,6 +33,8 @@ public:
 	//SDL_FRect* GetBoundingBox();
 	SDL_FRect* GetAttackHitBox();
 	AttackType GetCurrentAttack() const;
+
+	vector<Projectile*>& GetProjectiles();
 	
 	bool getSkill1CD() { return m_isSkillUp; }
 	bool setSkill1CD(bool setSkillCD)
@@ -51,6 +55,8 @@ private:
 	// Private member
 	SDL_FRect m_pBoundingBox;
 	SDL_FRect m_pAttackHitBox;
+
+	vector<Projectile*> m_projectile;
 
 	bool m_grounded; //In most platforming games, the player actually starts in the air
 	bool m_showHitbox;

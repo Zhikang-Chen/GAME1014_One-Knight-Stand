@@ -1,8 +1,11 @@
 ﻿#include "PlatformPlayer.h"
 #include <algorithm>
+
+#include "Bullet.h"
 #include "Engine.h"
 #include "EventManager.h"
 #include "SoundManager.h"
+#include "TextureManager.h"
 
 //For some reason m_maxVelY can't take JUMPFORCE
 //Will fix someday
@@ -29,14 +32,26 @@ PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : Entity
 	SoundManager::Load("Aud/cooldownActivate.wav", "cdActive", SOUND_SFX);
 	SoundManager::Load("Aud/ding.wav", "cdActive", SOUND_SFX);
 	SoundManager::Load("Aud/whip.wav", "whip", SOUND_SFX);
+
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/icebullet.png", "b");
 }
 
+PlatformPlayer::~PlatformPlayer()
+{
+	for(auto &i : m_projectile)
+	{
+		delete i;
+		i = nullptr;
+	}
+	m_projectile.clear();
+}
 
 void PlatformPlayer::Update()
 {
 	//Set Sound Volume
 	SoundManager::SetSoundVolume(30);
-
+	if (EVMA::KeyPressed(SDL_SCANCODE_H))
+		ShowHitbox();
 
 	
 	if (m_isSkillUp && skillTimer / 500 >= 1)
@@ -89,6 +104,17 @@ void PlatformPlayer::Update()
 					SoundManager::PlaySound("specSlash", 0, 0);
 					m_isSkillUp = true;
 					m_currentAttack = AttackType::ICE;
+
+					int w, h;
+					SDL_QueryTexture(TEMA::GetTexture("b"), nullptr, nullptr, &w, &h);
+
+					float x;
+					if (m_facingLeft)
+						x = m_dst.x - 100;
+					else
+						x = m_dst.x + 100;
+					
+					m_projectile.push_back(new Bullet({ 0,0,w,h }, { m_dst.x,m_dst.y,float(w),float(h) }, TEMA::GetTexture("b"), { x,m_dst.y }));
 				}
 			}
 			if (!m_isSkillUpSTUN)
@@ -153,6 +179,7 @@ void PlatformPlayer::Update()
 			// Transition to idle.
 			if (!EVMA::KeyHeld(SDL_SCANCODE_A) && !EVMA::KeyHeld(SDL_SCANCODE_D))
 			{
+				m_accelX = 0;
 				m_state = PlayerState::STATE_IDLING;
 				SetAnimation(9, 0, 9, m_src.h * 2);
 			}
@@ -254,8 +281,17 @@ void PlatformPlayer::Update()
 
 	
 	m_dst.y = m_pBoundingBox.y - 9;
-	
 	this->Animate();
+
+	for (auto i : m_projectile)
+	{
+		i->Update();
+		if(i->GetDst()->x > WIDTH + WIDTH / 2 || i->GetDst()->x < 0 - WIDTH / 2)
+		{
+			Remove(i);
+			cout << "a" << endl;
+		}
+	}
 }
 
 void PlatformPlayer::Render()
@@ -269,13 +305,35 @@ void PlatformPlayer::Render()
 		SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 255, 255);
 		SDL_RenderFillRectF(Engine::Instance().GetRenderer(), &m_pAttackHitBox);
 		SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 255, 255);
+
+		for (auto i : m_projectile)
+		{
+			SDL_RenderFillRectF(Engine::Instance().GetRenderer(), i->GetDst());
+		}
 	}
 	SDL_RenderCopyExF(Engine::Instance().GetRenderer(), m_pText, &m_src, &m_dst, m_angle, 0, m_facingLeft?SDL_FLIP_HORIZONTAL:SDL_FLIP_NONE);
+	for (auto i : m_projectile)
+		i->Render();
 }
 
 void PlatformPlayer::ShowHitbox()
 {
 	m_showHitbox = !m_showHitbox;
+}
+
+void PlatformPlayer::Remove(Projectile* object)
+{
+	auto i = find(m_projectile.begin(), m_projectile.end(), object);
+	if(i != m_projectile.end())
+	{
+		m_projectile.erase(i);
+		m_projectile.shrink_to_fit();
+		delete object;
+	}
+	else
+	{
+		cout << "Unable find projectile" << endl;
+	}
 }
 
 void PlatformPlayer::SetX(float x) { m_pBoundingBox.x = x; }
@@ -286,10 +344,14 @@ PlayerState PlatformPlayer::GetState() { return m_state; }
 
 SDL_FRect* PlatformPlayer::GetAttackHitBox() { return &m_pAttackHitBox; }
 
-
 AttackType PlatformPlayer::GetCurrentAttack() const
 {
 	return m_currentAttack;
+}
+
+vector<Projectile*> &PlatformPlayer::GetProjectiles()
+{
+	return m_projectile;
 }
 
 bool PlatformPlayer::IsGrounded() { return m_grounded; }

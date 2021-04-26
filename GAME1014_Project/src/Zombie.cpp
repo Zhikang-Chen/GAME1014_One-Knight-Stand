@@ -14,7 +14,7 @@ void Zombie::Move()
 	m_zSoundCount++;
 	if (m_zSoundCount >= 100)
 	{
-		SoundManager::PlaySound("zombie", 0, 3);
+		SoundManager::PlaySound("zombie", 0);
 		m_zSoundCount = 0;
 	}
 
@@ -31,7 +31,6 @@ bool Zombie::DropTable(int r)
 	//For now, it will always return true so it will always drop an item
 	//But if we want chances, then we'd uncomment the stuff.
 	if (r < 39)
-	return true;
-	else
-		return false;
+		return true;
+	return false;
 }

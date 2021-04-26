@@ -159,8 +159,6 @@ void TiledLevel::Render()
 	
 	for (auto p : m_potions)
 		p->Render();
-
-	
 }
 
 void TiledLevel::Remove(Enemy* object)
@@ -188,7 +186,7 @@ void TiledLevel::Remove(HealthPotion* object)
 	if (i != m_potions.end())
 	{
 		m_potions.erase(i);
-		m_renderEnemies.shrink_to_fit();
+		m_potions.shrink_to_fit();
 		delete object;
 	}
 	else
@@ -215,6 +213,11 @@ void TiledLevel::Update()
 		{
 			i->Update();
 			m_renderEnemies.push_back(i);
+		}
+
+		if (i->GetDst()->y > HEIGHT + HEIGHT / 3 && i->GetDst()->y < 0 - HEIGHT / 3)
+		{
+			Remove(i);
 		}
 	}
 }
@@ -263,9 +266,9 @@ void TiledLevel::AddPotion(HealthPotion* p)
 
 void Tile::Render()
 {
-	SDL_RenderCopyF(Engine::Instance().GetRenderer(), m_pText, &m_src, &m_dst);
+	if(m_enable)
+		SDL_RenderCopyF(Engine::Instance().GetRenderer(), m_pText, &m_src, &m_dst);
 }
-
 
 void CheckPointTile::Activate()
 {

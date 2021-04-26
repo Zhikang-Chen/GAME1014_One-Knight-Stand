@@ -118,7 +118,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Arrow.cpp" />
     <ClCompile Include="..\src\Background.cpp" />
+    <ClCompile Include="..\src\Bullet.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CollisionManager.cpp" />
     <ClCompile Include="..\src\DebugManager.cpp" />
@@ -139,6 +141,7 @@
     <ClCompile Include="..\src\MathManager.cpp" />
     <ClCompile Include="..\src\PauseState.cpp" />
     <ClCompile Include="..\src\PlatformPlayer.cpp" />
+    <ClCompile Include="..\src\Projectile.cpp" />
     <ClCompile Include="..\src\SaveManager.cpp" />
     <ClCompile Include="..\src\Slime.cpp" />
     <ClCompile Include="..\src\SoundManager.cpp" />
@@ -152,7 +155,9 @@
     <ClCompile Include="..\src\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\Arrow.h" />
     <ClInclude Include="..\src\Background.h" />
+    <ClInclude Include="..\src\Bullet.h" />
     <ClInclude Include="..\src\Button.h" />
     <ClInclude Include="..\src\CollisionManager.h" />
     <ClInclude Include="..\src\DebugManager.h" />
@@ -173,6 +178,7 @@
     <ClInclude Include="..\src\MathManager.h" />
     <ClInclude Include="..\src\PauseState.h" />
     <ClInclude Include="..\src\PlatformPlayer.h" />
+    <ClInclude Include="..\src\Projectile.h" />
     <ClInclude Include="..\src\SaveManager.h" />
     <ClInclude Include="..\src\Slime.h" />
     <ClInclude Include="..\src\SoundManager.h" />
