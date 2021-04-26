@@ -1,10 +1,10 @@
 ﻿#include "Bullet.h"
-
 #include "MathManager.h"
+//To Do:
+// Make this work better
 
-Bullet::Bullet(SDL_Rect s, SDL_FRect d, SDL_Texture* t, SDL_FPoint tr) : Projectile(s,d,t)
+Bullet::Bullet(SDL_Rect s, SDL_FRect d, SDL_Texture* t, SDL_FPoint tr) : Projectile(s,d,t, tr)
 {
-	SetTarget(tr);
 	m_angle = MAMA::Rad2Deg(atan2(m_target.y - m_dst.y, m_target.x - m_dst.x));
 }
 

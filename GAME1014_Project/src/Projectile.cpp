@@ -1,7 +1,7 @@
 ﻿#include "Projectile.h"
 
-Projectile::Projectile(SDL_Rect s, SDL_FRect d, SDL_Texture* t)
-: AnimatedSpriteObject(s,d,t,0,0,0,0), m_target({0,0}) {}
+Projectile::Projectile(SDL_Rect s, SDL_FRect d, SDL_Texture* t, SDL_FPoint tr)
+: AnimatedSpriteObject(s,d,t,0,0,0,0), m_target(tr) {}
 
 const SDL_FPoint Projectile::GetTarget()
 {

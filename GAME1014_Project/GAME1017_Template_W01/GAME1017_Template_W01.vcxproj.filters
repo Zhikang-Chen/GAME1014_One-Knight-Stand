@@ -144,7 +144,9 @@
     <ClCompile Include="..\src\Bullet.cpp">
       <Filter>Game Objects\Projectile</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Arrow.cpp" />
+    <ClCompile Include="..\src\Arrow.cpp">
+      <Filter>Game Objects\Projectile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\DebugManager.h">

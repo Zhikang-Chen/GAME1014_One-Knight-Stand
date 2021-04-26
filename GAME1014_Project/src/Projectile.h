@@ -7,7 +7,7 @@
 class Projectile : public AnimatedSpriteObject
 {
 public:
-	Projectile(SDL_Rect s, SDL_FRect d, SDL_Texture* t);
+	Projectile(SDL_Rect s, SDL_FRect d, SDL_Texture* t, SDL_FPoint tr = {0,0});
 	void Update() override = 0;
 	void Render() override = 0;
 

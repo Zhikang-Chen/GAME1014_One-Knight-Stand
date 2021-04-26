@@ -212,6 +212,7 @@ void GameState::Resume()
 void GameState::CollisionCheck()
 {
 	PlatformPlayer* pp = dynamic_cast<PlatformPlayer*>(FindObject("Player"));
+	auto &projectile = pp->GetProjectiles();
 	SDL_FRect* p = pp->GetDst();
 
 
@@ -294,7 +295,6 @@ void GameState::CollisionCheck()
 					else
 					{
 						STMA::ChangeState(new GameClearState());
-						
 						return;
 					}
 				}
@@ -316,6 +316,18 @@ void GameState::CollisionCheck()
 				m_spawn = i;
 			}
 		}
+
+		if (!projectile.empty())
+		{
+			for (unsigned int i2 = 0; i2 < projectile.size(); i2++)
+			{
+				if (i->GetTag() == OBSTACLE && COMA::AABBCheck(*t, *projectile[i2]->GetDst()))
+				{
+					pp->Remove(projectile[i2]);
+				}
+			}
+		}
+		
 		for (auto enemy : m_levels[m_currLevel]->GetRenderEnemies())
 		{
 			auto e = enemy->GetDst();
@@ -373,7 +385,6 @@ void GameState::CollisionCheck()
 	}
 
 	SDL_FRect* attackbox = pp->GetAttackHitBox();
-	auto projectile = pp->GetProjectiles();
 	auto &enemies = m_levels[m_currLevel]->GetRenderEnemies();
 	for (auto i = 0; i < enemies.size(); i++)
 	{
@@ -406,7 +417,7 @@ void GameState::CollisionCheck()
 				if(COMA::AABBCheck(*s, *projectile[i2]->GetDst()))
 				{
 					enemies[i]->SetHeath(enemies[i]->GetHeath() - 10);
-					//pp->Remove(projectile[i2]);
+					pp->Remove(projectile[i2]);
 				}
 			}
 		}
@@ -511,6 +522,11 @@ void GameState::MoveCamTo(GameObject* o)
 	for (unsigned i = 0; i < m_levels[m_currLevel]->GetPotion().size(); i++)
 	{
 		m_levels[m_currLevel]->GetPotion()[i]->GetDst()->x += camOffset;
+	}
+
+	for(auto i : dynamic_cast<PlatformPlayer*>(FindObject("Player"))->GetProjectiles())
+	{
+		i->GetDst()->x += camOffset;
 	}
 	o->GetDst()->x += camOffset;
 }

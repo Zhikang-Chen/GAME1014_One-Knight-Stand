@@ -1,6 +1,8 @@
 ﻿#include "PlatformPlayer.h"
 #include <algorithm>
 
+
+#include "Arrow.h"
 #include "Bullet.h"
 #include "Engine.h"
 #include "EventManager.h"
@@ -33,7 +35,8 @@ PlatformPlayer::PlatformPlayer(SDL_Rect s, SDL_FRect d, SDL_Texture* t) : Entity
 	SoundManager::Load("Aud/ding.wav", "cdActive", SOUND_SFX);
 	SoundManager::Load("Aud/whip.wav", "whip", SOUND_SFX);
 
-	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/icebullet.png", "b");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/icebullet.png", "bullet");
+	TEMA::RegisterTexture("../GAME1017_Template_W01/Img/arrow.png", "arrow");
 }
 
 PlatformPlayer::~PlatformPlayer()
@@ -48,6 +51,7 @@ PlatformPlayer::~PlatformPlayer()
 
 void PlatformPlayer::Update()
 {
+	int w, h;
 	//Set Sound Volume
 	SoundManager::SetSoundVolume(30);
 	if (EVMA::KeyPressed(SDL_SCANCODE_H))
@@ -73,6 +77,13 @@ void PlatformPlayer::Update()
 	else
 	{
 		skillSTUNTimer++;
+	}
+
+	if (EVMA::MousePressed(3))
+	{
+		//cout << "arrow" << endl;
+		SDL_QueryTexture(TEMA::GetTexture("arrow"), nullptr, nullptr, &w, &h);
+		m_projectile.push_back(new Arrow({ 0,0,w,h }, { m_pBoundingBox.x + (m_pBoundingBox.w / 2) - w/8 ,m_pBoundingBox.y + (m_pBoundingBox.h / 2) - h / 8,float(w/4),float(h/4) }, TEMA::GetTexture("arrow"), { float(EVMA::GetMousePos().x), float(EVMA::GetMousePos().y)}));
 	}
 	
 	switch (m_state)
@@ -105,8 +116,7 @@ void PlatformPlayer::Update()
 					m_isSkillUp = true;
 					m_currentAttack = AttackType::ICE;
 
-					int w, h;
-					SDL_QueryTexture(TEMA::GetTexture("b"), nullptr, nullptr, &w, &h);
+					SDL_QueryTexture(TEMA::GetTexture("bullet"), nullptr, nullptr, &w, &h);
 
 					float x;
 					if (m_facingLeft)
@@ -114,7 +124,7 @@ void PlatformPlayer::Update()
 					else
 						x = m_dst.x + 100;
 					
-					m_projectile.push_back(new Bullet({ 0,0,w,h }, { m_dst.x,m_dst.y,float(w),float(h) }, TEMA::GetTexture("b"), { x,m_dst.y }));
+					m_projectile.push_back(new Bullet({ 0,0,w,h }, { m_dst.x,m_dst.y,float(w),float(h) }, TEMA::GetTexture("bullet"), { x,m_dst.y }));
 				}
 			}
 			if (!m_isSkillUpSTUN)
@@ -289,7 +299,7 @@ void PlatformPlayer::Update()
 		if(i->GetDst()->x > WIDTH + WIDTH / 2 || i->GetDst()->x < 0 - WIDTH / 2)
 		{
 			Remove(i);
-			cout << "a" << endl;
+			break;
 		}
 	}
 }
@@ -326,9 +336,9 @@ void PlatformPlayer::Remove(Projectile* object)
 	auto i = find(m_projectile.begin(), m_projectile.end(), object);
 	if(i != m_projectile.end())
 	{
+		delete object;
 		m_projectile.erase(i);
 		m_projectile.shrink_to_fit();
-		delete object;
 	}
 	else
 	{
